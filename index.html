@@ -1,19 +1,43 @@
-undefined
-        <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="az">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Senlife</title>
-    <style>
-        body { font-family: sans-serif; background: #f4f4f4; padding: 20px; text-align: center; }
-        .product-card { background: white; padding: 15px; border-radius: 12px; margin: 10px auto; max-width: 400px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        img { width: 100%; border-radius: 8px; }
-    </style>
+    <title>Senlife | Marketplace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
-    <h1>Senlife Marketplace</h1>
-    <div id="products-container">
+<body class="bg-gray-50">
+    <nav class="bg-white p-4 shadow-sm sticky top-0 z-50 flex justify-between items-center">
+        <div class="text-xl font-black tracking-tighter text-black uppercase">SENLIFE</div>
+        <div class="space-x-4 text-gray-500">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <i class="fa-solid fa-cart-shopping"></i>
         </div>
+    </nav>
+
+    <div class="p-4 flex space-x-4 overflow-x-auto no-scrollbar bg-white mb-2">
+        <div class="flex-shrink-0 text-center text-[10px]">
+            <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 text-lg mb-1">🎁</div>
+            <span>Əl İşləri</span>
+        </div>
+        <div class="flex-shrink-0 text-center text-[10px]">
+            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-lg mb-1">✨</div>
+            <span>Zərgərlik</span>
+        </div>
+        <div class="flex-shrink-0 text-center text-[10px]">
+            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 text-lg mb-1">🌸</div>
+            <span>Ətir</span>
+        </div>
+        <div class="flex-shrink-0 text-center text-[10px]">
+            <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 text-lg mb-1">⌚</div>
+            <span>Saat</span>
+        </div>
+    </div>
+
+    <div class="p-4 grid grid-cols-2 gap-4" id="product-container">
+        </div>
+
+    <style> .no-scrollbar::-webkit-scrollbar { display: none; } </style>
 </body>
 </html>
