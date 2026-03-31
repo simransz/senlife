@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Senlife - Marketplace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <style>
+        .nav-active { color: #ff4757; font-weight: bold; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body class="bg-gray-50 pb-24 text-gray-800">
+
+    <header class="bg-white py-4 shadow-sm text-center sticky top-0 z-50">
+        <img src="https://i.postimg.cc/0Nb8sPy1/1774906530079.png" alt="Senlife" class="h-12 mx-auto mb-3">
+        <div class="px-5">
+            <input type="text" placeholder="Axtarış..." class="w-full p-2 bg-gray-100 rounded-lg focus:outline-none border border-gray-200 text-sm">
+        </div>
+    </header>
+
+    <div id="home" class="tab-content active">
+        <div class="swiper mySwiper mt-2">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide px-4"><img src="https://via.placeholder.com/800x400?text=Afisa+1" class="rounded-xl w-full h-44 object-cover"></div>
+                <div class="swiper-slide px-4"><img src="https://via.placeholder.com/800x400?text=Afisa+2" class="rounded-xl w-full h-44 object-cover"></div>
+                <div class="swiper-slide px-4"><img src="https://via.placeholder.com/800x400?text=Afisa+3" class="rounded-xl w-full h-44 object-cover"></div>
+                <div class="swiper-slide px-4"><img src="https://via.placeholder.com/800x400?text=Afisa+4" class="rounded-xl w-full h-44 object-cover"></div>
+                <div class="swiper-slide px-4"><img src="https://via.placeholder.com/800x400?text=Afisa+5" class="rounded-xl w-full h-44 object-cover"></div>
+            </div>
+        </div>
+
+        <h2 class="px-5 mt-6 font-bold text-lg">Yeni məhsullar</h2>
+        <div id="product-list" class="grid grid-cols-2 gap-4 p-5">
+            <p class="text-gray-400 text-xs col-span-2 text-center py-10">Məhsullar yüklənir...</p>
+            </div>
+    </div>
+
+    <div id="catalog" class="tab-content">
+        <div class="bg-white p-5 text-center border-b">
+            <img src="https://i.postimg.cc/8C2VgvYF/1774906294188.png" class="h-10 mx-auto mb-2">
+            <p class="text-xs text-gray-500">Unikal əl işləri və Brend məhsullar</p>
+        </div>
+        <div class="grid grid-cols-2 gap-3 p-5">
+            <div class="bg-white p-4 rounded-xl shadow-sm text-center border border-gray-100 text-xs font-semibold">💎 Bujiteriya</div>
+            <div class="bg-white p-4 rounded-xl shadow-sm text-center border border-gray-100 text-xs font-semibold">🕯️ Şamlar</div>
+            <div class="bg-white p-4 rounded-xl shadow-sm text-center border border-gray-100 text-xs font-semibold">🎁 Şokolad qutuları</div>
+            <div class="bg-white p-4 rounded-xl shadow-sm text-center border border-gray-100 text-xs font-semibold">🗿 Gips məhsullar</div>
+            <div class="bg-white p-4 rounded-xl shadow-sm text-center border border-gray-100 text-xs font-semibold">🏺 Keramika işlər</div>
+            <div class="bg-white p-4 rounded-xl shadow-sm text-center border border-gray-100 text-xs font-semibold">✨ Ətirlər</div>
+            <div class="bg-white p-4 rounded-xl shadow-sm text-center border border-gray-100 text-xs font-semibold">⌚ Qol saatları</div>
+            <div class="bg-white p-4 rounded-xl shadow-sm text-center border border-gray-100 text-xs font-semibold">🖼️ Porterlər</div>
+            <div class="bg-white p-4 rounded-xl shadow-sm text-center border border-gray-100 text-xs font-semibold">🧶 Toxunma işlər</div>
+            <div class="bg-white p-4 rounded-xl shadow-sm text-center border border-gray-100 text-xs font-semibold">💐 Büketlər</div>
+        </div>
+    </div>
+
+    <div id="basket" class="tab-content p-5 text-center">
+        <h2 class="font-bold text-xl mb-4">Səbət</h2>
+        <p class="text-gray-400 py-20">Səbətiniz hal-hazırda boşdur.</p>
+    </div>
+
+    <div id="contact" class="tab-content p-5">
+        <h2 class="font-bold text-lg mb-2">Senlife haqqında</h2>
+        <p class="text-sm text-gray-600 mb-6">Ən özəl əl işləri və brendlərin tək ünvanı.</p>
+        <div class="space-y-3">
+            <a href="https://wa.me/994773526665" class="flex items-center p-3 bg-white rounded-xl shadow-sm border border-gray-100">
+                <span class="mr-3 text-xl">🟢</span> <span class="text-sm font-medium">WhatsApp: 077 352 66 65</span>
+            </a>
+            <a href="mailto:senzgroups@mail.com" class="flex items-center p-3 bg-white rounded-xl shadow-sm border border-gray-100">
+                <span class="mr-3 text-xl">📧</span> <span class="text-sm font-medium">senzgroups@mail.com</span>
+            </a>
+            <a href="https://www.instagram.com/invites/contact/?igsh=g73yqgxyxg6u&utm_content=ymivi47" class="flex items-center p-3 bg-white rounded-xl shadow-sm border border-gray-100">
+                <span class="mr-3 text-xl">📸</span> <span class="text-sm font-medium">Instagram: senlife.az</span>
+            </a>
+        </div>
+    </div>
+
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-3 text-[10px] shadow-2xl z-50">
+        <button onclick="showTab('home')" id="btn-home" class="nav-active text-center">🏠<br>Əsas</button>
+        <button onclick="showTab('catalog')" id="btn-catalog" class="text-center">📚<br>Kataloq</button>
+        <button onclick="showTab('basket')" id="btn-basket" class="text-center">🛒<br>Səbət</button>
+        <button onclick="showTab('contact')" id="btn-contact" class="text-center">📞<br>Əlaqə</button>
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        // Swiper (Afişalar) Ayarları
+        const swiper = new Swiper(".mySwiper", { 
+            loop: true, 
+            autoplay: { delay: 3000 },
+            grabCursor: true
+        });
+
+        // Bölmələr arası keçid sistemi
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('nav-active'));
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById('btn-' + tabId).classList.add('nav-active');
+            window.scrollTo(0,0);
+        }
+    </script>
+</body>
+</html>
