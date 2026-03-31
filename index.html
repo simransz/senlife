@@ -18,38 +18,29 @@
             --gray: #8e8e93;
             --light-gray: #f2f2f7;
             --radius: 16px;
-            --shadow: 0 8px 24px rgba(0,0,0,0.06);
+            --shadow: 0 4px 12px rgba(0,0,0,0.05);
             --red-line: #ff0000;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg); color: var(--primary); padding-bottom: 90px; overflow-x: hidden; }
 
-        /* --- HEADER (YENİLƏNDİ: TAM AĞ VƏ KÖLGƏSİZ) --- */
+        /* --- HEADER (TAM AĞ VƏ KÖLGƏSİZ) --- */
         header {
-            background: var(--white); /* Tam ağ fon */
-            position: sticky; 
-            top: 0; 
-            z-index: 1000;
-            padding: 15px 0; 
-            border-bottom: 1px solid rgba(0,0,0,0.08); /* Alt hissədə çox incə xətt */
-            /* Kölgə və bulanıqlıq silindi */
+            background: var(--white);
+            position: sticky; top: 0; z-index: 1000;
+            padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.06);
         }
 
         .header-top { 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 15px; 
-            margin-bottom: 15px; 
-            background: var(--white); /* Loqoların birbaşa arxası tam ağ */
+            display: flex; align-items: center; justify-content: center; 
+            gap: 15px; margin-bottom: 12px; 
         }
         
-        .logo-img { height: 48px; object-fit: contain; }
+        .logo-img { height: 42px; object-fit: contain; }
         
         .red-divider {
-            width: 2px;
-            height: 32px;
+            width: 2px; height: 28px;
             background-color: var(--red-line);
             border-radius: 2px;
         }
@@ -57,48 +48,63 @@
         .search-area { padding: 0 16px; display: flex; gap: 10px; }
         .search-wrapper {
             flex: 1; background: var(--light-gray);
-            border-radius: 12px; display: flex; align-items: center; padding: 10px 15px;
+            border-radius: 12px; display: flex; align-items: center; padding: 8px 15px;
         }
         .search-wrapper input {
             border: none; background: none; outline: none; width: 100%; font-size: 14px; margin-left: 8px;
         }
 
         /* --- VIEWS --- */
-        .view { display: none; animation: slideUp 0.4s ease; }
+        .view { display: none; animation: fadeIn 0.3s ease; }
         .view.active { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Banner və digər hissələr eyni qalır... */
+        /* --- HOME: BANNER --- */
         .hero-swiper { margin: 15px 0; width: 100%; }
         .banner-slide {
-            width: 85%; height: 180px; border-radius: var(--radius);
-            display: flex; align-items: flex-end; padding: 20px;
-            color: white; font-weight: 700; font-size: 1.2rem;
+            width: 85%; height: 160px; border-radius: var(--radius);
+            display: flex; align-items: flex-end; padding: 15px;
+            color: white; font-weight: 700; font-size: 1.1rem;
             background-size: cover; background-position: center;
         }
 
-        .section-label { padding: 15px 16px; font-weight: 700; font-size: 1.1rem; }
-        .products-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 16px; }
-        .card { background: var(--white); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,0.03); }
-        .card-body { padding: 12px; }
-        .card-title { font-size: 14px; font-weight: 600; margin: 4px 0; }
-        .card-price { font-size: 16px; font-weight: 700; color: var(--accent); }
-        .order-btn { width: 100%; background: var(--primary); color: white; border: none; padding: 10px; border-radius: 10px; margin-top: 10px; font-size: 13px; }
+        /* --- HOME: PRODUCTS --- */
+        .section-label { padding: 10px 16px; font-weight: 700; font-size: 1.1rem; }
+        .products-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 16px;
+        }
+        .card {
+            background: var(--white); border-radius: 12px; overflow: hidden;
+            box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,0.02);
+        }
+        .card-img { width: 100%; height: 140px; object-fit: cover; }
+        .card-body { padding: 10px; }
+        .card-type { font-size: 9px; color: var(--gray); text-transform: uppercase; }
+        .card-title { font-size: 13px; font-weight: 600; margin: 4px 0; height: 32px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .card-price { font-size: 14px; font-weight: 700; color: var(--accent); }
+        .order-btn {
+            width: 100%; background: var(--primary); color: white; border: none;
+            padding: 8px; border-radius: 8px; margin-top: 8px; font-size: 12px; font-weight: 600;
+        }
 
-        .cat-banner { background: var(--primary); color: white; padding: 15px; border-radius: 12px; margin: 20px 16px; text-align: center; font-size: 0.9rem; }
-        .cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; padding: 0 16px; }
+        /* --- CATALOG --- */
+        .cat-banner { background: var(--primary); color: white; padding: 15px; border-radius: 12px; margin: 15px 16px; text-align: center; font-size: 0.85rem; }
+        .cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 0 16px; }
         .cat-item { text-align: center; background: white; padding: 15px 5px; border-radius: 12px; box-shadow: var(--shadow); }
-        .cat-item i { font-size: 24px; color: var(--accent); margin-bottom: 8px; }
-        .cat-item p { font-size: 11px; }
+        .cat-item i { font-size: 22px; color: var(--accent); margin-bottom: 6px; }
+        .cat-item p { font-size: 10px; font-weight: 500; }
 
+        /* --- BOTTOM NAV --- */
         .bottom-nav {
             position: fixed; bottom: 0; width: 100%; background: white;
-            display: flex; justify-content: space-around; padding: 12px 0 30px;
+            display: flex; justify-content: space-around; padding: 10px 0 25px;
             border-top: 1px solid rgba(0,0,0,0.05); z-index: 1000;
         }
-        .nav-link { text-decoration: none; color: var(--gray); text-align: center; font-size: 11px; }
-        .nav-link.active { color: var(--primary); }
-        .nav-link i { display: block; font-size: 20px; margin-bottom: 4px; }
+        .nav-link { text-decoration: none; color: var(--gray); text-align: center; font-size: 10px; transition: 0.2s; }
+        .nav-link.active { color: var(--primary); font-weight: 700; }
+        .nav-link i { display: block; font-size: 18px; margin-bottom: 3px; }
+
+        ::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body>
@@ -121,8 +127,8 @@
         <section id="home" class="view active">
             <div class="swiper hero-swiper">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide banner-slide" style="background-image: linear-gradient(to top, rgba(0,0,0,0.6), transparent), url('https://picsum.photos/800/400?random=10')">Yeni Kolleksiya</div>
-                    <div class="swiper-slide banner-slide" style="background-image: linear-gradient(to top, rgba(0,0,0,0.6), transparent), url('https://picsum.photos/800/400?random=11')">Əl İşləri</div>
+                    <div class="swiper-slide banner-slide" style="background-image: linear-gradient(to top, rgba(0,0,0,0.5), transparent), url('https://picsum.photos/600/300?random=1')">Yeni Kolleksiya</div>
+                    <div class="swiper-slide banner-slide" style="background-image: linear-gradient(to top, rgba(0,0,0,0.5), transparent), url('https://picsum.photos/600/300?random=2')">Əl İşləri</div>
                 </div>
             </div>
             <h2 class="section-label">Yeni məhsullar</h2>
@@ -140,46 +146,72 @@
                 <div class="cat-item"><i class="fa-solid fa-palette"></i><p>Porterlər</p></div>
             </div>
         </section>
+
+        <section id="cart" class="view">
+            <div style="text-align:center; padding: 80px 20px;">
+                <i class="fa-solid fa-basket-shopping" style="font-size: 40px; color: #ddd; margin-bottom: 15px;"></i>
+                <p>Səbətiniz hal-hazırda boşdur.</p>
+            </div>
+        </section>
+
+        <section id="contact" class="view">
+            <div style="padding: 20px 16px;">
+                <h2 style="margin-bottom: 15px;">Əlaqə</h2>
+                <p style="color: var(--gray); font-size: 14px;">Bizimlə sosial şəbəkələr vasitəsilə əlaqə saxlaya bilərsiniz.</p>
+            </div>
+        </section>
     </main>
 
     <nav class="bottom-nav">
-        <a href="javascript:void(0)" class="nav-link active" onclick="switchTab('home', this)"><i class="fa-solid fa-house"></i><span>Əsas</span></a>
-        <a href="javascript:void(0)" class="nav-link" onclick="switchTab('catalog', this)"><i class="fa-solid fa-layer-group"></i><span>Kataloq</span></a>
-        <a href="javascript:void(0)" class="nav-link" onclick="switchTab('cart', this)"><i class="fa-solid fa-cart-shopping"></i><span>Səbət</span></a>
-        <a href="javascript:void(0)" class="nav-link" onclick="switchTab('contact', this)"><i class="fa-solid fa-comment-dots"></i><span>Əlaqə</span></a>
+        <a href="javascript:void(0)" class="nav-link active" onclick="switchTab('home', this)">
+            <i class="fa-solid fa-house"></i><span>Əsas</span>
+        </a>
+        <a href="javascript:void(0)" class="nav-link" onclick="switchTab('catalog', this)">
+            <i class="fa-solid fa-layer-group"></i><span>Kataloq</span>
+        </a>
+        <a href="javascript:void(0)" class="nav-link" onclick="switchTab('cart', this)">
+            <i class="fa-solid fa-cart-shopping"></i><span>Səbət</span>
+        </a>
+        <a href="javascript:void(0)" class="nav-link" onclick="switchTab('contact', this)">
+            <i class="fa-solid fa-comment-dots"></i><span>Əlaqə</span>
+        </a>
     </nav>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script>
+        // BÖLMƏ KEÇİDLƏRİ (Düzəldildi)
         function switchTab(viewId, el) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            
             document.getElementById(viewId).classList.add('active');
             el.classList.add('active');
             window.scrollTo(0, 0);
         }
 
+        // SWIPER
         const swiper = new Swiper('.hero-swiper', {
-            slidesPerView: "auto", centeredSlides: true, spaceBetween: 15, loop: true, autoplay: { delay: 3000 }
+            slidesPerView: "auto", centeredSlides: true, spaceBetween: 12, loop: true, autoplay: { delay: 3000 }
         });
 
-        const productsList = document.getElementById('main-products-list');
+        // MƏHSULLARIN YÜKLƏNMƏSİ
         function loadProducts() {
+            const list = document.getElementById('main-products-list');
             let html = "";
-            for(let i = 1000; i >= 980; i--) {
+            for(let i = 1; i <= 20; i++) {
                 html += `
                     <div class="card">
-                        <img src="https://picsum.photos/400/400?random=${i}" class="card-img" loading="lazy">
+                        <img src="https://picsum.photos/300/300?random=${i+10}" class="card-img" loading="lazy">
                         <div class="card-body">
-                            <span class="card-type">Məhsul</span>
-                            <h3 class="card-title">Seçilmiş Məhsul #${i}</h3>
-                            <p class="card-price">25.00 AZN</p>
+                            <span class="card-type">Premium</span>
+                            <h3 class="card-title">Məhsul Adı #${i}</h3>
+                            <p class="card-price">${(Math.random()*40 + 10).toFixed(2)} AZN</p>
                             <button class="order-btn">Sifariş Et</button>
                         </div>
                     </div>
                 `;
             }
-            productsList.innerHTML = html;
+            list.innerHTML = html;
         }
         loadProducts();
     </script>
