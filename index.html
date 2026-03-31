@@ -1,10 +1,9 @@
-undefined
-        <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="az">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Senlife | Premium Marketplace</title>
+    <title>Senlife | Professional Marketplace</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -14,26 +13,67 @@ undefined
         :root {
             --primary: #121212;
             --accent: #d4a373;
-            --sen-red: #e63946; /* Loqolar arası xətt üçün qırmızı */
+            --sen-red: #e63946; /* Loqolar arası qırmızı xətt */
             --bg: #fdfdfd;
             --white: #ffffff;
             --gray: #8e8e93;
             --light-gray: #f2f2f7;
+            --radius: 16px;
             --shadow: 0 8px 24px rgba(0,0,0,0.06);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg); color: var(--primary); padding-bottom: 90px; }
+        body { background-color: var(--bg); color: var(--primary); padding-bottom: 90px; overflow-x: hidden; }
 
         /* --- HEADER & LOGO --- */
         header {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(15px);
             position: sticky; top: 0; z-index: 1000;
             padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.05);
         }
-        .logo-container {
-            display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px;
+        .header-content { display: flex; flex-direction: column; align-items: center; }
+        .logo-box { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 10px; }
+        .logo-small { height: 32px; width: auto; object-fit: contain; }
+        .red-line { width: 1.5px; height: 20px; background-color: var(--sen-red); }
+        
+        .search-area { padding: 0 16px; width: 100%; display: flex; gap: 10px; }
+        .search-wrapper { flex: 1; background: var(--light-gray); border-radius: 12px; display: flex; align-items: center; padding: 10px 15px; }
+        .search-wrapper input { border: none; background: none; outline: none; width: 100%; font-size: 14px; margin-left: 8px; }
+
+        /* --- VIEWS --- */
+        .view { display: none; animation: slideUp 0.4s ease; }
+        .view.active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- HOME: BANNER (Məsafə azaldıldı) --- */
+        .hero-swiper { margin: 8px 0; width: 100%; }
+        .banner-slide {
+            width: 88%; height: 170px; border-radius: var(--radius);
+            display: flex; align-items: flex-end; padding: 15px;
+            color: white; font-weight: 700; font-size: 1.1rem;
+            background-size: cover; background-position: center;
+        }
+
+        /* --- HOME: PRODUCTS --- */
+        .section-label { padding: 8px 16px; font-weight: 700; font-size: 1.1rem; }
+        .products-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 16px; }
+        .card { background: var(--white); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,0.03); transition: 0.3s; }
+        .card-img { width: 100%; height: 150px; object-fit: cover; }
+        .card-body { padding: 12px; }
+        .card-type { font-size: 10px; color: var(--gray); text-transform: uppercase; letter-spacing: 0.5px; }
+        .card-title { font-size: 14px; font-weight: 600; margin: 4px 0; height: 34px; overflow: hidden; }
+        .card-price { font-size: 15px; font-weight: 700; color: var(--accent); margin-bottom: 8px; }
+        
+        .card-actions { display: flex; gap: 8px; }
+        .order-btn { flex: 3; background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .cart-quick-btn { flex: 1; background: var(--light-gray); color: var(--primary); border: none; padding: 10px; border-radius: 8px; cursor: pointer; }
+
+        /* --- PRODUCT MODAL --- */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 2000; align-items: flex-end; }
+        .modal-content { background: white; width: 100%; border-radius: 20px 20px 0 0; padding: 20px; animation: modalUp 0.3s ease; }
+        @keyframes modalUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .modal-
         }
         .logo-img { height: 35px; width: auto; object-fit: contain; }
         .logo-divider { width: 1.5px; height: 25px; background-color: var(--sen-red); }
