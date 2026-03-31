@@ -5,13 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Senlife | Marketplace</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="bg-gray-50">
-    <nav class="bg-white p-4 shadow-sm sticky top-0 z-50">
-        <h1 class="text-xl font-bold text-center">SENLIFE</h1>
+    <nav class="bg-white p-4 shadow-sm sticky top-0 z-50 flex justify-between items-center">
+        <div class="text-xl font-black tracking-tighter text-black">SENLIFE</div>
+        <div class="space-x-4 text-gray-500">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <i class="fa-solid fa-cart-shopping"></i>
+        </div>
     </nav>
 
-    <div class="p-4 grid grid-cols-2 gap-4" id="product-container">
+    <div class="p-4 flex space-x-4 overflow-x-auto no-scrollbar bg-white mb-2">
+        <div class="flex-shrink-0 text-center text-[10px]">
+            <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 text-lg mb-1">🎁</div>
+            <span>Əl İşləri</span>
         </div>
+        <div class="flex-shrink-0 text-center text-[10px]">
+            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-lg mb-1">✨</div>
+            <span>Zərgərlik</span>
+        </div>
+        <div class="flex-shrink-0 text-center text-[10px]">
+            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 text-lg mb-1">🌸</div>
+            <span>Ətir</span>
+        </div>
+        <div class="flex-shrink-0 text-center text-[10px]">
+            <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 text-lg mb-1">⌚</div>
+            <span>Saat</span>
+        </div>
+    </div>
+
+    <div class="p-4 grid grid-cols-2 gap-4" id="product-container">
+        <div class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100">
+            <div class="h-32 bg-gray-100 rounded-xl mb-2 flex items-center justify-center text-gray-400 text-[10px]">Nümunə Məhsul</div>
+            <h3 class="font-semibold text-xs truncate">Xoş gəlmisiniz!</h3>
+            <p class="text-red-500 font-bold text-sm">Botla məhsul əlavə edin</p>
+            <a href="https://wa.me/994773526665" class="block w-full mt-2 bg-black text-white text-center py-2 rounded-lg text-[10px]">Sifariş</a>
+        </div>
+        </div>
+
+    <style> .no-scrollbar::-webkit-scrollbar { display: none; } </style>
 </body>
 </html>
