@@ -12,110 +12,103 @@
     <style>
         :root {
             --primary: #cc0000;
-            --dark: #1a1a1a;
-            --bg: #ffffff;
-            --light-gray: #f8f9fa;
-            --radius: 15px;
-            --shadow: 0 4px 15px rgba(204, 0, 0, 0.08);
+            --dark: #121212;
+            --white: #ffffff;
+            --light: #f9f9f9;
+            --radius: 12px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg); color: var(--dark); padding-bottom: 100px; }
+        body { background-color: var(--white); color: var(--dark); padding-bottom: 90px; overflow-x: hidden; }
 
-        /* Header & Search */
+        /* Header */
         header {
             background: white; position: sticky; top: 0; z-index: 1000;
             padding: 10px 0; border-bottom: 2px solid var(--primary);
         }
-        .header-top { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 10px; }
-        .logo-img { height: 48px; object-fit: contain; }
-        .red-divider { width: 2px; height: 32px; background-color: var(--primary); }
+        .header-top { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px; }
+        .logo-img { height: 40px; }
+        .red-divider { width: 2px; height: 25px; background: var(--primary); }
         
         .search-area { padding: 0 16px; }
         .search-wrapper {
-            background: var(--light-gray); border: 1.5px solid #eee;
-            border-radius: 50px; display: flex; align-items: center; padding: 10px 18px;
+            background: var(--light); border: 1px solid #ddd;
+            border-radius: 50px; display: flex; align-items: center; padding: 8px 15px;
         }
-        .search-wrapper input { border: none; background: none; outline: none; width: 100%; padding-left: 10px; font-size: 14px; }
+        .search-wrapper input { border: none; background: none; outline: none; width: 100%; padding-left: 10px; }
 
-        /* Banner - 1.5s Speed */
-        .hero-swiper { margin: 15px 0; height: 190px; }
-        .swiper-slide { width: 92% !important; }
+        /* Banner - Sol Alt Künc Yazıları */
+        .hero-swiper { margin: 15px 0; height: 200px; width: 100%; }
+        .swiper-slide { width: 100% !important; padding: 0 16px; }
         .banner-slide {
             width: 100%; height: 100%; border-radius: var(--radius);
             background-size: cover; background-position: center; position: relative;
-            display: flex; align-items: center; justify-content: center; text-align: center;
+            overflow: hidden;
         }
         .banner-overlay { 
             position: absolute; inset: 0; 
-            background: rgba(0, 0, 0, 0.4); 
-            border-radius: var(--radius);
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); 
         }
-        .banner-text { position: relative; color: white; z-index: 10; padding: 0 20px; }
-        .banner-text h2 { font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .banner-text { 
+            position: absolute; bottom: 15px; left: 15px; 
+            color: white; z-index: 10; text-align: left;
+        }
+        .banner-text h2 { font-size: 18px; font-weight: 700; margin: 0; }
 
-        /* Catalog Grid - Large Icons */
-        .cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 16px; }
+        /* Catalog - İri və Uyğun İkonlar */
+        .cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 16px; }
         .cat-item { 
-            text-align: center; background: white; padding: 20px 10px; border-radius: 15px; 
-            border: 1px solid #f0f0f0; box-shadow: var(--shadow); transition: 0.3s;
+            text-align: center; background: white; padding: 15px 5px; border-radius: 12px; 
+            border: 1px solid #eee; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-        .cat-item i { font-size: 32px; color: var(--primary); margin-bottom: 12px; display: block; }
-        .cat-item p { font-size: 11px; font-weight: 700; color: var(--dark); }
+        .cat-item i { font-size: 28px; color: var(--primary); margin-bottom: 8px; display: block; }
+        .cat-item p { font-size: 10px; font-weight: 700; }
 
-        /* Products Grid */
-        .section-label { padding: 15px 16px; font-weight: 700; color: var(--primary); font-size: 18px; }
-        .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 0 16px; }
-        .card { background: white; border-radius: 18px; overflow: hidden; border: 1px solid #eee; box-shadow: var(--shadow); }
-        .card-img { width: 100%; height: 160px; object-fit: cover; }
-        .card-body { padding: 12px; }
-        .card-title { font-size: 13px; font-weight: 600; margin-bottom: 6px; height: 36px; overflow: hidden; }
-        .card-price { color: var(--primary); font-weight: 800; font-size: 15px; margin-bottom: 12px; }
+        /* Products */
+        .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 16px; }
+        .card { background: white; border-radius: 15px; overflow: hidden; border: 1px solid #f0f0f0; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .card-img { width: 100%; height: 140px; object-fit: cover; }
+        .card-body { padding: 10px; }
+        .card-title { font-size: 12px; font-weight: 600; height: 32px; overflow: hidden; margin-bottom: 5px; }
+        .card-price { color: var(--primary); font-weight: 700; font-size: 14px; margin-bottom: 10px; }
         
-        .btn-group { display: flex; gap: 6px; }
-        .order-btn { flex: 3; background: #25D366; color: white; border: none; padding: 10px; border-radius: 10px; font-size: 11px; font-weight: 700; }
-        .cart-btn { flex: 1; background: var(--primary); color: white; border: none; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+        .btn-group { display: flex; gap: 5px; }
+        .order-btn { flex: 3; background: #25D366; color: white; border: none; padding: 8px; border-radius: 8px; font-size: 11px; font-weight: 700; }
+        .cart-btn { flex: 1; background: var(--primary); color: white; border: none; border-radius: 8px; }
 
-        /* Toast */
-        #toast {
-            position: fixed; top: 30px; left: 50%; transform: translateX(-50%);
-            background: var(--primary); color: white; padding: 12px 25px;
-            border-radius: 50px; z-index: 2001; display: none; font-size: 14px; font-weight: 600; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        /* Nav */
-        .bottom-nav {
-            position: fixed; bottom: 0; width: 100%; background: white;
-            display: flex; justify-content: space-around; padding: 12px 0 25px;
-            border-top: 1px solid #eee; z-index: 1000;
-        }
-        .nav-link { text-decoration: none; color: #b0b0b0; text-align: center; font-size: 11px; position: relative; }
-        .nav-link.active { color: var(--primary); font-weight: 700; }
-        .nav-link i { font-size: 22px; margin-bottom: 4px; display: block; }
+        /* Səbət Rəqəmi */
+        .nav-link { text-decoration: none; color: #8e8e93; text-align: center; font-size: 10px; position: relative; }
+        .nav-link.active { color: var(--primary); }
         .cart-count { 
-            position: absolute; top: -8px; right: 2px; background: var(--primary); 
-            color: white; font-size: 10px; padding: 2px 7px; border-radius: 20px; 
-            display: none; border: 2px solid white;
+            position: absolute; top: -5px; right: 5px; background: var(--primary); 
+            color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; display: none;
+        }
+
+        /* Haqqımızda Banner */
+        .about-banner { 
+            background: var(--primary); color: white; padding: 25px; 
+            border-radius: 15px; margin: 16px; text-align: center;
+        }
+        .about-banner p { line-height: 1.5; font-size: 14px; margin: 0; }
+
+        #toast {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            background: var(--primary); color: white; padding: 10px 20px;
+            border-radius: 50px; z-index: 2000; display: none; font-weight: 600;
         }
 
         .view { display: none; }
-        .view.active { display: block; animation: fadeIn 0.4s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        
-        /* About Section */
-        .about-banner { background: var(--primary); color: white; padding: 30px 20px; border-radius: 20px; text-align: center; margin: 16px; line-height: 1.6; }
-        .contact-item { 
-            display: flex; align-items: center; gap: 15px; padding: 18px; 
-            background: #fdfdfd; border-radius: 15px; text-decoration: none; 
-            color: var(--dark); border: 1px solid #eee; margin: 0 16px 10px; font-weight: 600;
+        .view.active { display: block; }
+        .bottom-nav {
+            position: fixed; bottom: 0; width: 100%; background: white;
+            display: flex; justify-content: space-around; padding: 10px 0 25px;
+            border-top: 1px solid #eee; z-index: 1000;
         }
-
-        ::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body>
 
-    <div id="toast">Məhsul artıq səbətinizdədir!</div>
+    <div id="toast">Məhsul səbətə əlavə olundu!</div>
 
     <header>
         <div class="header-top">
@@ -125,18 +118,20 @@
         </div>
         <div class="search-area">
             <div class="search-wrapper">
-                <i class="fa fa-search" style="color: var(--primary);"></i>
-                <input type="text" id="searchInput" placeholder="Məhsul adı və ya kodu yazın..." onkeyup="filterProducts()">
+                <i class="fa fa-search" style="color:var(--primary)"></i>
+                <input type="text" id="searchInput" placeholder="Məhsul adı və ya kod yazın..." onkeyup="filterProducts()">
             </div>
         </div>
     </header>
 
     <main id="app">
         <section id="home" class="view active">
-            <div class="swiper hero-swiper">
-                <div class="swiper-wrapper" id="banner-wrapper"></div>
+            <div id="hero-section">
+                <div class="swiper hero-swiper">
+                    <div class="swiper-wrapper" id="banner-wrapper"></div>
+                </div>
             </div>
-            <h2 class="section-label">Yeni Məhsullar</h2>
+            <h2 id="list-title" style="padding: 10px 16px; font-size: 16px; color: var(--primary);">Yeni Məhsullar</h2>
             <div class="products-grid" id="product-list"></div>
         </section>
 
@@ -146,72 +141,60 @@
 
         <section id="cart" class="view">
             <div style="padding: 20px;">
-                <h2 style="margin-bottom:20px; color: var(--primary);">Alış-veriş Səbəti</h2>
+                <h2 style="margin-bottom:15px; color: var(--primary);">Səbətiniz</h2>
                 <div id="cart-items"></div>
-                <div id="cart-summary" style="margin-top:30px; border-top: 2px dashed #eee; padding-top:20px; display:none;">
-                    <div style="display:flex; justify-content:space-between; font-size:18px; font-weight:800; margin-bottom:20px;">
-                        <span>Cəmi Məbləğ:</span> <span id="total-price" style="color:var(--primary)">0 AZN</span>
+                <div id="cart-summary" style="margin-top:20px; display:none;">
+                    <div style="display:flex; justify-content:space-between; font-weight:700; padding: 15px 0;">
+                        <span>Cəmi:</span> <span id="total-price">0 AZN</span>
                     </div>
-                    <button onclick="orderCartWhatsApp()" class="order-btn" style="width:100%; padding:18px; font-size:16px; border-radius:15px;">Sifarişi Tamamla</button>
-                </div>
-                <div id="empty-cart-msg" style="text-align:center; padding-top:50px; color:#ccc;">
-                    <i class="fa fa-shopping-bag" style="font-size:60px; margin-bottom:15px;"></i>
-                    <p>Səbətiniz hal-hazırda boşdur.</p>
+                    <button onclick="orderCartWhatsApp()" class="order-btn" style="width:100%; padding:15px; font-size:14px;">Səbəti Sifariş Et</button>
                 </div>
             </div>
         </section>
 
         <section id="contact" class="view">
             <div class="about-banner">
-                <h2 style="margin-bottom:15px;">Haqqımızda</h2>
-                <p style="font-size: 14px; text-align: justify; opacity: 0.95;">
-                    SenLife, yüksək keyfiyyətli və unikal əl işlərini, eyni zamanda seçilmiş brend məhsullarını bir araya gətirən peşəkar marketplace platformasıdır. Bizim missiyamız, müştərilərimizə zəriflik və estetik daxil olan eksklüziv məhsulları ən rahat şəkildə təqdim etməkdir. Hər bir sifarişə rəsmi və fərdi yanaşma bizim əsas prinsipimizdir.
-                </p>
+                <p>SenLife — yüksək keyfiyyətli əl işləri və seçilmiş brend məhsulların mərkəzidir. Biz müştərilərimizə unikal dizayn və peşəkar xidmət təqdim edirik. Hər bir məhsul bizim üçün dəyərlidir.</p>
             </div>
-            <div style="margin-top: 10px;">
-                <a href="https://wa.me/994773526665" class="contact-item">
-                    <i class="fab fa-whatsapp" style="color:#25D366; font-size:24px;"></i> 077 352 66 65
+            <div style="padding: 16px; display: flex; flex-direction: column; gap: 10px;">
+                <a href="https://wa.me/994773526665" style="display:flex; align-items:center; gap:15px; padding:15px; background:#f9f9f9; border-radius:12px; text-decoration:none; color:black;">
+                    <i class="fab fa-whatsapp" style="color:#25D366; font-size:20px;"></i> 077 352 66 65
                 </a>
-                <a href="mailto:senzgroups@gmail.com" class="contact-item">
-                    <i class="fa fa-envelope" style="color:var(--primary); font-size:24px;"></i> senzgroups@gmail.com
-                </a>
-                <a href="https://www.instagram.com/senlife.az" class="contact-item">
-                    <i class="fab fa-instagram" style="color:#E1306C; font-size:24px;"></i> senlife.az
+                <a href="mailto:senzgroups@gmail.com" style="display:flex; align-items:center; gap:15px; padding:15px; background:#f9f9f9; border-radius:12px; text-decoration:none; color:black;">
+                    <i class="fa fa-envelope" style="color:var(--primary); font-size:20px;"></i> senzgroups@gmail.com
                 </a>
             </div>
         </section>
     </main>
 
     <nav class="bottom-nav">
-        <a href="javascript:void(0)" class="nav-link active" onclick="showView('home', this)"><i class="fa fa-house"></i><p>Əsas</p></a>
-        <a href="javascript:void(0)" class="nav-link" onclick="showView('catalog', this)"><i class="fa fa-grid-2"></i><i class="fa fa-layer-group"></i><p>Kataloq</p></a>
-        <a href="javascript:void(0)" class="nav-link" onclick="showView('cart', this)">
+        <a href="#" class="nav-link active" onclick="showView('home', this)"><i class="fa fa-house"></i><p>Əsas</p></a>
+        <a href="#" class="nav-link" onclick="showView('catalog', this)"><i class="fa fa-th-large"></i><p>Kataloq</p></a>
+        <a href="#" class="nav-link" onclick="showView('cart', this)">
             <i class="fa fa-shopping-cart"></i><p>Səbət</p>
             <span class="cart-count" id="count">0</span>
         </a>
-        <a href="javascript:void(0)" class="nav-link" onclick="showView('contact', this)"><i class="fa fa-info-circle"></i><p>Əlaqə</p></a>
+        <a href="#" class="nav-link" onclick="showView('contact', this)"><i class="fa fa-info-circle"></i><p>Əlaqə</p></a>
     </nav>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script>
-        // MƏHSUL DATA (Məhsul Kodu: SN008-dən başlayır)
         const products = [
-            { id: 1, code: 'SN008', name: 'Kristal Qaşlı Əl İşi Aksesuar', price: 35.00, cat: 'Bujiteriya', img: 'https://picsum.photos/400/400?1' },
-            { id: 2, code: 'SN009', name: 'Zərif Dekorativ Şam', price: 15.50, cat: 'Şamlar', img: 'https://picsum.photos/400/400?2' },
-            { id: 3, code: 'SN010', name: 'Özəl Hədiyyəlik Şokolad Qutusu', price: 40.00, cat: 'Şokolad qutuları', img: 'https://picsum.photos/400/400?3' }
+            { id: 1, code: 'SN008', name: 'Kristal Qaşlı Əl İşi', price: 35.00, cat: 'Bujiteriya', img: 'https://picsum.photos/400/400?1' },
+            { id: 2, code: 'SN009', name: 'Zərif Şam', price: 15.50, cat: 'Şamlar', img: 'https://picsum.photos/400/400?2' }
         ];
 
         const categories = [
             { name: 'Bujiteriya', icon: 'fa-gem' },
-            { name: 'Şamlar', icon: 'fa-fire-alt' },
-            { name: 'Şokolad qutuları', icon: 'fa-box-open' },
+            { name: 'Şamlar', icon: 'fa-fire' },
+            { name: 'Şokolad qutuları', icon: 'fa-box' },
             { name: 'Gips dizayn', icon: 'fa-shapes' },
-            { name: 'Keramika işlər', icon: 'fa-vial-circle-check' },
-            { name: 'Ətirlər', icon: 'fa-spray-can-sparkles' },
+            { name: 'Keramika işlər', icon: 'fa-vial' },
+            { name: 'Ətirlər', icon: 'fa-spray-can' },
             { name: 'Saatlar', icon: 'fa-clock' },
             { name: 'Portretlər', icon: 'fa-palette' },
-            { name: 'Toxunma işlər', icon: 'fa-mitten' },
-            { name: 'Buketlər', icon: 'fa-fan' },
+            { name: 'Toxunma işlər', icon: 'fa-socks' },
+            { name: 'Buketlər', icon: 'fa-leaf' },
             { name: 'Oyuncaq aləmi', icon: 'fa-robot' },
             { name: 'Dekorlar', icon: 'fa-couch' }
         ];
@@ -226,14 +209,14 @@
 
         function renderBanners() {
             const wrapper = document.getElementById('banner-wrapper');
-            const banners = [
-                { t: "Yeni Kolleksiya 2026", img: "https://picsum.photos/800/400?10" },
+            const data = [
+                { t: "Yeni Kolleksiya", img: "https://picsum.photos/800/400?10" },
                 { t: "Eksklüziv Əl İşləri", img: "https://picsum.photos/800/400?11" },
-                { t: "Peşəkar Marketplace", img: "https://picsum.photos/800/400?12" },
-                { t: "Sizə Özəl Seçimlər", img: "https://picsum.photos/800/400?13" },
-                { t: "Keyfiyyətli Məhsullar", img: "https://picsum.photos/800/400?14" }
+                { t: "Xüsusi Hədiyyələr", img: "https://picsum.photos/800/400?12" },
+                { t: "Peşəkar Marketplace", img: "https://picsum.photos/800/400?13" },
+                { t: "SenLife Üstünlüyü", img: "https://picsum.photos/800/400?14" }
             ];
-            wrapper.innerHTML = banners.map(b => `
+            wrapper.innerHTML = data.map(b => `
                 <div class="swiper-slide">
                     <div class="banner-slide" style="background-image:url('${b.img}')">
                         <div class="banner-overlay"></div>
@@ -241,52 +224,43 @@
                     </div>
                 </div>
             `).join('');
-            
-            new Swiper('.hero-swiper', {
-                loop: true, autoplay: { delay: 1500 }, speed: 800, centeredSlides: true
-            });
+            new Swiper('.hero-swiper', { loop: true, autoplay: { delay: 1500 } });
         }
 
         function renderProducts(data) {
             const list = document.getElementById('product-list');
             list.innerHTML = data.map(p => `
                 <div class="card">
-                    <img src="${p.img}" class="card-img" loading="lazy">
+                    <img src="${p.img}" class="card-img">
                     <div class="card-body">
-                        <div style="font-size:10px; color:#999; margin-bottom:4px;">ID: ${p.code}</div>
+                        <div style="font-size:10px; color:gray">Kod: ${p.code}</div>
                         <div class="card-title">${p.name}</div>
                         <div class="card-price">${p.price.toFixed(2)} AZN</div>
                         <div class="btn-group">
                             <button class="order-btn" onclick="orderSingle('${p.code}', '${p.name}', '${p.price}')">Sifariş</button>
-                            <button class="cart-btn" onclick="addToCart(${p.id})"><i class="fa fa-cart-plus"></i></button>
+                            <button class="cart-btn" onclick="addToCart(${p.id})"><i class="fa fa-plus"></i></button>
                         </div>
                     </div>
                 </div>
             `).join('');
         }
 
-        function renderCategories() {
-            const list = document.getElementById('category-list');
-            list.innerHTML = categories.map(c => `
-                <div class="cat-item" onclick="filterByCat('${c.name}')">
-                    <i class="fa-solid ${c.icon}"></i>
-                    <p>${c.name}</p>
-                </div>
-            `).join('');
-        }
-
         function filterProducts() {
             const val = document.getElementById('searchInput').value.toLowerCase();
+            const hero = document.getElementById('hero-section');
+            const title = document.getElementById('list-title');
+            
+            if(val.length > 0) {
+                hero.style.display = 'none';
+                title.innerText = "Axtarış Nəticələri";
+            } else {
+                hero.style.display = 'block';
+                title.innerText = "Yeni Məhsullar";
+            }
+            
             const filtered = products.filter(p => p.name.toLowerCase().includes(val) || p.code.toLowerCase().includes(val));
             renderProducts(filtered);
             showView('home', document.querySelector('.nav-link:first-child'));
-        }
-
-        function filterByCat(catName) {
-            const filtered = products.filter(p => p.cat === catName);
-            renderProducts(filtered);
-            showView('home', document.querySelector('.nav-link:first-child'));
-            window.scrollTo(0, 450);
         }
 
         function showView(id, el) {
@@ -298,71 +272,60 @@
         }
 
         function addToCart(id) {
-            const product = products.find(p => p.id === id);
-            cart.push(product);
-            updateCartCount();
-            
-            const toast = document.getElementById('toast');
-            toast.style.display = 'block';
-            setTimeout(() => toast.style.display = 'none', 2000);
+            cart.push(products.find(p => p.id === id));
+            const count = document.getElementById('count');
+            count.innerText = cart.length;
+            count.style.display = 'block';
+            const t = document.getElementById('toast');
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 2000);
         }
 
-        function updateCartCount() {
-            const countBadge = document.getElementById('count');
-            if(cart.length > 0) {
-                countBadge.innerText = cart.length;
-                countBadge.style.display = 'block';
-            } else {
-                countBadge.style.display = 'none';
-            }
+        function renderCategories() {
+            document.getElementById('category-list').innerHTML = categories.map(c => `
+                <div class="cat-item" onclick="filterByCat('${c.name}')">
+                    <i class="fa-solid ${c.icon}"></i><p>${c.name}</p>
+                </div>
+            `).join('');
+        }
+
+        function filterByCat(cat) {
+            const filtered = products.filter(p => p.cat === cat);
+            renderProducts(filtered);
+            showView('home', document.querySelector('.nav-link:first-child'));
+            document.getElementById('hero-section').style.display = 'none';
+            document.getElementById('list-title').innerText = cat;
         }
 
         function renderCartItems() {
             const container = document.getElementById('cart-items');
             const summary = document.getElementById('cart-summary');
-            const emptyMsg = document.getElementById('empty-cart-msg');
-            
             if(cart.length === 0) {
-                container.innerHTML = "";
+                container.innerHTML = "<p style='text-align:center; padding:20px; color:gray;'>Səbətiniz boşdur.</p>";
                 summary.style.display = 'none';
-                emptyMsg.style.display = 'block';
                 return;
             }
-            
-            emptyMsg.style.display = 'none';
             summary.style.display = 'block';
             let total = 0;
             container.innerHTML = cart.map((item, index) => {
                 total += item.price;
-                return `
-                    <div style="display:flex; gap:15px; margin-bottom:15px; align-items:center; background:#fcfcfc; padding:12px; border-radius:12px;">
-                        <img src="${item.img}" style="width:60px; height:60px; border-radius:10px; object-fit:cover;">
-                        <div style="flex:1">
-                            <div style="font-size:13px; font-weight:700;">${item.name}</div>
-                            <div style="color:var(--primary); font-size:13px; font-weight:700; margin-top:4px;">${item.price.toFixed(2)} AZN</div>
-                        </div>
-                        <i class="fa fa-trash-can" onclick="removeItem(${index})" style="color:#ff3b30; padding:10px;"></i>
-                    </div>
-                `;
+                return `<div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #eee">
+                    <span>${item.name}</span>
+                    <b>${item.price.toFixed(2)} AZN</b>
+                </div>`;
             }).join('');
             document.getElementById('total-price').innerText = total.toFixed(2) + " AZN";
         }
 
-        function removeItem(index) {
-            cart.splice(index, 1);
-            renderCartItems();
-            updateCartCount();
-        }
-
         function orderSingle(code, name, price) {
-            const text = `Salam SenLife! 👋\nBu məhsulu sifariş vermək istəyirəm:\n\n🆔 Kod: ${code}\n📦 Ad: ${name}\n💰 Qiymət: ${price} AZN\n\nZəhmət olmasa, çatdırılma barədə məlumat verərdiniz.`;
+            const text = `Salam SenLife! 👋\nBu məhsulu sifariş vermək istəyirəm:\n🆔 Kod: ${code}\n📦 Ad: ${name}\n💰 Qiymət: ${price} AZN`;
             window.open(`https://wa.me/994773526665?text=${encodeURIComponent(text)}`);
         }
 
         function orderCartWhatsApp() {
-            let itemsText = cart.map(p => `• ${p.name} (Kod: ${p.code}) — ${p.price.toFixed(2)} AZN`).join('\n');
+            let items = cart.map(p => `• ${p.name} (Kod: ${p.code}) — ${p.price.toFixed(2)} AZN`).join('\n');
             let total = cart.reduce((a, b) => a + b.price, 0).toFixed(2);
-            const text = `Salam SenLife! 👋\nSəbətimdəki məhsulları sifariş vermək istəyirəm:\n\n${itemsText}\n\n💰 Cəmi məbləğ: ${total} AZN\n\nZəhmət olmasa, sifarişi təsdiqləyib çatdırılma barədə məlumat verərdiniz.`;
+            const text = `Salam SenLife! 👋\nSəbətimdəki məhsullar:\n${items}\n💰 Cəmi: ${total} AZN`;
             window.open(`https://wa.me/994773526665?text=${encodeURIComponent(text)}`);
         }
 
