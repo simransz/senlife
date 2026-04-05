@@ -99,8 +99,9 @@
 
         #toast {
             position: fixed; top: 30px; left: 50%; transform: translateX(-50%);
-            background: var(--dark); color: white; padding: 12px 24px;
+            background: var(--primary); color: white; padding: 12px 24px;
             border-radius: 50px; z-index: 3000; display: none; font-size: 13px; font-weight: 600;
+            box-shadow: 0 6px 20px rgba(204,0,0,0.25);
         }
     </style>
 </head>
@@ -134,7 +135,7 @@
         </section>
 
         <section id="catalog" class="view">
-            <h2 style="padding: 20px 16px 5px; font-size: 20px; font-weight: 700;">Kataloq</h2>
+            <h2 style="padding: 20px 16px 5px; font-size: 20px; font-weight: 700;">Kateqoriyalar</h2>
             <div class="cat-grid" id="category-list"></div>
         </section>
 
@@ -155,14 +156,17 @@
             <div style="padding: 20px;">
                 <div style="background: var(--primary); color: white; padding: 30px 20px; border-radius: 20px; text-align: center; margin-bottom: 20px;">
                     <h3 style="margin-bottom:10px;">SenLife Azerbaijan</h3>
-                    <p style="font-size: 14px; opacity: 0.9; line-height: 1.6;">Yüksək keyfiyyətli əl işləri və eksklüziv brendlərin mərkəzi ünvanı.</p>
+                    <p style="font-size: 14px; opacity: 0.95; line-height: 1.8;">
+                        SenLife Azerbaijan olaraq sizə zövqlə seçilmiş əl işləri, dekor məhsulları və özəl hədiyyəlik seçimlər təqdim edirik.
+                        Məqsədimiz hər sifarişdə keyfiyyət, etibar və səmimi xidmət hissini sizə çatdırmaqdır.
+                    </p>
                 </div>
                 <div style="display: grid; gap: 12px;">
                     <a href="https://wa.me/994773526665" style="display:flex; align-items:center; gap:15px; padding:18px; background:#f5f5f5; border-radius:15px; text-decoration:none; color:black; font-weight: 600;">
                         <i class="fab fa-whatsapp" style="color:#25D366; font-size:24px;"></i> WhatsApp Dəstək
                     </a>
                     <a href="https://instagram.com/senlife_az" target="_blank" style="display:flex; align-items:center; gap:15px; padding:18px; background:#f5f5f5; border-radius:15px; text-decoration:none; color:black; font-weight: 600;">
-                        <i class="fab fa-instagram" style="color:#E4405F; font-size:24px;"></i> Instagram Səhifəmiz
+                        <i class="fab fa-instagram" style="color:#E4405F; font-size:24px;"></i> senlife.az
                     </a>
                     <a href="mailto:senzgroups@gmail.com" style="display:flex; align-items:center; gap:15px; padding:18px; background:#f5f5f5; border-radius:15px; text-decoration:none; color:black; font-weight: 600;">
                         <i class="fa-solid fa-envelope" style="color:var(--primary); font-size:22px;"></i> E-poçt Ünvanı
@@ -177,7 +181,7 @@
             <i class="fa-solid fa-house-chimney"></i><p>Əsas</p>
         </a>
         <a href="javascript:void(0)" class="nav-link" onclick="showView('catalog', this)">
-            <i class="fa-solid fa-layer-group"></i><p>Kataloq</p>
+            <i class="fa-solid fa-layer-group"></i><p>Kateqoriyalar</p>
         </a>
         <a href="javascript:void(0)" class="nav-link" onclick="showView('cart', this)">
             <i class="fa-solid fa-bag-shopping"></i><p>Səbət</p>
@@ -196,20 +200,19 @@
             { id: 3, code: 'SN010', name: 'Premium Şokolad Seti', price: 45.00, cat: 'Şokolad qutuları', img: 'https://picsum.photos/400/400?3' }
         ];
 
-        // İstədiyin kateqoriya adları və spesifik "ən yaxşı seçim" ikonları
         const categories = [
-            { name: 'Bujiteriya', icon: 'fa-ring' },              // Üzük 💍
-            { name: 'Şamlar', icon: 'fa-fire-alt' },            // Alovlu şam 🕯️
-            { name: 'Şokolad qutuları', icon: 'fa-gift' },      // Hədiyyə qutusu 🎁
-            { name: 'Gips məhsullar', icon: 'fa-monument' },    // Dekor fiqur/vaza 🏺
-            { name: 'Keramika işlər', icon: 'fa-mug-hot' },     // Keramika fincan ☕
-            { name: 'Ətirlər', icon: 'fa-bottle-droplet' },     // Ətir flakonu 🧴
-            { name: 'Qol saatları', icon: 'fa-clock' },         // Saat ⌚
-            { name: 'Portretlər', icon: 'fa-image' },           // Şəkil çərçivəsi 🖼️
-            { name: 'Toxunma işlər', icon: 'fa-scroll' },       // İplik/toxuma ruhu 🧶
-            { name: 'Buketlər', icon: 'fa-seedling' },          // Çiçək/gül 💐
-            { name: 'Oyuncaq aləmi', icon: 'fa-face-grin-tears' }, // Ayı/Oyuncaq (🧸 alternativi)
-            { name: 'Dekor işləri', icon: 'fa-couch' }          // Ev dekoru 🏠
+            { name: 'Bujiteriya', icon: 'fa-ring' },
+            { name: 'Şamlar', icon: 'fa-fire-flame-curved' },
+            { name: 'Şokolad qutuları', icon: 'fa-gift' },
+            { name: 'Gips məhsullar', icon: 'fa-monument' },
+            { name: 'Keramika işlər', icon: 'fa-mug-hot' },
+            { name: 'Ətirlər', icon: 'fa-bottle-droplet' },
+            { name: 'Qol saatları', icon: 'fa-clock' },
+            { name: 'Portretlər', icon: 'fa-image' },
+            { name: 'Toxunma işlər', icon: 'fa-scroll' },
+            { name: 'Buketlər', icon: 'fa-seedling' },
+            { name: 'Oyuncaq aləmi', icon: 'fa-face-grin-stars' },
+            { name: 'Dekor işləri', icon: 'fa-couch' }
         ];
 
         let cart = [];
@@ -223,12 +226,13 @@
         function renderBanners() {
             const wrapper = document.getElementById('banner-wrapper');
             const data = [
-                { t: "Yeni Mövsüm Kolleksiyası", img: "https://picsum.photos/800/400?10" },
-                { t: "Eksklüziv Əl İşləri", img: "https://picsum.photos/800/400?11" },
-                { t: "Özəl Hədiyyəlik Seçimlər", img: "https://picsum.photos/800/400?12" },
-                { t: "Peşəkar Marketplace Xidməti", img: "https://picsum.photos/800/400?13" },
-                { t: "Sənə Özəl Dizaynlar", img: "https://picsum.photos/800/400?14" }
+                { t: "Endirimlər", img: "https://picsum.photos/800/400?10" },
+                { t: "Eksklüziv əl işləri", img: "https://picsum.photos/800/400?11" },
+                { t: "Premium məhsullar", img: "https://picsum.photos/800/400?12" },
+                { t: "Özəl hədiyyəlik seçimlər", img: "https://picsum.photos/800/400?13" },
+                { t: "Bonuslar", img: "https://picsum.photos/800/400?14" }
             ];
+
             wrapper.innerHTML = data.map(b => `
                 <div class="swiper-slide">
                     <div class="banner-slide" style="background-image:url('${b.img}')">
@@ -237,7 +241,15 @@
                     </div>
                 </div>
             `).join('');
-            new Swiper('.hero-swiper', { loop: true, autoplay: { delay: 3000 }, speed: 800 });
+
+            new Swiper('.hero-swiper', {
+                loop: true,
+                autoplay: {
+                    delay: 1500,
+                    disableOnInteraction: false
+                },
+                speed: 800
+            });
         }
 
         function renderProducts(data) {
