@@ -65,7 +65,7 @@
         }
         .cat-item:active { transform: scale(0.95); background: #fff5f5; }
         .cat-item i { font-size: 30px; color: var(--primary); margin-bottom: 10px; display: block; }
-        .cat-item p { font-size: 10.5px; font-weight: 700; color: #333; line-height: 1.2; }
+        .cat-item p { font-size: 10px; font-weight: 700; color: #333; line-height: 1.2; text-transform: capitalize; }
 
         /* Products */
         .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 16px; }
@@ -192,23 +192,24 @@
     <script>
         const products = [
             { id: 1, code: 'SN008', name: 'Kristal Qaşlı Əl İşi Üzük', price: 35.00, cat: 'Bujiteriya', img: 'https://picsum.photos/400/400?1' },
-            { id: 2, code: 'SN009', name: 'Zərif Dekorativ Şam', price: 15.50, cat: 'Şamlar', img: 'https://picsum.photos/400/400?2' }
+            { id: 2, code: 'SN009', name: 'Zərif Dekorativ Şam', price: 15.50, cat: 'Şamlar', img: 'https://picsum.photos/400/400?2' },
+            { id: 3, code: 'SN010', name: 'Premium Şokolad Seti', price: 45.00, cat: 'Şokolad qutuları', img: 'https://picsum.photos/400/400?3' }
         ];
 
-        // Kataloq İkonları - Tam uyğun simvollarla əvəz olundu
+        // İstədiyin kateqoriya adları və spesifik "ən yaxşı seçim" ikonları
         const categories = [
-            { name: 'Bujiteriya', icon: 'fa-gem' },
-            { name: 'Şamlar', icon: 'fa-fire-alt' },
-            { name: 'Şokolad qutuları', icon: 'fa-box-tissue' },
-            { name: 'Gips dizayn', icon: 'fa-shapes' },
-            { name: 'Keramika işlər', icon: 'fa-mortar-pestle' },
-            { name: 'Ətirlər', icon: 'fa-spray-can-sparkles' },
-            { name: 'Saatlar', icon: 'fa-stopwatch' },
-            { name: 'Portretlər', icon: 'fa-brush' },
-            { name: 'Toxunma işlər', icon: 'fa-socks' },
-            { name: 'Buketlər', icon: 'fa-spa' },
-            { name: 'Oyuncaq aləmi', icon: 'fa-robot' },
-            { name: 'Dekorlar', icon: 'fa-couch' }
+            { name: 'Bujiteriya', icon: 'fa-ring' },              // Üzük 💍
+            { name: 'Şamlar', icon: 'fa-fire-alt' },            // Alovlu şam 🕯️
+            { name: 'Şokolad qutuları', icon: 'fa-gift' },      // Hədiyyə qutusu 🎁
+            { name: 'Gips məhsullar', icon: 'fa-monument' },    // Dekor fiqur/vaza 🏺
+            { name: 'Keramika işlər', icon: 'fa-mug-hot' },     // Keramika fincan ☕
+            { name: 'Ətirlər', icon: 'fa-bottle-droplet' },     // Ətir flakonu 🧴
+            { name: 'Qol saatları', icon: 'fa-clock' },         // Saat ⌚
+            { name: 'Portretlər', icon: 'fa-image' },           // Şəkil çərçivəsi 🖼️
+            { name: 'Toxunma işlər', icon: 'fa-scroll' },       // İplik/toxuma ruhu 🧶
+            { name: 'Buketlər', icon: 'fa-seedling' },          // Çiçək/gül 💐
+            { name: 'Oyuncaq aləmi', icon: 'fa-face-grin-tears' }, // Ayı/Oyuncaq (🧸 alternativi)
+            { name: 'Dekor işləri', icon: 'fa-couch' }          // Ev dekoru 🏠
         ];
 
         let cart = [];
@@ -221,7 +222,6 @@
 
         function renderBanners() {
             const wrapper = document.getElementById('banner-wrapper');
-            // 5 ədəd banner və Azərbaycan dilində düzgün yazılar
             const data = [
                 { t: "Yeni Mövsüm Kolleksiyası", img: "https://picsum.photos/800/400?10" },
                 { t: "Eksklüziv Əl İşləri", img: "https://picsum.photos/800/400?11" },
@@ -286,7 +286,8 @@
         }
 
         function addToCart(id) {
-            cart.push(products.find(p => p.id === id));
+            const product = products.find(p => p.id === id);
+            cart.push(product);
             const count = document.getElementById('count');
             count.innerText = cart.length;
             count.style.display = 'block';
