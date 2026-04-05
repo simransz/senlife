@@ -3,19 +3,22 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>SenLife | Marketplace</title>
+    <title>SenLife | Professional Marketplace</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
 
     <style>
         :root {
             --primary: #cc0000;
+            --primary-soft: #fff3f3;
             --dark: #121212;
             --white: #ffffff;
             --light: #f9f9f9;
             --radius: 20px;
+            --shadow-soft: 0 8px 24px rgba(0,0,0,0.05);
+            --shadow-hover: 0 16px 32px rgba(0,0,0,0.08);
         }
 
         * {
@@ -26,6 +29,10 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             background-color: var(--white);
             color: var(--dark);
@@ -33,8 +40,10 @@
             overflow-x: hidden;
         }
 
+        /* Header */
         header {
-            background: white;
+            background: rgba(255,255,255,0.96);
+            backdrop-filter: blur(12px);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -53,6 +62,7 @@
 
         .logo-img {
             height: 38px;
+            object-fit: contain;
         }
 
         .red-divider {
@@ -72,7 +82,13 @@
             border-radius: 50px;
             display: flex;
             align-items: center;
-            padding: 10px 18px;
+            padding: 11px 18px;
+            transition: 0.25s ease;
+        }
+
+        .search-wrapper:focus-within {
+            border-color: rgba(204,0,0,0.25);
+            box-shadow: 0 0 0 4px rgba(204,0,0,0.06);
         }
 
         .search-wrapper input {
@@ -87,7 +103,7 @@
         /* Banner */
         .hero-swiper {
             margin: 15px 0;
-            height: 200px;
+            height: 210px;
             width: 100%;
         }
 
@@ -99,78 +115,111 @@
         .banner-slide {
             width: 100%;
             height: 100%;
-            border-radius: var(--radius);
+            border-radius: 24px;
             background-size: cover;
             background-position: center;
             position: relative;
             overflow: hidden;
+            box-shadow: var(--shadow-soft);
         }
 
         .banner-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            background: linear-gradient(to top, rgba(0,0,0,0.74), rgba(0,0,0,0.10));
         }
 
         .banner-text {
             position: absolute;
-            bottom: 18px;
-            left: 18px;
+            bottom: 20px;
+            left: 20px;
             color: white;
             z-index: 10;
         }
 
         .banner-text h2 {
-            font-size: 18px;
-            font-weight: 700;
+            font-size: 20px;
+            font-weight: 800;
             text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+            line-height: 1.3;
         }
 
-        /* Categories */
+        /* Category Grid */
         .cat-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
+            gap: 14px;
             padding: 16px;
         }
 
         .cat-item {
             text-align: center;
-            background: white;
-            padding: 18px 8px;
-            border-radius: var(--radius);
-            border: 1px solid #f0f0f0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-            transition: 0.25s ease;
+            background: linear-gradient(180deg, #ffffff 0%, #fffdfd 100%);
+            padding: 18px 10px;
+            border-radius: 22px;
+            border: 1px solid #f2f2f2;
+            box-shadow: var(--shadow-soft);
+            transition: 0.28s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .cat-item::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(204,0,0,0.05), rgba(204,0,0,0.01));
+            opacity: 0;
+            transition: 0.28s ease;
+        }
+
+        .cat-item:hover::before,
+        .cat-item:active::before {
+            opacity: 1;
+        }
+
+        .cat-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(204,0,0,0.10);
         }
 
         .cat-item:active {
-            transform: scale(0.96);
-            background: #fff5f5;
+            transform: scale(0.97);
         }
 
         .cat-icon-wrap {
-            width: 54px;
-            height: 54px;
-            border-radius: 50%;
-            background: #fff4f4;
+            width: 58px;
+            height: 58px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #fff5f5, #fffafa);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 10px;
-            box-shadow: inset 0 0 0 1px rgba(204,0,0,0.06);
+            margin: 0 auto 12px;
+            box-shadow: inset 0 0 0 1px rgba(204,0,0,0.05);
+            position: relative;
+            z-index: 1;
         }
 
         .cat-item i {
             font-size: 24px;
             color: var(--primary);
+            display: block;
         }
 
         .cat-item p {
-            font-size: 10.5px;
-            font-weight: 700;
-            color: #333;
-            line-height: 1.25;
+            font-size: 11px;
+            font-weight: 800;
+            color: #2b2b2b;
+            line-height: 1.35;
+            position: relative;
+            z-index: 1;
+            min-height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* Products */
@@ -183,16 +232,23 @@
 
         .card {
             background: white;
-            border-radius: 18px;
+            border-radius: 20px;
             overflow: hidden;
             border: 1px solid #f2f2f2;
             box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            transition: 0.25s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
         }
 
         .card-img {
             width: 100%;
             height: 150px;
             object-fit: cover;
+            background: #f4f4f4;
         }
 
         .card-body {
@@ -201,7 +257,7 @@
 
         .card-title {
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 700;
             height: 34px;
             overflow: hidden;
             margin-bottom: 6px;
@@ -226,9 +282,10 @@
             color: white;
             border: none;
             padding: 10px;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 11px;
-            font-weight: 700;
+            font-weight: 800;
+            cursor: pointer;
         }
 
         .cart-btn {
@@ -236,10 +293,11 @@
             background: var(--primary);
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
         }
 
         /* Navigation */
@@ -247,8 +305,8 @@
             position: fixed;
             bottom: 0;
             width: 100%;
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.96);
+            backdrop-filter: blur(14px);
             display: flex;
             justify-content: space-around;
             padding: 12px 0 32px;
@@ -313,8 +371,47 @@
             z-index: 3000;
             display: none;
             font-size: 13px;
-            font-weight: 600;
-            box-shadow: 0 8px 20px rgba(204,0,0,0.28);
+            font-weight: 700;
+            box-shadow: 0 8px 20px rgba(204,0,0,0.25);
+        }
+
+        /* Contact */
+        .contact-banner {
+            background: linear-gradient(135deg, #cc0000, #8f0000);
+            color: white;
+            padding: 30px 20px;
+            border-radius: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .contact-card {
+            display:flex;
+            align-items:center;
+            gap:15px;
+            padding:18px;
+            background:#f7f7f7;
+            border-radius:18px;
+            text-decoration:none;
+            color:black;
+            font-weight: 700;
+            transition: 0.25s ease;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-2px);
+            background: #f3f3f3;
+        }
+
+        @media (max-width: 420px) {
+            .cat-item p {
+                font-size: 10px;
+            }
+
+            .banner-text h2 {
+                font-size: 18px;
+            }
         }
     </style>
 </head>
@@ -345,7 +442,7 @@
                 </div>
             </div>
 
-            <h2 id="list-title" style="padding: 10px 16px; font-size: 17px; font-weight: 700; color: var(--primary);">
+            <h2 id="list-title" style="padding: 10px 16px; font-size: 17px; font-weight: 800; color: var(--primary);">
                 Yeni Məhsullar
             </h2>
 
@@ -353,7 +450,7 @@
         </section>
 
         <section id="catalog" class="view">
-            <h2 style="padding: 20px 16px 5px; font-size: 20px; font-weight: 700;">Kateqoriyalar</h2>
+            <h2 style="padding: 20px 16px 5px; font-size: 20px; font-weight: 800;">Kateqoriyalar</h2>
             <div class="cat-grid" id="category-list"></div>
         </section>
 
@@ -362,12 +459,12 @@
                 <h2 style="margin-bottom:20px; color: var(--primary); font-size: 22px;">Səbətim</h2>
                 <div id="cart-items"></div>
 
-                <div id="cart-summary" style="margin-top:30px; display:none; background: var(--light); padding: 20px; border-radius: 15px;">
-                    <div style="display:flex; justify-content:space-between; font-weight:700; padding-bottom: 15px; font-size: 18px;">
+                <div id="cart-summary" style="margin-top:30px; display:none; background: var(--light); padding: 20px; border-radius: 18px;">
+                    <div style="display:flex; justify-content:space-between; font-weight:800; padding-bottom: 15px; font-size: 18px;">
                         <span>Cəmi:</span>
                         <span id="total-price">0 AZN</span>
                     </div>
-                    <button onclick="orderCartWhatsApp()" class="order-btn" style="width:100%; padding:16px; font-size:15px; border-radius: 12px;">
+                    <button onclick="orderCartWhatsApp()" class="order-btn" style="width:100%; padding:16px; font-size:15px; border-radius: 14px;">
                         Səbəti Sifariş Et
                     </button>
                 </div>
@@ -376,23 +473,24 @@
 
         <section id="contact" class="view">
             <div style="padding: 20px;">
-                <div style="background: var(--primary); color: white; padding: 30px 20px; border-radius: 20px; text-align: center; margin-bottom: 20px;">
-                    <h3 style="margin-bottom:10px;">SenLife</h3>
-                    <p style="font-size: 14px; opacity: 0.95; line-height: 1.8;">
+                <div class="contact-banner">
+                    <h3 style="margin-bottom:10px; font-size: 22px;">SenLife</h3>
+                    <p style="font-size: 14px; opacity: 0.96; line-height: 1.8;">
                         SenLife olaraq sizə zövqlə seçilmiş əl işləri, dekor məhsulları və özəl hədiyyəlik seçimlər təqdim edirik.
+                        Məqsədimiz hər sifarişdə keyfiyyət, etibar və səmimi xidmət hissini sizə çatdırmaqdır.
                     </p>
                 </div>
 
                 <div style="display: grid; gap: 12px;">
-                    <a href="https://wa.me/994773526665" style="display:flex; align-items:center; gap:15px; padding:18px; background:#f5f5f5; border-radius:15px; text-decoration:none; color:black; font-weight: 600;">
+                    <a href="https://wa.me/994773526665" class="contact-card">
                         <i class="fab fa-whatsapp" style="color:#25D366; font-size:24px;"></i> WhatsApp Dəstək
                     </a>
 
-                    <a href="https://instagram.com/senlife_az" target="_blank" style="display:flex; align-items:center; gap:15px; padding:18px; background:#f5f5f5; border-radius:15px; text-decoration:none; color:black; font-weight: 600;">
+                    <a href="https://instagram.com/senlife_az" target="_blank" class="contact-card">
                         <i class="fab fa-instagram" style="color:#E4405F; font-size:24px;"></i> senlife.az
                     </a>
 
-                    <a href="mailto:senzgroups@gmail.com" style="display:flex; align-items:center; gap:15px; padding:18px; background:#f5f5f5; border-radius:15px; text-decoration:none; color:black; font-weight: 600;">
+                    <a href="mailto:senzgroups@gmail.com" class="contact-card">
                         <i class="fa-solid fa-envelope" style="color:var(--primary); font-size:22px;"></i> E-poçt Ünvanı
                     </a>
                 </div>
@@ -426,25 +524,28 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script>
         const products = [
-            { id: 1, code: 'SN008', name: 'Kristal Qaşlı Əl İşi Üzük', price: 35.00, cat: 'Bujiteriya', img: 'https://picsum.photos/400/400?1' },
+            { id: 1, code: 'SN008', name: 'Kristal Qaşlı Əl İşi Üzük', price: 35.00, cat: 'Aksessuarlar', img: 'https://picsum.photos/400/400?1' },
             { id: 2, code: 'SN009', name: 'Zərif Dekorativ Şam', price: 15.50, cat: 'Şamlar', img: 'https://picsum.photos/400/400?2' },
             { id: 3, code: 'SN010', name: 'Premium Şokolad Seti', price: 45.00, cat: 'Şokolad qutuları', img: 'https://picsum.photos/400/400?3' }
         ];
 
-        // PREMIUM İKONLAR (Tam istəyinə uyğun)
+        // Yenilənmiş premium kateqoriyalar
         const categories = [
-            { name: 'Bujiteriya', icon: 'fa-ring' },              // Üzük
-            { name: 'Şamlar', icon: 'fa-fire-burner' },         // Şam/Alov
-            { name: 'Şokolad qutuları', icon: 'fa-gift' },      // Hədiyyə qutusu
-            { name: 'Gips məhsullar', icon: 'fa-monument' },    // Heykəl/Dekor
-            { name: 'Keramika işlər', icon: 'fa-mug-hot' },     // Keramika fincan
-            { name: 'Ətirlər', icon: 'fa-bottle-droplet' },     // Ətir flakonu
-            { name: 'Qol saatları', icon: 'fa-clock' },         // Saat
-            { name: 'Portretlər', icon: 'fa-image' },           // Şəkil çərçivəsi
-            { name: 'Toxunma işlər', icon: 'fa-scroll' },       // İplik topası ruhu
-            { name: 'Buketlər', icon: 'fa-seedling' },          // Gül/Buket
-            { name: 'Oyuncaq aləmi', icon: 'fa-teddy-bear' },   // Ayıcıq
-            { name: 'Dekor işləri', icon: 'fa-couch' }          // Ev dekoru
+            { name: 'Ev əşyaları', icon: 'fa-house' },
+            { name: 'Bəzək əşyaları', icon: 'fa-wand-magic-sparkles' },
+            { name: 'Aksessuarlar', icon: 'fa-gem' },
+            { name: 'Geyimlər', icon: 'fa-shirt' },
+            { name: 'Şamlar', icon: 'fa-fire-flame-curved' },
+            { name: 'Gips məhsullar', icon: 'fa-cube' },
+            { name: 'Keramika işlər', icon: 'fa-mug-hot' },
+            { name: 'Ətirlər', icon: 'fa-spray-can-sparkles' },
+            { name: 'Hədiyyəlik qutular', icon: 'fa-gift' },
+            { name: 'Şokolad qutuları', icon: 'fa-box-open' },
+            { name: 'Epoksi məhsullar', icon: 'fa-droplet' },
+            { name: 'Toxunma işlər', icon: 'fa-scissors' },
+            { name: 'Portretlər', icon: 'fa-image' },
+            { name: 'Oyuncaq aləmi', icon: 'fa-puzzle-piece' },
+            { name: 'Dekorlar', icon: 'fa-couch' }
         ];
 
         let cart = [];
@@ -459,7 +560,6 @@
         function renderBanners() {
             const wrapper = document.getElementById('banner-wrapper');
 
-            // Bura öz hazırladığın afişaların linklərini yerləşdirə bilərsən
             const data = [
                 { t: "Endirimlər", img: "https://picsum.photos/800/400?10" },
                 { t: "Eksklüziv əl işləri", img: "https://picsum.photos/800/400?11" },
@@ -486,29 +586,33 @@
             heroSwiper = new Swiper('.hero-swiper', {
                 loop: true,
                 autoplay: {
-                    delay: 2500,
+                    delay: 2200,
                     disableOnInteraction: false
                 },
-                speed: 800
+                speed: 850,
+                observer: true,
+                observeParents: true,
+                observeSlideChildren: true
             });
         }
 
         function restartSwiper() {
-            if (!heroSwiper) return;
-            setTimeout(() => {
-                heroSwiper.update();
-                heroSwiper.slideToLoop(0, 0);
-                heroSwiper.autoplay.start();
-            }, 120);
+            if (heroSwiper) {
+                setTimeout(() => {
+                    heroSwiper.update();
+                    heroSwiper.autoplay.start();
+                }, 200);
+            }
         }
 
         function renderProducts(data) {
             const list = document.getElementById('product-list');
+
             list.innerHTML = data.map(p => `
                 <div class="card">
                     <img src="${p.img}" class="card-img" loading="lazy" />
                     <div class="card-body">
-                        <div style="font-size:9px; color:#999; font-weight:700; margin-bottom:2px;">KOD: ${p.code}</div>
+                        <div style="font-size:9px; color:#999; font-weight:800; margin-bottom:2px;">KOD: ${p.code}</div>
                         <div class="card-title">${p.name}</div>
                         <div class="card-price">${p.price.toFixed(2)} AZN</div>
                         <div class="btn-group">
@@ -539,10 +643,10 @@
             );
 
             renderProducts(filtered);
-            showView('home', document.querySelector('.nav-link:first-child'));
+            showView('home', document.querySelector('.nav-link:first-child'), false);
         }
 
-        function showView(id, el) {
+        function showView(id, el, scrollTop = true) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
 
@@ -550,18 +654,21 @@
             el.classList.add('active');
 
             if (id === 'cart') renderCartItems();
-            if (id === 'home' && document.getElementById('hero-section').style.display !== 'none') {
-                restartSwiper();
+            if (id === 'home') restartSwiper();
+
+            if (scrollTop) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
-            window.scrollTo(0, 0);
         }
 
         function addToCart(id) {
             const product = products.find(p => p.id === id);
             cart.push(product);
+
             const count = document.getElementById('count');
             count.innerText = cart.length;
             count.style.display = 'block';
+
             const t = document.getElementById('toast');
             t.style.display = 'block';
             setTimeout(() => t.style.display = 'none', 2000);
@@ -569,7 +676,7 @@
 
         function renderCategories() {
             document.getElementById('category-list').innerHTML = categories.map(c => `
-                <div class="cat-item" onclick="filterByCat('${c.name}')">
+                <div class="cat-item" onclick="filterByCat('${c.name.replace(/'/g, "\\'")}')">
                     <div class="cat-icon-wrap">
                         <i class="fa-solid ${c.icon}"></i>
                     </div>
@@ -591,32 +698,40 @@
             const summary = document.getElementById('cart-summary');
 
             if (cart.length === 0) {
-                container.innerHTML = `<div style="text-align:center; padding:50px 20px; color:#ccc;"><i class="fa-solid fa-bag-shopping" style="font-size:60px; margin-bottom:15px; display:block;"></i><p>Səbətiniz boşdur.</p></div>`;
+                container.innerHTML = `
+                    <div style="text-align:center; padding:50px 20px; color:#ccc;">
+                        <i class="fa-solid fa-bag-shopping" style="font-size:60px; margin-bottom:15px; display:block;"></i>
+                        <p>Səbətiniz boşdur.</p>
+                    </div>
+                `;
                 summary.style.display = 'none';
                 return;
             }
 
             summary.style.display = 'block';
             let total = 0;
+
             container.innerHTML = cart.map((item, index) => {
                 total += item.price;
                 return `
                     <div style="display:flex; align-items:center; gap:12px; padding:15px 0; border-bottom:1px solid #f0f0f0">
-                        <img src="${item.img}" style="width:50px; height:50px; border-radius:10px; object-fit:cover;">
+                        <img src="${item.img}" style="width:50px; height:50px; border-radius:12px; object-fit:cover;">
                         <div style="flex:1">
-                            <div style="font-size:13px; font-weight:600;">${item.name}</div>
-                            <div style="font-size:12px; color:var(--primary); font-weight:700;">${item.price.toFixed(2)} AZN</div>
+                            <div style="font-size:13px; font-weight:700;">${item.name}</div>
+                            <div style="font-size:12px; color:var(--primary); font-weight:800;">${item.price.toFixed(2)} AZN</div>
                         </div>
                         <i class="fa-solid fa-trash" style="color:#ddd; cursor:pointer;" onclick="removeFromCart(${index})"></i>
                     </div>
                 `;
             }).join('');
+
             document.getElementById('total-price').innerText = total.toFixed(2) + " AZN";
         }
 
         function removeFromCart(index) {
             cart.splice(index, 1);
             renderCartItems();
+
             const count = document.getElementById('count');
             count.innerText = cart.length;
             if (cart.length === 0) count.style.display = 'none';
@@ -630,6 +745,7 @@
         function orderCartWhatsApp() {
             let items = cart.map(p => `• ${p.name} (Kod: ${p.code}) — ${p.price.toFixed(2)} AZN`).join('\n');
             let total = cart.reduce((a, b) => a + b.price, 0).toFixed(2);
+
             const text = `Salam SenLife! 👋\nSəbətimdəki məhsullar:\n${items}\n\n💰 Cəmi: ${total} AZN`;
             window.open(`https://wa.me/994773526665?text=${encodeURIComponent(text)}`);
         }
