@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>SenLife | Professional Marketplace</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
 
     <style>
@@ -18,90 +18,306 @@
             --radius: 20px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--white); color: var(--dark); padding-bottom: 100px; overflow-x: hidden; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--white);
+            color: var(--dark);
+            padding-bottom: 100px;
+            overflow-x: hidden;
+        }
 
         /* Header */
         header {
-            background: white; position: sticky; top: 0; z-index: 1000;
-            padding: 12px 0; border-bottom: 2px solid var(--primary);
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 12px 0;
+            border-bottom: 2px solid var(--primary);
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
-        .header-top { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 12px; }
-        .logo-img { height: 38px; }
-        .red-divider { width: 1.5px; height: 22px; background: var(--primary); opacity: 0.5; }
-        
-        .search-area { padding: 0 16px; }
-        .search-wrapper {
-            background: var(--light); border: 1px solid #eee;
-            border-radius: 50px; display: flex; align-items: center; padding: 10px 18px;
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 12px;
         }
-        .search-wrapper input { border: none; background: none; outline: none; width: 100%; padding-left: 10px; font-size: 14px; }
+
+        .logo-img {
+            height: 38px;
+        }
+
+        .red-divider {
+            width: 1.5px;
+            height: 22px;
+            background: var(--primary);
+            opacity: 0.5;
+        }
+
+        .search-area {
+            padding: 0 16px;
+        }
+
+        .search-wrapper {
+            background: var(--light);
+            border: 1px solid #eee;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            padding: 10px 18px;
+        }
+
+        .search-wrapper input {
+            border: none;
+            background: none;
+            outline: none;
+            width: 100%;
+            padding-left: 10px;
+            font-size: 14px;
+        }
 
         /* Banner */
-        .hero-swiper { margin: 15px 0; height: 200px; width: 100%; }
-        .swiper-slide { width: 100% !important; padding: 0 16px; }
+        .hero-swiper {
+            margin: 15px 0;
+            height: 200px;
+            width: 100%;
+        }
+
+        .swiper-slide {
+            width: 100% !important;
+            padding: 0 16px;
+        }
+
         .banner-slide {
-            width: 100%; height: 100%; border-radius: var(--radius);
-            background-size: cover; background-position: center; position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: var(--radius);
+            background-size: cover;
+            background-position: center;
+            position: relative;
             overflow: hidden;
         }
-        .banner-overlay { 
-            position: absolute; inset: 0; 
-            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); 
-        }
-        .banner-text { 
-            position: absolute; bottom: 20px; left: 20px; 
-            color: white; z-index: 10;
-        }
-        .banner-text h2 { font-size: 18px; font-weight: 700; text-shadow: 1px 1px 4px rgba(0,0,0,0.5); }
 
-        /* Catalog Grid */
-        .cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 16px; }
-        .cat-item { 
-            text-align: center; background: white; padding: 18px 8px; border-radius: var(--radius); 
-            border: 1px solid #f0f0f0; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        .banner-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.72), rgba(0,0,0,0.12));
+        }
+
+        .banner-text {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            z-index: 10;
+        }
+
+        .banner-text h2 {
+            font-size: 18px;
+            font-weight: 700;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+        }
+
+        /* Category Grid */
+        .cat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            padding: 16px;
+        }
+
+        .cat-item {
+            text-align: center;
+            background: white;
+            padding: 18px 8px;
+            border-radius: var(--radius);
+            border: 1px solid #f0f0f0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
             transition: 0.3s;
         }
-        .cat-item:active { transform: scale(0.95); background: #fff5f5; }
-        .cat-item i { font-size: 30px; color: var(--primary); margin-bottom: 10px; display: block; }
-        .cat-item p { font-size: 10px; font-weight: 700; color: #333; line-height: 1.2; text-transform: capitalize; }
+
+        .cat-item:active {
+            transform: scale(0.95);
+            background: #fff5f5;
+        }
+
+        .cat-icon-wrap {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: #fff3f3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            box-shadow: inset 0 0 0 1px rgba(204,0,0,0.06);
+        }
+
+        .cat-item i {
+            font-size: 24px;
+            color: var(--primary);
+            display: block;
+        }
+
+        .cat-item p {
+            font-size: 10px;
+            font-weight: 700;
+            color: #333;
+            line-height: 1.25;
+            text-transform: capitalize;
+        }
 
         /* Products */
-        .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 16px; }
-        .card { background: white; border-radius: 18px; overflow: hidden; border: 1px solid #f2f2f2; box-shadow: 0 4px 15px rgba(0,0,0,0.04); }
-        .card-img { width: 100%; height: 150px; object-fit: cover; }
-        .card-body { padding: 12px; }
-        .card-title { font-size: 12px; font-weight: 600; height: 34px; overflow: hidden; margin-bottom: 6px; line-height: 1.4; }
-        .card-price { color: var(--primary); font-weight: 800; font-size: 15px; margin-bottom: 12px; }
-        
-        .btn-group { display: flex; gap: 6px; }
-        .order-btn { flex: 3; background: #25D366; color: white; border: none; padding: 10px; border-radius: 10px; font-size: 11px; font-weight: 700; }
-        .cart-btn { flex: 1; background: var(--primary); color: white; border: none; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            padding: 0 16px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid #f2f2f2;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+        }
+
+        .card-img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 12px;
+        }
+
+        .card-title {
+            font-size: 12px;
+            font-weight: 600;
+            height: 34px;
+            overflow: hidden;
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+
+        .card-price {
+            color: var(--primary);
+            font-weight: 800;
+            font-size: 15px;
+            margin-bottom: 12px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 6px;
+        }
+
+        .order-btn {
+            flex: 3;
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .cart-btn {
+            flex: 1;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
         /* Navigation */
         .bottom-nav {
-            position: fixed; bottom: 0; width: 100%; background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px); display: flex; justify-content: space-around; 
-            padding: 12px 0 32px; border-top: 1px solid #eee; z-index: 2000;
-        }
-        .nav-link { text-decoration: none; color: #a0a0a0; text-align: center; font-size: 11px; position: relative; transition: 0.3s; }
-        .nav-link i { font-size: 20px; margin-bottom: 4px; display: block; }
-        .nav-link.active { color: var(--primary); }
-        .cart-count { 
-            position: absolute; top: -8px; right: -2px; background: var(--primary); 
-            color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; font-weight: 700;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0 32px;
+            border-top: 1px solid #eee;
+            z-index: 2000;
         }
 
-        .view { display: none; }
-        .view.active { display: block; animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .nav-link {
+            text-decoration: none;
+            color: #a0a0a0;
+            text-align: center;
+            font-size: 11px;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .nav-link i {
+            font-size: 20px;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .nav-link.active {
+            color: var(--primary);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -2px;
+            background: var(--primary);
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         #toast {
-            position: fixed; top: 30px; left: 50%; transform: translateX(-50%);
-            background: var(--primary); color: white; padding: 12px 24px;
-            border-radius: 50px; z-index: 3000; display: none; font-size: 13px; font-weight: 600;
-            box-shadow: 0 6px 20px rgba(204,0,0,0.25);
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            z-index: 3000;
+            display: none;
+            font-size: 13px;
+            font-weight: 600;
+            box-shadow: 0 8px 20px rgba(204,0,0,0.25);
         }
     </style>
 </head>
@@ -111,14 +327,15 @@
 
     <header>
         <div class="header-top">
-            <img src="https://i.postimg.cc/5t87Yx8F/1774906530079.png" class="logo-img">
+            <img src="https://i.postimg.cc/5t87Yx8F/1774906530079.png" class="logo-img" />
             <div class="red-divider"></div>
-            <img src="https://i.postimg.cc/Rq5QVZxB/1774906294188.png" class="logo-img">
+            <img src="https://i.postimg.cc/Rq5QVZxB/1774906294188.png" class="logo-img" />
         </div>
+
         <div class="search-area">
             <div class="search-wrapper">
                 <i class="fa-solid fa-magnifying-glass" style="color:var(--primary); font-size: 14px;"></i>
-                <input type="text" id="searchInput" placeholder="Məhsul adı və ya kod..." onkeyup="filterProducts()">
+                <input type="text" id="searchInput" placeholder="Məhsul adı və ya kod..." onkeyup="filterProducts()" />
             </div>
         </div>
     </header>
@@ -130,7 +347,11 @@
                     <div class="swiper-wrapper" id="banner-wrapper"></div>
                 </div>
             </div>
-            <h2 id="list-title" style="padding: 10px 16px; font-size: 17px; font-weight: 700; color: var(--primary);">Yeni Məhsullar</h2>
+
+            <h2 id="list-title" style="padding: 10px 16px; font-size: 17px; font-weight: 700; color: var(--primary);">
+                Yeni Məhsullar
+            </h2>
+
             <div class="products-grid" id="product-list"></div>
         </section>
 
@@ -143,11 +364,15 @@
             <div style="padding: 20px;">
                 <h2 style="margin-bottom:20px; color: var(--primary); font-size: 22px;">Səbətim</h2>
                 <div id="cart-items"></div>
+
                 <div id="cart-summary" style="margin-top:30px; display:none; background: var(--light); padding: 20px; border-radius: 15px;">
                     <div style="display:flex; justify-content:space-between; font-weight:700; padding-bottom: 15px; font-size: 18px;">
-                        <span>Cəmi:</span> <span id="total-price">0 AZN</span>
+                        <span>Cəmi:</span>
+                        <span id="total-price">0 AZN</span>
                     </div>
-                    <button onclick="orderCartWhatsApp()" class="order-btn" style="width:100%; padding:16px; font-size:15px; border-radius: 12px;">Səbəti Sifariş Et</button>
+                    <button onclick="orderCartWhatsApp()" class="order-btn" style="width:100%; padding:16px; font-size:15px; border-radius: 12px;">
+                        Səbəti Sifariş Et
+                    </button>
                 </div>
             </div>
         </section>
@@ -161,13 +386,16 @@
                         Məqsədimiz hər sifarişdə keyfiyyət, etibar və səmimi xidmət hissini sizə çatdırmaqdır.
                     </p>
                 </div>
+
                 <div style="display: grid; gap: 12px;">
                     <a href="https://wa.me/994773526665" style="display:flex; align-items:center; gap:15px; padding:18px; background:#f5f5f5; border-radius:15px; text-decoration:none; color:black; font-weight: 600;">
                         <i class="fab fa-whatsapp" style="color:#25D366; font-size:24px;"></i> WhatsApp Dəstək
                     </a>
+
                     <a href="https://instagram.com/senlife_az" target="_blank" style="display:flex; align-items:center; gap:15px; padding:18px; background:#f5f5f5; border-radius:15px; text-decoration:none; color:black; font-weight: 600;">
                         <i class="fab fa-instagram" style="color:#E4405F; font-size:24px;"></i> senlife.az
                     </a>
+
                     <a href="mailto:senzgroups@gmail.com" style="display:flex; align-items:center; gap:15px; padding:18px; background:#f5f5f5; border-radius:15px; text-decoration:none; color:black; font-weight: 600;">
                         <i class="fa-solid fa-envelope" style="color:var(--primary); font-size:22px;"></i> E-poçt Ünvanı
                     </a>
@@ -178,17 +406,24 @@
 
     <nav class="bottom-nav">
         <a href="javascript:void(0)" class="nav-link active" onclick="showView('home', this)">
-            <i class="fa-solid fa-house-chimney"></i><p>Əsas</p>
+            <i class="fa-solid fa-house-chimney"></i>
+            <p>Əsas</p>
         </a>
+
         <a href="javascript:void(0)" class="nav-link" onclick="showView('catalog', this)">
-            <i class="fa-solid fa-layer-group"></i><p>Kateqoriyalar</p>
+            <i class="fa-solid fa-layer-group"></i>
+            <p>Kateqoriyalar</p>
         </a>
+
         <a href="javascript:void(0)" class="nav-link" onclick="showView('cart', this)">
-            <i class="fa-solid fa-bag-shopping"></i><p>Səbət</p>
+            <i class="fa-solid fa-bag-shopping"></i>
+            <p>Səbət</p>
             <span class="cart-count" id="count" style="display:none;">0</span>
         </a>
+
         <a href="javascript:void(0)" class="nav-link" onclick="showView('contact', this)">
-            <i class="fa-solid fa-headset"></i><p>Əlaqə</p>
+            <i class="fa-solid fa-headset"></i>
+            <p>Əlaqə</p>
         </a>
     </nav>
 
@@ -200,18 +435,19 @@
             { id: 3, code: 'SN010', name: 'Premium Şokolad Seti', price: 45.00, cat: 'Şokolad qutuları', img: 'https://picsum.photos/400/400?3' }
         ];
 
+        // Premium ikonlu kateqoriyalar
         const categories = [
-            { name: 'Bujiteriya', icon: 'fa-ring' },
+            { name: 'Bujiteriya', icon: 'fa-gem' },
             { name: 'Şamlar', icon: 'fa-fire-flame-curved' },
             { name: 'Şokolad qutuları', icon: 'fa-gift' },
-            { name: 'Gips məhsullar', icon: 'fa-monument' },
+            { name: 'Gips məhsullar', icon: 'fa-chess-queen' },
             { name: 'Keramika işlər', icon: 'fa-mug-hot' },
-            { name: 'Ətirlər', icon: 'fa-bottle-droplet' },
+            { name: 'Ətirlər', icon: 'fa-wine-bottle' },
             { name: 'Qol saatları', icon: 'fa-clock' },
             { name: 'Portretlər', icon: 'fa-image' },
-            { name: 'Toxunma işlər', icon: 'fa-scroll' },
+            { name: 'Toxunma işlər', icon: 'fa-scissors' },
             { name: 'Buketlər', icon: 'fa-seedling' },
-            { name: 'Oyuncaq aləmi', icon: 'fa-face-grin-stars' },
+            { name: 'Oyuncaq aləmi', icon: 'fa-star' },
             { name: 'Dekor işləri', icon: 'fa-couch' }
         ];
 
@@ -225,6 +461,7 @@
 
         function renderBanners() {
             const wrapper = document.getElementById('banner-wrapper');
+
             const data = [
                 { t: "Endirimlər", img: "https://picsum.photos/800/400?10" },
                 { t: "Eksklüziv əl işləri", img: "https://picsum.photos/800/400?11" },
@@ -237,7 +474,9 @@
                 <div class="swiper-slide">
                     <div class="banner-slide" style="background-image:url('${b.img}')">
                         <div class="banner-overlay"></div>
-                        <div class="banner-text"><h2>${b.t}</h2></div>
+                        <div class="banner-text">
+                            <h2>${b.t}</h2>
+                        </div>
                     </div>
                 </div>
             `).join('');
@@ -254,9 +493,10 @@
 
         function renderProducts(data) {
             const list = document.getElementById('product-list');
+
             list.innerHTML = data.map(p => `
                 <div class="card">
-                    <img src="${p.img}" class="card-img" loading="lazy">
+                    <img src="${p.img}" class="card-img" loading="lazy" />
                     <div class="card-body">
                         <div style="font-size:9px; color:#999; font-weight:700; margin-bottom:2px;">KOD: ${p.code}</div>
                         <div class="card-title">${p.name}</div>
@@ -274,16 +514,19 @@
             const val = document.getElementById('searchInput').value.toLowerCase();
             const hero = document.getElementById('hero-section');
             const title = document.getElementById('list-title');
-            
-            if(val.length > 0) {
+
+            if (val.length > 0) {
                 hero.style.display = 'none';
                 title.innerText = "Axtarış Nəticələri";
             } else {
                 hero.style.display = 'block';
                 title.innerText = "Yeni Məhsullar";
             }
-            
-            const filtered = products.filter(p => p.name.toLowerCase().includes(val) || p.code.toLowerCase().includes(val));
+
+            const filtered = products.filter(p =>
+                p.name.toLowerCase().includes(val) || p.code.toLowerCase().includes(val)
+            );
+
             renderProducts(filtered);
             showView('home', document.querySelector('.nav-link:first-child'));
         }
@@ -291,18 +534,22 @@
         function showView(id, el) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+
             document.getElementById(id).classList.add('active');
             el.classList.add('active');
-            if(id === 'cart') renderCartItems();
-            window.scrollTo(0,0);
+
+            if (id === 'cart') renderCartItems();
+            window.scrollTo(0, 0);
         }
 
         function addToCart(id) {
             const product = products.find(p => p.id === id);
             cart.push(product);
+
             const count = document.getElementById('count');
             count.innerText = cart.length;
             count.style.display = 'block';
+
             const t = document.getElementById('toast');
             t.style.display = 'block';
             setTimeout(() => t.style.display = 'none', 2000);
@@ -311,7 +558,10 @@
         function renderCategories() {
             document.getElementById('category-list').innerHTML = categories.map(c => `
                 <div class="cat-item" onclick="filterByCat('${c.name}')">
-                    <i class="fa-solid ${c.icon}"></i><p>${c.name}</p>
+                    <div class="cat-icon-wrap">
+                        <i class="fa-solid ${c.icon}"></i>
+                    </div>
+                    <p>${c.name}</p>
                 </div>
             `).join('');
         }
@@ -327,38 +577,45 @@
         function renderCartItems() {
             const container = document.getElementById('cart-items');
             const summary = document.getElementById('cart-summary');
-            if(cart.length === 0) {
+
+            if (cart.length === 0) {
                 container.innerHTML = `
                     <div style="text-align:center; padding:50px 20px; color:#ccc;">
                         <i class="fa-solid fa-bag-shopping" style="font-size:60px; margin-bottom:15px; display:block;"></i>
                         <p>Səbətiniz boşdur.</p>
-                    </div>`;
+                    </div>
+                `;
                 summary.style.display = 'none';
                 return;
             }
+
             summary.style.display = 'block';
             let total = 0;
+
             container.innerHTML = cart.map((item, index) => {
                 total += item.price;
                 return `
-                <div style="display:flex; align-items:center; gap:12px; padding:15px 0; border-bottom:1px solid #f0f0f0">
-                    <img src="${item.img}" style="width:50px; height:50px; border-radius:10px; object-fit:cover;">
-                    <div style="flex:1">
-                        <div style="font-size:13px; font-weight:600;">${item.name}</div>
-                        <div style="font-size:12px; color:var(--primary); font-weight:700;">${item.price.toFixed(2)} AZN</div>
+                    <div style="display:flex; align-items:center; gap:12px; padding:15px 0; border-bottom:1px solid #f0f0f0">
+                        <img src="${item.img}" style="width:50px; height:50px; border-radius:10px; object-fit:cover;">
+                        <div style="flex:1">
+                            <div style="font-size:13px; font-weight:600;">${item.name}</div>
+                            <div style="font-size:12px; color:var(--primary); font-weight:700;">${item.price.toFixed(2)} AZN</div>
+                        </div>
+                        <i class="fa-solid fa-trash" style="color:#ddd; cursor:pointer;" onclick="removeFromCart(${index})"></i>
                     </div>
-                    <i class="fa-solid fa-trash" style="color:#ddd;" onclick="removeFromCart(${index})"></i>
-                </div>`;
+                `;
             }).join('');
+
             document.getElementById('total-price').innerText = total.toFixed(2) + " AZN";
         }
 
         function removeFromCart(index) {
             cart.splice(index, 1);
             renderCartItems();
+
             const count = document.getElementById('count');
             count.innerText = cart.length;
-            if(cart.length === 0) count.style.display = 'none';
+            if (cart.length === 0) count.style.display = 'none';
         }
 
         function orderSingle(code, name, price) {
@@ -369,6 +626,7 @@
         function orderCartWhatsApp() {
             let items = cart.map(p => `• ${p.name} (Kod: ${p.code}) — ${p.price.toFixed(2)} AZN`).join('\n');
             let total = cart.reduce((a, b) => a + b.price, 0).toFixed(2);
+
             const text = `Salam SenLife! 👋\nSəbətimdəki məhsullar:\n${items}\n\n💰 Cəmi: ${total} AZN`;
             window.open(`https://wa.me/994773526665?text=${encodeURIComponent(text)}`);
         }
