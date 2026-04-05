@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>SenLife | Professional Marketplace</title>
+    <title>SenLife | Marketplace</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
@@ -33,7 +33,6 @@
             overflow-x: hidden;
         }
 
-        /* Header */
         header {
             background: white;
             position: sticky;
@@ -110,13 +109,13 @@
         .banner-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.72), rgba(0,0,0,0.12));
+            background: linear-gradient(to top, rgba(0,0,0,0.75), rgba(0,0,0,0.08));
         }
 
         .banner-text {
             position: absolute;
-            bottom: 20px;
-            left: 20px;
+            bottom: 18px;
+            left: 18px;
             color: white;
             z-index: 10;
         }
@@ -124,10 +123,10 @@
         .banner-text h2 {
             font-size: 18px;
             font-weight: 700;
-            text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.45);
         }
 
-        /* Category Grid */
+        /* Categories */
         .cat-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -142,19 +141,19 @@
             border-radius: var(--radius);
             border: 1px solid #f0f0f0;
             box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-            transition: 0.3s;
+            transition: 0.25s ease;
         }
 
         .cat-item:active {
-            transform: scale(0.95);
+            transform: scale(0.96);
             background: #fff5f5;
         }
 
         .cat-icon-wrap {
-            width: 52px;
-            height: 52px;
+            width: 54px;
+            height: 54px;
             border-radius: 50%;
-            background: #fff3f3;
+            background: #fff4f4;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -163,9 +162,8 @@
         }
 
         .cat-item i {
-            font-size: 24px;
+            font-size: 22px;
             color: var(--primary);
-            display: block;
         }
 
         .cat-item p {
@@ -296,11 +294,11 @@
 
         .view.active {
             display: block;
-            animation: fadeIn 0.4s ease;
+            animation: fadeIn 0.35s ease;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -317,7 +315,7 @@
             display: none;
             font-size: 13px;
             font-weight: 600;
-            box-shadow: 0 8px 20px rgba(204,0,0,0.25);
+            box-shadow: 0 8px 20px rgba(204,0,0,0.28);
         }
     </style>
 </head>
@@ -380,9 +378,9 @@
         <section id="contact" class="view">
             <div style="padding: 20px;">
                 <div style="background: var(--primary); color: white; padding: 30px 20px; border-radius: 20px; text-align: center; margin-bottom: 20px;">
-                    <h3 style="margin-bottom:10px;">SenLife Azerbaijan</h3>
+                    <h3 style="margin-bottom:10px;">SenLife</h3>
                     <p style="font-size: 14px; opacity: 0.95; line-height: 1.8;">
-                        SenLife Azerbaijan olaraq sizə zövqlə seçilmiş əl işləri, dekor məhsulları və özəl hədiyyəlik seçimlər təqdim edirik.
+                        SenLife olaraq sizə zövqlə seçilmiş əl işləri, dekor məhsulları və özəl hədiyyəlik seçimlər təqdim edirik.
                         Məqsədimiz hər sifarişdə keyfiyyət, etibar və səmimi xidmət hissini sizə çatdırmaqdır.
                     </p>
                 </div>
@@ -435,23 +433,24 @@
             { id: 3, code: 'SN010', name: 'Premium Şokolad Seti', price: 45.00, cat: 'Şokolad qutuları', img: 'https://picsum.photos/400/400?3' }
         ];
 
-        // Premium ikonlu kateqoriyalar
+        // Daha uyğun və zövqlü ikonlar
         const categories = [
             { name: 'Bujiteriya', icon: 'fa-gem' },
-            { name: 'Şamlar', icon: 'fa-fire-flame-curved' },
-            { name: 'Şokolad qutuları', icon: 'fa-gift' },
-            { name: 'Gips məhsullar', icon: 'fa-chess-queen' },
-            { name: 'Keramika işlər', icon: 'fa-mug-hot' },
-            { name: 'Ətirlər', icon: 'fa-wine-bottle' },
+            { name: 'Şamlar', icon: 'fa-candle-holder' },
+            { name: 'Şokolad qutuları', icon: 'fa-box' },
+            { name: 'Gips məhsullar', icon: 'fa-chess-bishop' },
+            { name: 'Keramika işlər', icon: 'fa-mug-saucer' },
+            { name: 'Ətirlər', icon: 'fa-spray-can-sparkles' },
             { name: 'Qol saatları', icon: 'fa-clock' },
-            { name: 'Portretlər', icon: 'fa-image' },
-            { name: 'Toxunma işlər', icon: 'fa-scissors' },
-            { name: 'Buketlər', icon: 'fa-seedling' },
-            { name: 'Oyuncaq aləmi', icon: 'fa-star' },
-            { name: 'Dekor işləri', icon: 'fa-couch' }
+            { name: 'Portretlər', icon: 'fa-portrait' },
+            { name: 'Toxunma işlər', icon: 'fa-mitten' },
+            { name: 'Buketlər', icon: 'fa-fan' },
+            { name: 'Oyuncaq aləmi', icon: 'fa-teddy-bear' },
+            { name: 'Dekor işləri', icon: 'fa-house' }
         ];
 
         let cart = [];
+        let heroSwiper = null;
 
         function init() {
             renderProducts(products);
@@ -481,7 +480,11 @@
                 </div>
             `).join('');
 
-            new Swiper('.hero-swiper', {
+            if (heroSwiper) {
+                heroSwiper.destroy(true, true);
+            }
+
+            heroSwiper = new Swiper('.hero-swiper', {
                 loop: true,
                 autoplay: {
                     delay: 1500,
@@ -489,6 +492,16 @@
                 },
                 speed: 800
             });
+        }
+
+        function restartSwiper() {
+            if (!heroSwiper) return;
+
+            setTimeout(() => {
+                heroSwiper.update();
+                heroSwiper.slideToLoop(0, 0);
+                heroSwiper.autoplay.start();
+            }, 120);
         }
 
         function renderProducts(data) {
@@ -521,6 +534,7 @@
             } else {
                 hero.style.display = 'block';
                 title.innerText = "Yeni Məhsullar";
+                restartSwiper();
             }
 
             const filtered = products.filter(p =>
@@ -539,6 +553,14 @@
             el.classList.add('active');
 
             if (id === 'cart') renderCartItems();
+
+            if (id === 'home') {
+                const searchVal = document.getElementById('searchInput').value.trim();
+                if (searchVal.length === 0 && document.getElementById('hero-section').style.display !== 'none') {
+                    restartSwiper();
+                }
+            }
+
             window.scrollTo(0, 0);
         }
 
