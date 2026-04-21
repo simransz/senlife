@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SenLife Pro</title>
+<title>SenLife</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -11,200 +11,273 @@
 
 <style>
 :root{
---primary:#ff4d4d;
---soft:#fff5f5;
+--primary:#ff5a5a;
+--soft:#fff4f4;
 --dark:#121212;
 }
 
-body{font-family:Inter;margin:0;background:#fff;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter}
+body{background:#fff;color:#121212;padding-bottom:90px}
 
-header{padding:10px;border-bottom:1px solid #eee;background:#fff;}
+/* HEADER */
+header{
+background:#fff;
+position:sticky;
+top:0;
+z-index:1000;
+border-bottom:1px solid #eee;
+padding:10px;
+}
 
-.search{display:flex;gap:10px;padding:10px;}
+.search-area{
+display:flex;
+gap:10px;
+align-items:center;
+}
 
-.search input{flex:1;padding:10px;border-radius:50px;border:none;background:#f5f5f5;}
+.icon-btn{
+width:40px;height:40px;border:none;
+background:var(--soft);
+border-radius:50%;
+display:flex;align-items:center;justify-content:center;
+color:var(--primary);
+}
 
-button{border:none;border-radius:12px;padding:10px;}
+.search{
+flex:1;
+background:#f5f5f5;
+border-radius:50px;
+padding:10px 15px;
+display:flex;
+align-items:center;
+}
 
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:10px;}
+.search input{
+border:none;background:none;outline:none;width:100%;
+}
 
-.card{border:1px solid #eee;border-radius:15px;overflow:hidden;}
+/* GRID */
+.products{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
+padding:12px;
+}
 
-.card img{width:100%;height:150px;object-fit:cover;}
+.card{
+border:1px solid #eee;
+border-radius:18px;
+overflow:hidden;
+background:#fff;
+}
 
-.card-body{padding:10px;}
+.card img{width:100%;height:160px;object-fit:cover}
 
-.view{display:none;}
-.view.active{display:block;}
+.card-body{padding:10px}
 
-.bottom{position:fixed;bottom:0;width:100%;display:flex;justify-content:space-around;background:#fff;padding:10px;border-top:1px solid #eee;}
+.price{color:var(--primary);font-weight:800}
 
-.badge{background:red;color:#fff;font-size:10px;padding:3px 6px;border-radius:6px;}
+/* VIEW */
+.view{display:none}
+.view.active{display:block}
 
-.sticky{position:fixed;bottom:70px;width:90%;left:5%;}
+/* DETAIL */
+.detail-img{width:100%}
+.detail-box{padding:20px}
 
+.sticky{
+position:fixed;
+bottom:70px;
+left:0;
+width:100%;
+padding:10px;
+}
+
+.sticky button{
+width:100%;
+padding:15px;
+border:none;
+background:#25D366;
+color:#fff;
+border-radius:12px;
+font-weight:700;
+}
+
+/* NAV */
+.nav{
+position:fixed;
+bottom:0;
+width:100%;
+display:flex;
+justify-content:space-around;
+background:#fff;
+border-top:1px solid #eee;
+padding:10px;
+}
 </style>
 </head>
 
 <body>
 
 <header>
+<div class="search-area">
+
+<button class="icon-btn" onclick="goHome()">
+<i class="fa fa-arrow-left"></i>
+</button>
+
 <div class="search">
-<button onclick="goHome()"><i class="fa fa-arrow-left"></i></button>
-<input id="search" placeholder="Axtar..." onkeyup="filter()">
-<button><i class="fa fa-gift"></i></button>
+<input id="searchInput" placeholder="Məhsul axtar..." onkeyup="filter()">
+</div>
+
+<button class="icon-btn">
+<i class="fa fa-gift"></i>
+</button>
+
 </div>
 </header>
 
 <!-- HOME -->
 <section id="home" class="view active">
-<div class="grid" id="list"></div>
+<div class="products" id="product-list"></div>
 </section>
 
 <!-- DETAIL -->
 <section id="detail" class="view">
-<div id="detailBox"></div>
+<div id="detail-content"></div>
 </section>
 
 <!-- CART -->
 <section id="cart" class="view">
-<div id="cartList"></div>
-<button onclick="orderCart()">WhatsApp sifariş</button>
+<div id="cart-items" style="padding:20px"></div>
+<button onclick="orderCart()" style="margin:20px;width:90%">Sifariş et</button>
 </section>
 
-<!-- ADMIN -->
-<section id="admin" class="view">
-<h3>Admin Panel</h3>
-<input id="pname" placeholder="Ad">
-<input id="pprice" placeholder="Qiymət">
-<button onclick="addProduct()">Əlavə et</button>
+<!-- CONTACT -->
+<section id="contact" class="view" style="padding:20px">
+<a href="https://www.instagram.com/senlife.az?igsh=eDU4d3N6ZjQ2aGJm">Instagram</a>
 </section>
 
-<nav class="bottom">
-<button onclick="show('home')">Home</button>
-<button onclick="show('cart')">Cart</button>
-<button onclick="show('admin')">Admin</button>
-</nav>
+<!-- NAV -->
+<div class="nav">
+<button onclick="show('home')">Əsas</button>
+<button onclick="show('cart')">Səbət</button>
+<button onclick="show('contact')">Profil</button>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 
 <script>
 
-let products=[
-{id:1,name:"Şam",price:15,code:"SN1",cat:"Şam",img:"https://picsum.photos/400?1",stock:3},
-{id:2,name:"Qutu",price:20,code:"SN2",cat:"Qutu",img:"https://picsum.photos/400?2",stock:5}
+const products=[
+{ id:1, code:'SN001', name:'Gips Qutu', price:12, cat:'Gips', img:'https://picsum.photos/400?1', desc:'Minimalist dizayn' },
+{ id:2, code:'SN002', name:'Şam', price:18, cat:'Şam', img:'https://picsum.photos/400?2', desc:'Ətirli şam' }
 ];
 
 let cart=[];
 
-/* RENDER */
-function render(data){
-document.getElementById("list").innerHTML=data.map(p=>`
-<div class="card" onclick="openP(${p.id})">
+/* HOME */
+function render(){
+product-list.innerHTML=products.map(p=>`
+<div class="card" onclick="openProduct(${p.id})">
 <img src="${p.img}">
 <div class="card-body">
-<b>${p.name}</b><br>
-${p.price} AZN<br>
-${p.stock<4?'<span class="badge">Son '+p.stock+'</span>':''}
+<b>${p.name}</b>
+<div class="price">${p.price} AZN</div>
 </div>
 </div>
 `).join('');
 }
 
 /* DETAIL */
-function openP(id){
+function openProduct(id){
 let p=products.find(x=>x.id==id);
 
-detailBox.innerHTML=`
+detail-content.innerHTML=`
 <div class="swiper">
 <div class="swiper-wrapper">
-<div class="swiper-slide"><img src="${p.img}" width="100%"></div>
-<div class="swiper-slide"><img src="${p.img}" width="100%"></div>
+<div class="swiper-slide"><img src="${p.img}" class="detail-img"></div>
+<div class="swiper-slide"><img src="${p.img}" class="detail-img"></div>
 </div>
 </div>
 
-<div style="padding:20px">
+<div class="detail-box">
 <h2>${p.name}</h2>
-<p>${p.price} AZN</p>
-<p>Kod: ${p.code}</p>
+<p><b>Qiymət:</b> ${p.price} AZN</p>
+<p><b>Kateqoriya:</b> ${p.cat}</p>
+<p><b>Kod:</b> ${p.code}</p>
+<p>${p.desc}</p>
 
-<button onclick="addCart(${p.id})">Səbətə at</button>
-<button onclick="orderOne(${p.id})">WhatsApp</button>
+<button onclick="addCart(${p.id})">Səbətə əlavə et</button>
+<button onclick="orderSingle(${p.id})">WhatsApp</button>
 </div>
 
 <div class="sticky">
-<button style="width:100%;background:green;color:#fff" onclick="orderOne(${p.id})">Sifariş et</button>
+<button onclick="orderSingle(${p.id})">Sifariş et</button>
 </div>
 `;
 
-show("detail");
+show('detail');
 
-new Swiper('.swiper',{autoplay:{delay:2000},loop:true});
+new Swiper('.swiper',{loop:true,autoplay:{delay:2500}});
 }
 
 /* CART */
 function addCart(id){
 cart.push(products.find(p=>p.id==id));
-alert("Əlavə edildi");
+alert("Səbətə əlavə edildi");
 }
 
 function renderCart(){
-cartList.innerHTML=cart.map(p=>`
-<div>${p.name} - ${p.price}</div>
+cart-items.innerHTML=cart.map(p=>`
+<div>${p.name} - ${p.price} AZN</div>
 `).join('');
 }
 
-function orderCart(){
-let msg="Salam 😊\n\nSifariş:\n";
-cart.forEach(p=>msg+=p.name+" "+p.price+"\n");
-window.open("https://wa.me/994773526665?text="+encodeURIComponent(msg));
-}
-
-/* SINGLE ORDER */
-function orderOne(id){
+/* WHATSAPP */
+function orderSingle(id){
 let p=products.find(x=>x.id==id);
 
 let msg=`Salam 😊
 
 ${p.name} sifariş etmək istəyirəm
-Qiymət: ${p.price}
+Qiymət: ${p.price} AZN
 Kod: ${p.code}`;
 
 window.open("https://wa.me/994773526665?text="+encodeURIComponent(msg));
 }
 
-/* FILTER */
-function filter(){
-let val=search.value.toLowerCase();
-render(products.filter(p=>p.name.toLowerCase().includes(val)));
+function orderCart(){
+let msg="Salam 😊\n\nSəbət:\n";
+cart.forEach(p=>msg+=`${p.name} - ${p.price} AZN\n`);
+window.open("https://wa.me/994773526665?text="+encodeURIComponent(msg));
 }
 
-/* ADMIN */
-function addProduct(){
-let name=pname.value;
-let price=pprice.value;
-
-products.push({
-id:Date.now(),
-name,price,
-code:"NEW",
-img:"https://picsum.photos/400",
-stock:5
-});
-
-render(products);
+/* SEARCH */
+function filter(){
+let val=searchInput.value.toLowerCase();
+let filtered=products.filter(p=>p.name.toLowerCase().includes(val));
+product-list.innerHTML=filtered.map(p=>`
+<div class="card" onclick="openProduct(${p.id})">
+<img src="${p.img}">
+<div class="card-body">
+<b>${p.name}</b>
+<div class="price">${p.price} AZN</div>
+</div>
+</div>
+`).join('');
 }
 
 /* NAV */
 function show(v){
-document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));
-document.getElementById(v).classList.add("active");
+document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+document.getElementById(v).classList.add('active');
 renderCart();
 }
 
-function goHome(){show("home");}
+function goHome(){show('home')}
 
-render(products);
+render();
 
 </script>
 
