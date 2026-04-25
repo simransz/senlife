@@ -1,191 +1,423 @@
-import React, { useState, useMemo } from 'react';
-import { 
-  Search, ShoppingCart, User, Heart, Menu, 
-  ChevronDown, Filter, Star, ShoppingBag 
-} from 'lucide-react';
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>SenLife | Premium Gift & Decor</title>
 
-// --- MOCK DATA (Verilənlər Bazası) ---
-const PRODUCTS = [
-  { id: 1, title: "Buta Naxışlı Əl İşləmə Broş", price: 45, oldPrice: 55, rating: 4.8, category: "Aksesuar", img: "https://images.unsplash.com/photo-1617033935324-a23bc4c1ed9d?w=400", isNew: true },
-  { id: 2, title: "Minimalist Gümüş Üzük", price: 120, oldPrice: 150, rating: 4.9, category: "Zərgərlik", img: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400", isNew: false },
-  { id: 3, title: "Dəri Portmone (Qəhvəyi)", price: 65, oldPrice: null, rating: 4.5, category: "Dəri", img: "https://images.unsplash.com/photo-1627123424574-724758594e93?w=400", isNew: true },
-  { id: 4, title: "Kəpənək Formalı Boyunbağı", price: 35, oldPrice: 40, rating: 4.7, category: "Aksesuar", img: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400", isNew: false },
-  { id: 5, title: "İpək Şərf - Milli Ornamentlər", price: 55, oldPrice: 70, rating: 5.0, category: "Geyim", img: "https://images.unsplash.com/photo-1584030373081-f37b7bb4fa8e?w=400", isNew: false },
-];
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
 
-const CATEGORIES = ["Hamısı", "Aksesuar", "Zərgərlik", "Dəri", "Geyim"];
+    <style>
+        :root {
+            --primary: #b30000; /* Tündləşdirilmiş premium qırmızı */
+            --dark: #121212;
+            --white: #ffffff;
+            --light: #f8f8f8;
+            --gray: #888;
+        }
 
-export default function SenlifeMarketplace() {
-  const [activeCat, setActiveCat] = useState("Hamısı");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [cart, setCart] = useState([]);
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--white); color: var(--dark); padding-bottom: 90px; overflow-x: hidden; }
 
-  // Filtrasiya Məntiqi
-  const filteredProducts = useMemo(() => {
-    return PRODUCTS.filter(p => 
-      (activeCat === "Hamısı" || p.category === activeCat) &&
-      p.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }, [activeCat, searchQuery]);
+        /* --- Header & Search --- */
+        header { background: var(--white); position: sticky; top: 0; z-index: 1000; padding: 12px 0; border-bottom: 1px solid #eee; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
+        .header-top { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 12px; }
+        .logo-img { height: 35px; object-fit: contain; }
+        .red-divider { width: 1.5px; height: 20px; background: var(--primary); opacity: 0.5; }
 
-  return (
-    <div className="min-h-screen bg-[#F8F9FA] text-[#1A1A1A] antialiased">
-      
-      {/* --- ÜST NAVİQASİYA (HEADER) --- */}
-      <nav className="sticky top-0 z-[100] bg-white border-b border-gray-100 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between gap-8">
-          {/* Logo */}
-          <div className="text-3xl font-black tracking-tighter text-indigo-600 cursor-pointer">
-            SENLIFE
-          </div>
+        .search-area { padding: 0 16px; display: flex; align-items: center; gap: 10px; }
+        .nav-icon-btn { background: var(--light); border: none; width: 42px; height: 42px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: 0.3s; }
+        .search-wrapper { background: var(--light); border-radius: 14px; display: flex; align-items: center; padding: 0 15px; flex: 1; height: 42px; border: 1px solid #eef0f2; }
+        .search-wrapper input { border: none; background: none; outline: none; width: 100%; padding-left: 10px; font-size: 14px; font-weight: 500; }
 
-          {/* Sürətli Axtarış (Umico Analoqu) */}
-          <div className="hidden md:flex flex-1 max-w-2xl relative">
-            <input 
-              type="text"
-              placeholder="Məhsul, brend və ya kateqoriya axtarın..."
-              className="w-full bg-gray-100 border-transparent rounded-xl py-3 px-12 focus:bg-white focus:ring-2 focus:ring-indigo-500 transition-all outline-none"
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <Search className="absolute left-4 top-3.5 text-gray-400 w-5 h-5" />
-          </div>
+        /* --- Banners --- */
+        .hero-swiper { margin: 15px; height: 220px; border-radius: 25px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .banner-slide { width: 100%; height: 100%; background-size: cover; background-position: center; position: relative; }
+        .banner-overlay { position: absolute; inset: 0; background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.7)); }
+        .banner-text { position: absolute; bottom: 20px; left: 20px; color: white; font-size: 24px; font-weight: 800; z-index: 5; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
 
-          {/* İstifadəçi Paneli */}
-          <div className="flex items-center gap-6">
-            <div className="hidden sm:flex flex-col items-end group cursor-pointer">
-              <span className="text-xs text-gray-400">Xoş gəlmisiniz</span>
-              <div className="flex items-center gap-1 font-semibold group-hover:text-indigo-600">
-                Giriş edin <ChevronDown size={14} />
-              </div>
+        /* --- Section Titles --- */
+        .section-title { padding: 15px 16px 5px; font-size: 20px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* --- Products Grid (2 sıra) --- */
+        .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 16px; }
+        .card { background: white; border-radius: 20px; border: 1px solid #f0f0f0; overflow: hidden; transition: 0.3s; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .card-img { width: 100%; height: 180px; object-fit: cover; }
+        .card-body { padding: 12px; }
+        .card-title { font-size: 14px; font-weight: 700; height: 38px; overflow: hidden; margin-bottom: 8px; color: #333; line-height: 1.4; }
+        .card-price { color: var(--primary); font-weight: 800; font-size: 16px; margin-bottom: 12px; }
+        .card-actions { display: flex; gap: 8px; }
+        .order-small { flex: 1; background: #25D366; color: white; border: none; padding: 10px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; }
+        .cart-small { width: 40px; background: var(--primary); color: white; border: none; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+
+        /* --- Pagination --- */
+        .pagination { display: flex; justify-content: center; gap: 10px; padding: 25px 0; align-items: center; }
+        .pg-btn { border: 1px solid #eee; background: white; width: 35px; height: 35px; border-radius: 10px; cursor: pointer; font-weight: 700; color: var(--dark); transition: 0.3s; }
+        .pg-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* --- Premium Detail Modal --- */
+        .modal { position: fixed; inset: 0; background: white; z-index: 3000; display: none; overflow-y: auto; }
+        .modal-header { position: relative; width: 100%; height: 420px; background: #000; }
+        .modal-btn { position: absolute; top: 20px; background: rgba(255,255,255,0.9); border: none; width: 40px; height: 40px; border-radius: 50%; z-index: 10; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .btn-m-back { left: 20px; }
+        .btn-m-share { right: 20px; }
+        .img-badge { position: absolute; bottom: 20px; right: 20px; background: rgba(0,0,0,0.6); color: white; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: 600; z-index: 10; backdrop-filter: blur(5px); }
+
+        .modal-content { padding: 25px; border-radius: 30px 30px 0 0; background: white; margin-top: -30px; position: relative; z-index: 11; }
+        .m-title { font-size: 24px; font-weight: 800; margin-bottom: 8px; color: var(--dark); }
+        .m-price { color: var(--primary); font-size: 22px; font-weight: 800; margin-bottom: 5px; }
+        .m-code { color: var(--gray); font-size: 14px; margin-bottom: 20px; display: block; font-weight: 500; }
+        .m-note-box { background: var(--light); padding: 15px; border-radius: 15px; border-left: 4px solid var(--primary); margin-bottom: 25px; }
+        .m-note-box p { font-size: 14px; color: #555; line-height: 1.6; }
+
+        .m-actions { display: flex; gap: 12px; height: 60px; margin-bottom: 30px; }
+        .m-btn-order { flex: 1; background: #25D366; color: white; border: none; border-radius: 18px; font-size: 16px; font-weight: 700; box-shadow: 0 10px 20px rgba(37,211,102,0.2); }
+        .m-btn-cart { width: 70px; background: var(--primary); color: white; border: none; border-radius: 18px; font-size: 22px; box-shadow: 0 10px 20px rgba(179,0,0,0.2); }
+
+        /* --- Səbət Dizaynı --- */
+        .cart-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: var(--light); border-radius: 18px; margin-bottom: 12px; border: 1px solid #eee; }
+        .cart-item img { width: 65px; height: 65px; border-radius: 12px; object-fit: cover; }
+        .cart-info { flex: 1; }
+        .cart-info h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+        .cart-info p { color: var(--primary); font-weight: 800; font-size: 15px; }
+        .cart-del { color: var(--primary); border: none; background: none; font-size: 18px; padding: 5px; }
+
+        /* --- Haqqımızda (Premium) --- */
+        .about-card { background: var(--primary); border-radius: 25px; padding: 35px 25px; color: white; text-align: center; box-shadow: 0 15px 30px rgba(179,0,0,0.2); }
+        .about-card h2 { font-size: 24px; margin-bottom: 15px; font-weight: 800; }
+        .about-card p { font-size: 15px; line-height: 1.7; opacity: 0.9; }
+
+        /* --- Bottom Navigation --- */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); display: flex; justify-content: space-around; padding: 12px 0 25px; border-top: 1px solid #eee; z-index: 2000; }
+        .nav-link { text-decoration: none; color: #bbb; text-align: center; font-size: 11px; font-weight: 700; position: relative; transition: 0.3s; cursor: pointer; }
+        .nav-link i { font-size: 22px; display: block; margin-bottom: 4px; }
+        .nav-link.active { color: var(--primary); }
+        .badge { position: absolute; top: -5px; right: -5px; background: var(--primary); color: white; width: 20px; height: 20px; border-radius: 50%; font-size: 11px; display: flex; align-items: center; justify-content: center; border: 2px solid white; font-weight: 800; }
+
+        /* --- Toast Notification --- */
+        #toast { position: fixed; top: 25px; left: 50%; transform: translateX(-50%); background: var(--primary); color: white; padding: 15px 35px; border-radius: 50px; z-index: 5000; font-weight: 700; display: none; box-shadow: 0 10px 30px rgba(179,0,0,0.4); border: 2px solid rgba(255,255,255,0.2); font-size: 14px; white-space: nowrap; }
+
+        .view { display: none; }
+        .view.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <div id="toast">Səbətinizə əlavə edildi! ✨</div>
+
+    <div id="productModal" class="modal">
+        <div class="modal-header">
+            <button class="modal-btn btn-m-back" onclick="closeModal()"><i class="fa-solid fa-chevron-left"></i></button>
+            <button class="modal-btn btn-m-share" onclick="shareProduct()"><i class="fa-solid fa-share-nodes"></i></button>
+            <div class="img-badge" id="m-counter">1/1</div>
+            <div class="swiper detail-swiper" style="height: 100%;">
+                <div class="swiper-wrapper" id="m-slides"></div>
             </div>
-            <div className="relative cursor-pointer p-2 hover:bg-gray-50 rounded-full transition" onClick={() => alert("Səbət boşdur")}>
-              <ShoppingBag size={24} className="text-gray-700" />
-              {cart.length > 0 && (
-                <span className="absolute top-0 right-0 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold">
-                  {cart.length}
-                </span>
-              )}
+        </div>
+        <div class="modal-content">
+            <h1 class="m-title" id="m-title">Məhsul Adı</h1>
+            <div class="m-price" id="m-price">0.00 AZN</div>
+            <span class="m-code" id="m-code">Kod: SL-000</span>
+            
+            <div style="font-weight: 800; margin-bottom: 8px; font-size: 15px;">Məhsul haqqında:</div>
+            <div class="m-note-box"><p id="m-note">Premium keyfiyyətli əl işi məhsul.</p></div>
+
+            <div class="m-actions">
+                <button class="m-btn-order" id="m-order-btn">İndi Sifariş Et</button>
+                <button class="m-btn-cart" id="m-cart-btn"><i class="fa-solid fa-basket-shopping"></i></button>
             </div>
-          </div>
-        </div>
-      </nav>
 
-      {/* --- KATEQORİYA PANERİ --- */}
-      <div className="bg-white border-b border-gray-100 overflow-x-auto scrollbar-hide">
-        <div className="max-w-7xl mx-auto px-4 flex gap-8">
-          {CATEGORIES.map(cat => (
-            <button 
-              key={cat}
-              onClick={() => setActiveCat(cat)}
-              className={`py-4 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
-                activeCat === cat ? "border-indigo-600 text-indigo-600" : "border-transparent text-gray-500 hover:text-gray-800"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+            <h3 class="section-title" style="padding:0; margin-bottom:15px;">Oxşar Məhsullar</h3>
+            <div class="products-grid" id="m-related" style="padding:0;"></div>
         </div>
-      </div>
-
-      {/* --- ƏSAS MƏZMUN --- */}
-      <main className="max-w-7xl mx-auto px-4 py-8">
-        
-        {/* Banner (Promosyon) */}
-        <div className="relative w-full h-[300px] rounded-3xl overflow-hidden mb-12 bg-indigo-900 shadow-2xl shadow-indigo-200">
-          <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent z-10" />
-          <img 
-            src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200" 
-            className="absolute inset-0 w-full h-full object-cover"
-            alt="Banner"
-          />
-          <div className="relative z-20 h-full flex flex-col justify-center px-12 text-white max-w-md">
-            <span className="bg-indigo-500 text-[10px] font-bold px-3 py-1 rounded-full uppercase mb-4 w-fit">Yeni Kolleksiya</span>
-            <h1 className="text-4xl font-bold mb-4">Əl işləri ilə öz üslubunu yarat</h1>
-            <button className="bg-white text-indigo-600 font-bold py-3 px-8 rounded-xl hover:bg-indigo-50 transition-transform active:scale-95 w-fit text-sm">
-              İndi Alış-Veriş Et
-            </button>
-          </div>
-        </div>
-
-        {/* Məhsul Başlığı */}
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            Trenddə olanlar <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-          </h2>
-          <button className="flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-indigo-600">
-            <Filter size={16} /> Filtrlə
-          </button>
-        </div>
-
-        {/* --- PRODUCT GRID --- */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-          {filteredProducts.map(product => (
-            <div key={product.id} className="group bg-white rounded-2xl border border-gray-100 hover:border-indigo-100 hover:shadow-xl transition-all duration-500 flex flex-col">
-              {/* Image Container */}
-              <div className="relative aspect-[4/5] p-2 overflow-hidden">
-                <div className="w-full h-full rounded-xl overflow-hidden bg-gray-50 relative">
-                  <img 
-                    src={product.img} 
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    alt={product.title}
-                  />
-                  {/* Badge */}
-                  {product.isNew && (
-                    <div className="absolute top-3 left-3 bg-white text-indigo-600 text-[10px] font-bold px-2 py-1 rounded-md shadow-sm">
-                      YENİ
-                    </div>
-                  )}
-                  {/* Like Button */}
-                  <button className="absolute top-3 right-3 p-2 bg-white/80 backdrop-blur-md rounded-full text-gray-400 hover:text-red-500 hover:bg-white transition shadow-sm">
-                    <Heart size={18} />
-                  </button>
-                </div>
-              </div>
-
-              {/* Product Info */}
-              <div className="p-4 flex-1 flex flex-col">
-                <div className="flex items-center gap-1 mb-2">
-                  <Star size={12} className="fill-yellow-400 text-yellow-400" />
-                  <span className="text-[11px] font-bold text-gray-600">{product.rating}</span>
-                </div>
-                <h3 className="text-sm font-semibold text-gray-800 line-clamp-2 mb-4 h-10 group-hover:text-indigo-600 transition-colors">
-                  {product.title}
-                </h3>
-                
-                <div className="mt-auto">
-                  <div className="flex flex-col mb-4">
-                    <span className="text-xl font-black text-gray-900">{product.price} ₼</span>
-                    {product.oldPrice && (
-                      <span className="text-xs text-gray-400 line-through">{product.oldPrice} ₼</span>
-                    )}
-                  </div>
-                  <button 
-                    onClick={() => setCart([...cart, product])}
-                    className="w-full bg-gray-900 text-white py-3 rounded-xl text-xs font-bold hover:bg-indigo-600 transition-colors shadow-lg shadow-gray-200"
-                  >
-                    SƏBƏTƏ AT
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </main>
-
-      {/* --- FOOTER (Minimal) --- */}
-      <footer className="mt-24 border-t border-gray-100 bg-white py-12">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <div className="text-2xl font-black text-gray-300 mb-6 tracking-widest">SENLIFE</div>
-          <p className="text-gray-400 text-sm max-w-md mx-auto leading-relaxed">
-            Azərbaycanın ən unikal əl işləri və dizayn məhsullarının mərkəzi. Keyfiyyət və zəriflik bir arada.
-          </p>
-          <div className="mt-8 flex justify-center gap-6 text-gray-400 text-xs">
-            <span className="hover:text-indigo-600 cursor-pointer">Haqqımızda</span>
-            <span className="hover:text-indigo-600 cursor-pointer">Çatdırılma</span>
-            <span className="hover:text-indigo-600 cursor-pointer">Qaydalar</span>
-          </div>
-        </div>
-      </footer>
     </div>
-  );
-}
+
+    <header>
+        <div class="header-top">
+            <img src="https://i.postimg.cc/5t87Yx8F/1774906530079.png" class="logo-img" />
+            <div class="red-divider"></div>
+            <img src="https://i.postimg.cc/Rq5QVZxB/1774906294188.png" class="logo-img" />
+        </div>
+        <div class="search-area">
+            <button class="nav-icon-btn" onclick="goHome()"><i class="fa-solid fa-house"></i></button>
+            <div class="search-wrapper">
+                <i class="fa-solid fa-magnifying-glass" style="color: var(--primary);"></i>
+                <input type="text" id="searchInput" placeholder="Məhsul, kod və ya kateqoriya..." onkeyup="handleSearch()" />
+            </div>
+        </div>
+    </header>
+
+    <main id="app">
+        <section id="home" class="view active">
+            <div class="swiper hero-swiper">
+                <div class="swiper-wrapper" id="banner-wrapper"></div>
+            </div>
+            <h2 class="section-title">Yeni Məhsullar</h2>
+            <div class="products-grid" id="product-list"></div>
+            <div class="pagination" id="pagination-controls"></div>
+        </section>
+
+        <section id="catalog" class="view">
+            <h2 class="section-title">Bölmələr</h2>
+            <div id="category-list" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 16px;"></div>
+        </section>
+
+        <section id="cart" class="view">
+            <div style="padding: 20px;">
+                <h2 class="section-title" style="padding:0; margin-bottom: 25px; color: var(--dark);">Səbətim</h2>
+                <div id="cart-items"></div>
+                <div id="cart-footer" style="display:none; margin-top: 30px; border-top: 2px dashed #eee; padding-top: 20px;">
+                    <div style="display:flex; justify-content:space-between; font-weight:800; font-size:20px; margin-bottom:25px;">
+                        <span>Cəmi:</span> <span id="cart-total" style="color: var(--primary);">0.00 AZN</span>
+                    </div>
+                    <button onclick="orderWhatsApp()" class="m-btn-order" style="width:100%; height: 60px;">Səbətimi Sifariş Et</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="view">
+            <div style="padding: 20px;">
+                <div class="about-card">
+                    <h2>SenLife Haqqında</h2>
+                    <p>Zövqlə seçilmiş premium əl işləri, unikal gips dekorları və xüsusi hədiyyələrin yeganə ünvanı. Biz hər bir detala sevgi qatırıq.</p>
+                </div>
+                <div style="margin-top: 30px;">
+                    <a href="https://wa.me/994773526665" style="display:flex; align-items:center; gap:15px; padding:20px; background:#f4f4f4; border-radius:18px; text-decoration:none; color:var(--dark); font-weight:700; margin-bottom:15px;">
+                        <i class="fa-brands fa-whatsapp" style="font-size:24px; color:#25D366;"></i> WhatsApp Dəstək
+                    </a>
+                    <a href="https://instagram.com/senlife.az" style="display:flex; align-items:center; gap:15px; padding:20px; background:#f4f4f4; border-radius:18px; text-decoration:none; color:var(--dark); font-weight:700;">
+                        <i class="fa-brands fa-instagram" style="font-size:24px; color:#E4405F;"></i> senlife.az
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <nav class="bottom-nav">
+        <div class="nav-link active" onclick="showView('home', this)"><i class="fa-solid fa-house"></i>Əsas</div>
+        <div class="nav-link" onclick="showView('catalog', this)"><i class="fa-solid fa-grid-2"></i>Kataloq</div>
+        <div class="nav-link" onclick="showView('cart', this)">
+            <i class="fa-solid fa-basket-shopping"></i>Səbət
+            <span class="badge" id="cart-badge">0</span>
+        </div>
+        <div class="nav-link" onclick="showView('contact', this)"><i class="fa-solid fa-circle-info"></i>Haqqımızda</div>
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script>
+        // Məhsul Bazası (Maksimum 100 məhsul üçün struktur)
+        const products = [
+            { id: 1, code: 'SL-101', name: 'Premium Gips Vaz', price: 18.00, cat: 'Gips məhsulları', img: ['https://picsum.photos/600/700?1', 'https://picsum.photos/600/700?11'], desc: 'Yüksək keyfiyyətli gipsdən hazırlanmış, əl işi dekorativ vaz.' },
+            { id: 2, code: 'SL-102', name: 'Aromatik Soya Şamı', price: 24.00, cat: 'Şamlar', img: ['https://picsum.photos/600/700?2'], desc: 'Təbii soya mumundan hazırlanmış premium ətirli şam.' },
+            { id: 3, code: 'SL-103', name: 'Minimalist Saat', price: 45.00, cat: 'Aksessuarlar', img: ['https://picsum.photos/600/700?3'], desc: 'Müasir interyerlər üçün minimalist divar saatı.' },
+            { id: 4, code: 'SL-104', name: 'Hədiyyəlik Qutu', price: 55.00, cat: 'Hədiyyəlik qutular', img: ['https://picsum.photos/600/700?4'], desc: 'Premium məhsullardan ibarət özəl hədiyyə dəsti.' }
+        ].reverse(); // Ən sonuncu məhsul ən başda
+
+        let cart = JSON.parse(localStorage.getItem('senlife_cart')) || [];
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let filteredProducts = [...products];
+
+        function init() {
+            renderBanners();
+            renderCategories();
+            updateProductDisplay();
+            updateCartUI();
+        }
+
+        function renderBanners() {
+            const labels = ['Yeni Kolleksiya', 'Premium Hədiyyələr', 'Əl İşləri', 'Özəl Endirimlər'];
+            document.getElementById('banner-wrapper').innerHTML = labels.map((l, i) => `
+                <div class="swiper-slide">
+                    <div class="banner-slide" style="background-image:url('https://picsum.photos/800/500?${i+50}')">
+                        <div class="banner-overlay"></div>
+                        <div class="banner-text">${l}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            new Swiper('.hero-swiper', {
+                loop: true,
+                autoplay: { delay: 1500, disableOnInteraction: false },
+                speed: 800
+            });
+        }
+
+        function updateProductDisplay() {
+            const start = (currentPage - 1) * itemsPerPage;
+            const items = filteredProducts.slice(start, start + itemsPerPage);
+            
+            document.getElementById('product-list').innerHTML = items.map(p => `
+                <div class="card">
+                    <img src="${p.img[0]}" class="card-img" onclick="openProduct(${p.id})">
+                    <div class="card-body">
+                        <div class="card-title" onclick="openProduct(${p.id})">${p.name}</div>
+                        <div class="card-price">${p.price.toFixed(2)} AZN</div>
+                        <div class="card-actions">
+                            <button class="order-small" onclick="directOrder('${p.code}', '${p.name}')">Sifariş</button>
+                            <button class="cart-small" onclick="addToCart(${p.id})"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            renderPagination();
+        }
+
+        function openProduct(id) {
+            const p = products.find(x => x.id === id);
+            const modal = document.getElementById('productModal');
+            
+            document.getElementById('m-title').innerText = p.name;
+            document.getElementById('m-price').innerText = p.price.toFixed(2) + " AZN";
+            document.getElementById('m-code').innerText = "Kod: " + p.code;
+            document.getElementById('m-note').innerText = p.desc;
+            
+            document.getElementById('m-slides').innerHTML = p.img.map(s => `<div class="swiper-slide"><img src="${s}" style="width:100%;height:100%;object-fit:cover;"></div>`).join('');
+            document.getElementById('m-counter').innerText = `1/${p.img.length}`;
+            
+            document.getElementById('m-order-btn').onclick = () => directOrder(p.code, p.name);
+            document.getElementById('m-cart-btn').onclick = () => addToCart(p.id);
+
+            const related = products.filter(x => x.id !== p.id).slice(0, 2);
+            document.getElementById('m-related').innerHTML = related.map(rp => `
+                <div class="card">
+                    <img src="${rp.img[0]}" class="card-img" onclick="openProduct(${rp.id})">
+                    <div class="card-body">
+                        <div class="card-title">${rp.name}</div>
+                        <div class="card-price">${rp.price.toFixed(2)} AZN</div>
+                    </div>
+                </div>
+            `).join('');
+
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+
+            new Swiper('.detail-swiper', {
+                on: { slideChange: function() { document.getElementById('m-counter').innerText = `${this.activeIndex+1}/${p.img.length}`; } }
+            });
+        }
+
+        function closeModal() {
+            document.getElementById('productModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function addToCart(id) {
+            const p = products.find(x => x.id === id);
+            cart.push(p);
+            localStorage.setItem('senlife_cart', JSON.stringify(cart));
+            updateCartUI();
+            
+            const t = document.getElementById('toast');
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 2000);
+        }
+
+        function updateCartUI() {
+            const badge = document.getElementById('cart-badge');
+            badge.innerText = cart.length;
+            badge.style.display = cart.length > 0 ? 'flex' : 'none';
+
+            const container = document.getElementById('cart-items');
+            if(cart.length === 0) {
+                container.innerHTML = `<div style="text-align:center; padding:50px 20px;"><i class="fa-solid fa-basket-shopping" style="font-size:50px; color:#eee; margin-bottom:15px;"></i><p style="color:#999; font-weight:600;">Səbətiniz hal-hazırda boşdur.</p></div>`;
+                document.getElementById('cart-footer').style.display = 'none';
+                return;
+            }
+
+            container.innerHTML = cart.map((p, i) => `
+                <div class="cart-item">
+                    <img src="${p.img[0]}">
+                    <div class="cart-info">
+                        <h4>${p.name}</h4>
+                        <p>${p.price.toFixed(2)} AZN</p>
+                    </div>
+                    <button class="cart-del" onclick="removeFromCart(${i})"><i class="fa-solid fa-trash-can"></i></button>
+                </div>
+            `).join('');
+
+            document.getElementById('cart-footer').style.display = 'block';
+            document.getElementById('cart-total').innerText = cart.reduce((a, b) => a + b.price, 0).toFixed(2) + " AZN";
+        }
+
+        function removeFromCart(i) {
+            cart.splice(i, 1);
+            localStorage.setItem('senlife_cart', JSON.stringify(cart));
+            updateCartUI();
+        }
+
+        function handleSearch() {
+            const q = document.getElementById('searchInput').value.toLowerCase();
+            filteredProducts = products.filter(p => p.name.toLowerCase().includes(q) || p.code.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q));
+            currentPage = 1;
+            updateProductDisplay();
+        }
+
+        function renderPagination() {
+            const total = Math.ceil(filteredProducts.length / itemsPerPage);
+            let html = '';
+            for(let i=1; i<=total; i++) {
+                html += `<button class="pg-btn ${i===currentPage ? 'active' : ''}" onclick="currentPage=${i};updateProductDisplay();window.scrollTo(0,350);">${i}</button>`;
+            }
+            document.getElementById('pagination-controls').innerHTML = total > 1 ? html : '';
+        }
+
+        function showView(id, el) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            el.classList.add('active');
+            if(id === 'cart') updateCartUI();
+            window.scrollTo(0,0);
+        }
+
+        function orderWhatsApp() {
+            const text = cart.map((p, i) => `${i+1}. ${p.name} (${p.code})`).join('\n');
+            const total = cart.reduce((a, b) => a + b.price, 0).toFixed(2);
+            const msg = `Salam SenLife! 👋\nSəbətimdəki məhsulları sifariş etmək istəyirəm:\n\n${text}\n\n💰 Toplam: ${total} AZN`;
+            window.open(`https://wa.me/994773526665?text=${encodeURIComponent(msg)}`);
+        }
+
+        function directOrder(code, name) {
+            const msg = `Salam SenLife! 👋\nMən bu məhsulu sifariş etmək istəyirəm:\n✨ ${name}\n🔢 Kod: ${code}`;
+            window.open(`https://wa.me/994773526665?text=${encodeURIComponent(msg)}`);
+        }
+
+        function renderCategories() {
+            const cats = ['Gips məhsulları', 'Şamlar', 'Hədiyyəlik qutular', 'Aksessuarlar'];
+            document.getElementById('category-list').innerHTML = cats.map(c => `
+                <div onclick="filterByCategory('${c}')" style="background:var(--light); padding:25px 15px; border-radius:20px; text-align:center; cursor:pointer; border:1px solid #eee;">
+                    <i class="fa-solid fa-gift" style="font-size:24px; color:var(--primary); margin-bottom:10px;"></i>
+                    <p style="font-weight:700; font-size:13px;">${c}</p>
+                </div>
+            `).join('');
+        }
+
+        function filterByCategory(cat) {
+            filteredProducts = products.filter(p => p.cat === cat);
+            currentPage = 1;
+            updateProductDisplay();
+            showView('home', document.querySelector('.nav-link:first-child'));
+        }
+
+        function goHome() {
+            filteredProducts = [...products];
+            currentPage = 1;
+            document.getElementById('searchInput').value = '';
+            updateProductDisplay();
+            showView('home', document.querySelector('.nav-link:first-child'));
+        }
+
+        function shareProduct() {
+            if (navigator.share) {
+                navigator.share({ title: 'SenLife', url: window.location.href });
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
