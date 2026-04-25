@@ -11,358 +11,263 @@
 
     <style>
         :root {
-            --primary: #b30000; /* Tündləşdirilmiş premium qırmızı */
-            --dark: #121212;
+            --primary: #CC0000; /* Canlı Qırmızı */
+            --dark: #000000;   /* Tam Qara */
             --white: #ffffff;
-            --light: #f8f8f8;
-            --gray: #888;
+            --light: #f4f4f4;
+            --gray: #666;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--white); color: var(--dark); padding-bottom: 90px; overflow-x: hidden; }
 
         /* --- Header & Search --- */
-        header { background: var(--white); position: sticky; top: 0; z-index: 1000; padding: 12px 0; border-bottom: 1px solid #eee; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
-        .header-top { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 12px; }
-        .logo-img { height: 35px; object-fit: contain; }
-        .red-divider { width: 1.5px; height: 20px; background: var(--primary); opacity: 0.5; }
-
-        .search-area { padding: 0 16px; display: flex; align-items: center; gap: 10px; }
-        .nav-icon-btn { background: var(--light); border: none; width: 42px; height: 42px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: 0.3s; }
-        .search-wrapper { background: var(--light); border-radius: 14px; display: flex; align-items: center; padding: 0 15px; flex: 1; height: 42px; border: 1px solid #eef0f2; }
-        .search-wrapper input { border: none; background: none; outline: none; width: 100%; padding-left: 10px; font-size: 14px; font-weight: 500; }
+        header { background: var(--white); position: sticky; top: 0; z-index: 1000; padding: 12px 0; border-bottom: 2px solid var(--primary); }
+        
+        .search-area { padding: 0 16px; display: flex; align-items: center; gap: 8px; }
+        .back-btn, .bonus-btn { background: none; border: none; font-size: 20px; color: var(--dark); cursor: pointer; padding: 5px; }
+        
+        .search-wrapper { background: var(--light); border-radius: 8px; display: flex; align-items: center; padding: 0 12px; flex: 1; height: 45px; border: 1px solid #ddd; }
+        .search-wrapper input { border: none; background: none; outline: none; width: 100%; padding-left: 8px; font-size: 14px; color: var(--dark); }
 
         /* --- Banners --- */
-        .hero-swiper { margin: 15px; height: 220px; border-radius: 25px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .banner-slide { width: 100%; height: 100%; background-size: cover; background-position: center; position: relative; }
-        .banner-overlay { position: absolute; inset: 0; background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.7)); }
-        .banner-text { position: absolute; bottom: 20px; left: 20px; color: white; font-size: 24px; font-weight: 800; z-index: 5; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        .hero-swiper { margin: 15px 0; height: 200px; width: 100%; overflow: hidden; }
+        .banner-slide { width: 100%; height: 100%; background-size: cover; background-position: center; position: relative; border-radius: 0; }
+        .banner-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.6), transparent); }
+        .banner-text { position: absolute; bottom: 15px; left: 15px; color: white; font-size: 18px; font-weight: 700; z-index: 5; }
 
         /* --- Section Titles --- */
-        .section-title { padding: 15px 16px 5px; font-size: 20px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; }
+        .section-header { padding: 15px 16px; display: flex; align-items: baseline; gap: 10px; }
+        .section-title { font-size: 22px; font-weight: 800; color: var(--dark); }
+        .section-count { font-size: 14px; color: var(--gray); font-weight: 400; }
 
-        /* --- Products Grid (2 sıra) --- */
-        .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 16px; }
-        .card { background: white; border-radius: 20px; border: 1px solid #f0f0f0; overflow: hidden; transition: 0.3s; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
-        .card-img { width: 100%; height: 180px; object-fit: cover; }
-        .card-body { padding: 12px; }
-        .card-title { font-size: 14px; font-weight: 700; height: 38px; overflow: hidden; margin-bottom: 8px; color: #333; line-height: 1.4; }
-        .card-price { color: var(--primary); font-weight: 800; font-size: 16px; margin-bottom: 12px; }
-        .card-actions { display: flex; gap: 8px; }
-        .order-small { flex: 1; background: #25D366; color: white; border: none; padding: 10px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; }
-        .cart-small { width: 40px; background: var(--primary); color: white; border: none; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+        /* --- Categories 3x6 --- */
+        .cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 16px; }
+        .cat-item { background: var(--light); padding: 15px 5px; border-radius: 12px; text-align: center; border: 1px solid #eee; transition: 0.2s; }
+        .cat-item i { font-size: 24px; color: var(--primary); margin-bottom: 8px; display: block; }
+        .cat-item span { font-size: 11px; font-weight: 700; color: var(--dark); display: block; height: 30px; line-height: 1.2; }
+
+        /* --- Products --- */
+        .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 16px; }
+        .card { background: white; border-radius: 12px; border: 1px solid #eee; overflow: hidden; position: relative; }
+        .card-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
+        .card-body { padding: 10px; }
+        .card-title { font-size: 13px; font-weight: 600; color: var(--dark); margin-bottom: 5px; height: 32px; overflow: hidden; }
+        .card-price { color: var(--primary); font-weight: 800; font-size: 15px; }
 
         /* --- Pagination --- */
-        .pagination { display: flex; justify-content: center; gap: 10px; padding: 25px 0; align-items: center; }
-        .pg-btn { border: 1px solid #eee; background: white; width: 35px; height: 35px; border-radius: 10px; cursor: pointer; font-weight: 700; color: var(--dark); transition: 0.3s; }
+        .pagination { display: flex; justify-content: center; gap: 8px; padding: 30px 0; }
+        .pg-btn { border: 1px solid #ddd; background: white; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-weight: 600; }
         .pg-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* --- Premium Detail Modal --- */
-        .modal { position: fixed; inset: 0; background: white; z-index: 3000; display: none; overflow-y: auto; }
-        .modal-header { position: relative; width: 100%; height: 420px; background: #000; }
-        .modal-btn { position: absolute; top: 20px; background: rgba(255,255,255,0.9); border: none; width: 40px; height: 40px; border-radius: 50%; z-index: 10; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .btn-m-back { left: 20px; }
-        .btn-m-share { right: 20px; }
-        .img-badge { position: absolute; bottom: 20px; right: 20px; background: rgba(0,0,0,0.6); color: white; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: 600; z-index: 10; backdrop-filter: blur(5px); }
+        /* --- Səbət & Toast --- */
+        #toast { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: white; color: var(--dark); padding: 12px 25px; border-radius: 10px; z-index: 5000; font-weight: 700; transition: 0.5s; box-shadow: 0 5px 20px rgba(0,0,0,0.1); border-left: 5px solid #25D366; display: flex; align-items: center; gap: 10px; }
+        #toast.show { top: 20px; }
 
-        .modal-content { padding: 25px; border-radius: 30px 30px 0 0; background: white; margin-top: -30px; position: relative; z-index: 11; }
-        .m-title { font-size: 24px; font-weight: 800; margin-bottom: 8px; color: var(--dark); }
-        .m-price { color: var(--primary); font-size: 22px; font-weight: 800; margin-bottom: 5px; }
-        .m-code { color: var(--gray); font-size: 14px; margin-bottom: 20px; display: block; font-weight: 500; }
-        .m-note-box { background: var(--light); padding: 15px; border-radius: 15px; border-left: 4px solid var(--primary); margin-bottom: 25px; }
-        .m-note-box p { font-size: 14px; color: #555; line-height: 1.6; }
-
-        .m-actions { display: flex; gap: 12px; height: 60px; margin-bottom: 30px; }
-        .m-btn-order { flex: 1; background: #25D366; color: white; border: none; border-radius: 18px; font-size: 16px; font-weight: 700; box-shadow: 0 10px 20px rgba(37,211,102,0.2); }
-        .m-btn-cart { width: 70px; background: var(--primary); color: white; border: none; border-radius: 18px; font-size: 22px; box-shadow: 0 10px 20px rgba(179,0,0,0.2); }
-
-        /* --- Səbət Dizaynı --- */
-        .cart-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: var(--light); border-radius: 18px; margin-bottom: 12px; border: 1px solid #eee; }
-        .cart-item img { width: 65px; height: 65px; border-radius: 12px; object-fit: cover; }
-        .cart-info { flex: 1; }
-        .cart-info h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
-        .cart-info p { color: var(--primary); font-weight: 800; font-size: 15px; }
-        .cart-del { color: var(--primary); border: none; background: none; font-size: 18px; padding: 5px; }
-
-        /* --- Haqqımızda (Premium) --- */
-        .about-card { background: var(--primary); border-radius: 25px; padding: 35px 25px; color: white; text-align: center; box-shadow: 0 15px 30px rgba(179,0,0,0.2); }
-        .about-card h2 { font-size: 24px; margin-bottom: 15px; font-weight: 800; }
-        .about-card p { font-size: 15px; line-height: 1.7; opacity: 0.9; }
-
-        /* --- Bottom Navigation --- */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); display: flex; justify-content: space-around; padding: 12px 0 25px; border-top: 1px solid #eee; z-index: 2000; }
-        .nav-link { text-decoration: none; color: #bbb; text-align: center; font-size: 11px; font-weight: 700; position: relative; transition: 0.3s; cursor: pointer; }
-        .nav-link i { font-size: 22px; display: block; margin-bottom: 4px; }
+        /* --- Bottom Nav --- */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--white); display: flex; justify-content: space-around; padding: 10px 0 25px; border-top: 1px solid #eee; z-index: 2000; }
+        .nav-link { text-decoration: none; color: #888; text-align: center; font-size: 11px; font-weight: 600; cursor: pointer; }
+        .nav-link i { font-size: 20px; display: block; margin-bottom: 4px; }
         .nav-link.active { color: var(--primary); }
-        .badge { position: absolute; top: -5px; right: -5px; background: var(--primary); color: white; width: 20px; height: 20px; border-radius: 50%; font-size: 11px; display: flex; align-items: center; justify-content: center; border: 2px solid white; font-weight: 800; }
 
-        /* --- Toast Notification --- */
-        #toast { position: fixed; top: 25px; left: 50%; transform: translateX(-50%); background: var(--primary); color: white; padding: 15px 35px; border-radius: 50px; z-index: 5000; font-weight: 700; display: none; box-shadow: 0 10px 30px rgba(179,0,0,0.4); border: 2px solid rgba(255,255,255,0.2); font-size: 14px; white-space: nowrap; }
+        /* --- Haqqımızda --- */
+        .about-section { padding: 20px; text-align: center; }
+        .about-logos { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; }
+        .about-logos img { height: 40px; }
+        .social-btn { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 15px; border-radius: 10px; text-decoration: none; color: white; font-weight: 700; margin-bottom: 10px; width: 100%; }
 
         .view { display: none; }
-        .view.active { display: block; animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .view.active { display: block; }
     </style>
 </head>
 <body>
 
-    <div id="toast">Səbətinizə əlavə edildi! ✨</div>
-
-    <div id="productModal" class="modal">
-        <div class="modal-header">
-            <button class="modal-btn btn-m-back" onclick="closeModal()"><i class="fa-solid fa-chevron-left"></i></button>
-            <button class="modal-btn btn-m-share" onclick="shareProduct()"><i class="fa-solid fa-share-nodes"></i></button>
-            <div class="img-badge" id="m-counter">1/1</div>
-            <div class="swiper detail-swiper" style="height: 100%;">
-                <div class="swiper-wrapper" id="m-slides"></div>
-            </div>
-        </div>
-        <div class="modal-content">
-            <h1 class="m-title" id="m-title">Məhsul Adı</h1>
-            <div class="m-price" id="m-price">0.00 AZN</div>
-            <span class="m-code" id="m-code">Kod: SL-000</span>
-            
-            <div style="font-weight: 800; margin-bottom: 8px; font-size: 15px;">Məhsul haqqında:</div>
-            <div class="m-note-box"><p id="m-note">Premium keyfiyyətli əl işi məhsul.</p></div>
-
-            <div class="m-actions">
-                <button class="m-btn-order" id="m-order-btn">İndi Sifariş Et</button>
-                <button class="m-btn-cart" id="m-cart-btn"><i class="fa-solid fa-basket-shopping"></i></button>
-            </div>
-
-            <h3 class="section-title" style="padding:0; margin-bottom:15px;">Oxşar Məhsullar</h3>
-            <div class="products-grid" id="m-related" style="padding:0;"></div>
-        </div>
-    </div>
+    <div id="toast"><i class="fa-solid fa-circle-check" style="color:#25D366"></i> Məhsul səbətə əlavə edildi</div>
 
     <header>
-        <div class="header-top">
-            <img src="https://i.postimg.cc/5t87Yx8F/1774906530079.png" class="logo-img" />
-            <div class="red-divider"></div>
-            <img src="https://i.postimg.cc/Rq5QVZxB/1774906294188.png" class="logo-img" />
-        </div>
         <div class="search-area">
-            <button class="nav-icon-btn" onclick="goHome()"><i class="fa-solid fa-house"></i></button>
+            <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-arrow-left"></i></button>
             <div class="search-wrapper">
-                <i class="fa-solid fa-magnifying-glass" style="color: var(--primary);"></i>
-                <input type="text" id="searchInput" placeholder="Məhsul, kod və ya kateqoriya..." onkeyup="handleSearch()" />
+                <i class="fa-solid fa-magnifying-glass" style="color: var(--gray);"></i>
+                <input type="text" id="searchInput" placeholder="Məhsul adı, kod və ya haqqında..." onsearch="performSearch(this.value)" onkeypress="if(event.key === 'Enter') performSearch(this.value)">
             </div>
+            <button class="bonus-btn"><i class="fa-solid fa-gift"></i></button>
         </div>
     </header>
 
     <main id="app">
         <section id="home" class="view active">
             <div class="swiper hero-swiper">
-                <div class="swiper-wrapper" id="banner-wrapper"></div>
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide"><div class="banner-slide" style="background-image:url('https://picsum.photos/800/400?1')"><div class="banner-overlay"></div><div class="banner-text">Əl işləri</div></div></div>
+                    <div class="swiper-slide"><div class="banner-slide" style="background-image:url('https://picsum.photos/800/400?2')"><div class="banner-overlay"></div><div class="banner-text">Premium məhsullar</div></div></div>
+                    <div class="swiper-slide"><div class="banner-slide" style="background-image:url('https://picsum.photos/800/400?3')"><div class="banner-overlay"></div><div class="banner-text">Hədiyyə qutuları</div></div></div>
+                    <div class="swiper-slide"><div class="banner-slide" style="background-image:url('https://picsum.photos/800/400?4')"><div class="banner-overlay"></div><div class="banner-text">Aksiyalar</div></div></div>
+                    <div class="swiper-slide"><div class="banner-slide" style="background-image:url('https://picsum.photos/800/400?5')"><div class="banner-overlay"></div><div class="banner-text">Bonuslar</div></div></div>
+                </div>
             </div>
-            <h2 class="section-title">Yeni Məhsullar</h2>
+
+            <div class="section-header">
+                <h2 class="section-title">Yeni məhsullar</h2>
+                <span class="section-count">1000+</span>
+            </div>
+            
             <div class="products-grid" id="product-list"></div>
             <div class="pagination" id="pagination-controls"></div>
         </section>
 
         <section id="catalog" class="view">
-            <h2 class="section-title">Bölmələr</h2>
-            <div id="category-list" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 16px;"></div>
+            <h2 class="section-title" style="padding: 16px;">Kateqoriyalar</h2>
+            <div class="cat-grid" id="category-list">
+                </div>
         </section>
 
         <section id="cart" class="view">
             <div style="padding: 20px;">
-                <h2 class="section-title" style="padding:0; margin-bottom: 25px; color: var(--dark);">Səbətim</h2>
-                <div id="cart-items"></div>
-                <div id="cart-footer" style="display:none; margin-top: 30px; border-top: 2px dashed #eee; padding-top: 20px;">
-                    <div style="display:flex; justify-content:space-between; font-weight:800; font-size:20px; margin-bottom:25px;">
-                        <span>Cəmi:</span> <span id="cart-total" style="color: var(--primary);">0.00 AZN</span>
+                <h2 class="section-title">Səbətim</h2>
+                <div id="cart-items" style="margin-top:20px;"></div>
+                <div id="cart-footer" style="display:none; margin-top: 30px;">
+                    <div style="display:flex; justify-content:space-between; font-weight:800; margin-bottom:20px;">
+                        <span>Toplam:</span> <span id="cart-total" style="color: var(--primary);">0.00 AZN</span>
                     </div>
-                    <button onclick="orderWhatsApp()" class="m-btn-order" style="width:100%; height: 60px;">Səbətimi Sifariş Et</button>
+                    <button onclick="orderWhatsApp()" style="width:100%; background:#25D366; color:white; border:none; padding:15px; border-radius:10px; font-weight:700;">Sifarişi Tamamla</button>
                 </div>
             </div>
         </section>
 
         <section id="contact" class="view">
-            <div style="padding: 20px;">
-                <div class="about-card">
-                    <h2>SenLife Haqqında</h2>
-                    <p>Zövqlə seçilmiş premium əl işləri, unikal gips dekorları və xüsusi hədiyyələrin yeganə ünvanı. Biz hər bir detala sevgi qatırıq.</p>
+            <div class="about-section">
+                <div class="about-logos">
+                    <img src="https://i.postimg.cc/5t87Yx8F/1774906530079.png" />
+                    <img src="https://i.postimg.cc/Rq5QVZxB/1774906294188.png" />
                 </div>
-                <div style="margin-top: 30px;">
-                    <a href="https://wa.me/994773526665" style="display:flex; align-items:center; gap:15px; padding:20px; background:#f4f4f4; border-radius:18px; text-decoration:none; color:var(--dark); font-weight:700; margin-bottom:15px;">
-                        <i class="fa-brands fa-whatsapp" style="font-size:24px; color:#25D366;"></i> WhatsApp Dəstək
-                    </a>
-                    <a href="https://instagram.com/senlife.az" style="display:flex; align-items:center; gap:15px; padding:20px; background:#f4f4f4; border-radius:18px; text-decoration:none; color:var(--dark); font-weight:700;">
-                        <i class="fa-brands fa-instagram" style="font-size:24px; color:#E4405F;"></i> senlife.az
-                    </a>
-                </div>
+                <h2 style="margin-bottom:15px;">Senlife Haqqında</h2>
+                <p style="color:#555; line-height:1.6; margin-bottom:30px;">
+                    Sizin üçün ən özəl və səmimi hədiyyələri bir araya gətirdik. Senlife ilə hər anınızı özəlləşdirin.
+                </p>
+
+                <a href="https://wa.me/994773526665" class="social-btn" style="background:#25D366;">
+                    <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                </a>
+                <a href="https://instagram.com/senlife.az" class="social-btn" style="background:#E4405F;">
+                    <i class="fa-brands fa-instagram"></i> senlife.az
+                </a>
+                <a href="mailto:senzgroups@gmail.com" class="social-btn" style="background:#444;">
+                    <i class="fa-solid fa-envelope"></i> senzgroups@gmail.com
+                </a>
             </div>
         </section>
     </main>
 
     <nav class="bottom-nav">
         <div class="nav-link active" onclick="showView('home', this)"><i class="fa-solid fa-house"></i>Əsas</div>
-        <div class="nav-link" onclick="showView('catalog', this)"><i class="fa-solid fa-grid-2"></i>Kataloq</div>
-        <div class="nav-link" onclick="showView('cart', this)">
-            <i class="fa-solid fa-basket-shopping"></i>Səbət
-            <span class="badge" id="cart-badge">0</span>
-        </div>
-        <div class="nav-link" onclick="showView('contact', this)"><i class="fa-solid fa-circle-info"></i>Haqqımızda</div>
+        <div class="nav-link" onclick="showView('catalog', this)"><i class="fa-solid fa-list-ul"></i>Kateqoriyalar</div>
+        <div class="nav-link" onclick="showView('cart', this)"><i class="fa-solid fa-basket-shopping"></i>Səbət</div>
+        <div class="nav-link" onclick="showView('contact', this)"><i class="fa-solid fa-user"></i>Haqqımızda</div>
     </nav>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script>
-        // Məhsul Bazası (Maksimum 100 məhsul üçün struktur)
-        const products = [
-            { id: 1, code: 'SL-101', name: 'Premium Gips Vaz', price: 18.00, cat: 'Gips məhsulları', img: ['https://picsum.photos/600/700?1', 'https://picsum.photos/600/700?11'], desc: 'Yüksək keyfiyyətli gipsdən hazırlanmış, əl işi dekorativ vaz.' },
-            { id: 2, code: 'SL-102', name: 'Aromatik Soya Şamı', price: 24.00, cat: 'Şamlar', img: ['https://picsum.photos/600/700?2'], desc: 'Təbii soya mumundan hazırlanmış premium ətirli şam.' },
-            { id: 3, code: 'SL-103', name: 'Minimalist Saat', price: 45.00, cat: 'Aksessuarlar', img: ['https://picsum.photos/600/700?3'], desc: 'Müasir interyerlər üçün minimalist divar saatı.' },
-            { id: 4, code: 'SL-104', name: 'Hədiyyəlik Qutu', price: 55.00, cat: 'Hədiyyəlik qutular', img: ['https://picsum.photos/600/700?4'], desc: 'Premium məhsullardan ibarət özəl hədiyyə dəsti.' }
-        ].reverse(); // Ən sonuncu məhsul ən başda
+        // Məlumat Bazası
+        const products = Array.from({length: 45}, (_, i) => ({
+            id: i + 1,
+            code: `SL-${100 + i}`,
+            name: i % 2 === 0 ? "Handmade Broş" : "Premium Gips Dekor",
+            price: (10 + i * 2).toFixed(2),
+            desc: "Yüksək keyfiyyətli əl işi məhsul.",
+            img: `https://picsum.photos/400/400?sig=${i}`
+        }));
 
-        let cart = JSON.parse(localStorage.getItem('senlife_cart')) || [];
+        const categories = [
+            { name: "Ev əşyaları", icon: "fa-house-chimney" },
+            { name: "Geyim", icon: "fa-shirt" },
+            { name: "Aksessuarlar", icon: "fa-gem" },
+            { name: "Ətirlər", icon: "fa-spray-can-sparkles" },
+            { name: "Şam və Gips", icon: "fa-fire-burner" },
+            { name: "Hədiyyəlik", icon: "fa-box-open" },
+            { name: "Keramika", icon: "fa-faucet-drip" },
+            { name: "Portretlər", icon: "fa-palette" },
+            { name: "Oyuncaq", icon: "fa-robot" }
+        ];
+
+        let cart = [];
         let currentPage = 1;
-        const itemsPerPage = 10;
-        let filteredProducts = [...products];
+        const itemsPerPage = 20;
 
+        // Init
         function init() {
-            renderBanners();
+            renderProducts();
             renderCategories();
-            updateProductDisplay();
-            updateCartUI();
+            initSwiper();
         }
 
-        function renderBanners() {
-            const labels = ['Yeni Kolleksiya', 'Premium Hədiyyələr', 'Əl İşləri', 'Özəl Endirimlər'];
-            document.getElementById('banner-wrapper').innerHTML = labels.map((l, i) => `
-                <div class="swiper-slide">
-                    <div class="banner-slide" style="background-image:url('https://picsum.photos/800/500?${i+50}')">
-                        <div class="banner-overlay"></div>
-                        <div class="banner-text">${l}</div>
-                    </div>
-                </div>
-            `).join('');
-
+        function initSwiper() {
             new Swiper('.hero-swiper', {
                 loop: true,
-                autoplay: { delay: 1500, disableOnInteraction: false },
-                speed: 800
+                autoplay: { delay: 3000, disableOnInteraction: false },
+                speed: 1300,
+                grabCursor: true
             });
         }
 
-        function updateProductDisplay() {
+        function renderProducts() {
             const start = (currentPage - 1) * itemsPerPage;
-            const items = filteredProducts.slice(start, start + itemsPerPage);
-            
-            document.getElementById('product-list').innerHTML = items.map(p => `
+            const end = start + itemsPerPage;
+            const list = products.slice(start, end);
+
+            document.getElementById('product-list').innerHTML = list.map(p => `
                 <div class="card">
-                    <img src="${p.img[0]}" class="card-img" onclick="openProduct(${p.id})">
+                    <img src="${p.img}" class="card-img">
                     <div class="card-body">
-                        <div class="card-title" onclick="openProduct(${p.id})">${p.name}</div>
-                        <div class="card-price">${p.price.toFixed(2)} AZN</div>
-                        <div class="card-actions">
-                            <button class="order-small" onclick="directOrder('${p.code}', '${p.name}')">Sifariş</button>
-                            <button class="cart-small" onclick="addToCart(${p.id})"><i class="fa-solid fa-plus"></i></button>
-                        </div>
+                        <div class="card-title">${p.name} (${p.code})</div>
+                        <div class="card-price">${p.price} AZN</div>
+                        <button onclick="addToCart(${p.id})" style="margin-top:10px; width:100%; padding:8px; background:var(--dark); color:white; border:none; border-radius:5px; font-size:12px;">Səbətə at</button>
                     </div>
                 </div>
             `).join('');
             renderPagination();
         }
 
-        function openProduct(id) {
-            const p = products.find(x => x.id === id);
-            const modal = document.getElementById('productModal');
-            
-            document.getElementById('m-title').innerText = p.name;
-            document.getElementById('m-price').innerText = p.price.toFixed(2) + " AZN";
-            document.getElementById('m-code').innerText = "Kod: " + p.code;
-            document.getElementById('m-note').innerText = p.desc;
-            
-            document.getElementById('m-slides').innerHTML = p.img.map(s => `<div class="swiper-slide"><img src="${s}" style="width:100%;height:100%;object-fit:cover;"></div>`).join('');
-            document.getElementById('m-counter').innerText = `1/${p.img.length}`;
-            
-            document.getElementById('m-order-btn').onclick = () => directOrder(p.code, p.name);
-            document.getElementById('m-cart-btn').onclick = () => addToCart(p.id);
-
-            const related = products.filter(x => x.id !== p.id).slice(0, 2);
-            document.getElementById('m-related').innerHTML = related.map(rp => `
-                <div class="card">
-                    <img src="${rp.img[0]}" class="card-img" onclick="openProduct(${rp.id})">
-                    <div class="card-body">
-                        <div class="card-title">${rp.name}</div>
-                        <div class="card-price">${rp.price.toFixed(2)} AZN</div>
-                    </div>
-                </div>
-            `).join('');
-
-            modal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-
-            new Swiper('.detail-swiper', {
-                on: { slideChange: function() { document.getElementById('m-counter').innerText = `${this.activeIndex+1}/${p.img.length}`; } }
-            });
+        function renderPagination() {
+            const total = Math.ceil(products.length / itemsPerPage);
+            let html = '';
+            for(let i=1; i<=total; i++) {
+                html += `<button class="pg-btn ${i===currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+            }
+            document.getElementById('pagination-controls').innerHTML = html;
         }
 
-        function closeModal() {
-            document.getElementById('productModal').style.display = 'none';
-            document.body.style.overflow = 'auto';
+        function changePage(page) {
+            currentPage = page;
+            renderProducts();
+            window.scrollTo(0, 400);
+        }
+
+        function renderCategories() {
+            document.getElementById('category-list').innerHTML = categories.map(c => `
+                <div class="cat-item">
+                    <i class="fa-solid ${c.icon}"></i>
+                    <span>${c.name}</span>
+                </div>
+            `).join('');
+        }
+
+        function performSearch(val) {
+            if(!val) return;
+            // Klaviatura bağlansın
+            document.getElementById('searchInput').blur();
+            
+            // Search məntiqi (Simulyasiya)
+            alert("Axtarılır: " + val);
         }
 
         function addToCart(id) {
             const p = products.find(x => x.id === id);
             cart.push(p);
-            localStorage.setItem('senlife_cart', JSON.stringify(cart));
-            updateCartUI();
             
-            const t = document.getElementById('toast');
-            t.style.display = 'block';
-            setTimeout(() => t.style.display = 'none', 2000);
-        }
-
-        function updateCartUI() {
-            const badge = document.getElementById('cart-badge');
-            badge.innerText = cart.length;
-            badge.style.display = cart.length > 0 ? 'flex' : 'none';
-
-            const container = document.getElementById('cart-items');
-            if(cart.length === 0) {
-                container.innerHTML = `<div style="text-align:center; padding:50px 20px;"><i class="fa-solid fa-basket-shopping" style="font-size:50px; color:#eee; margin-bottom:15px;"></i><p style="color:#999; font-weight:600;">Səbətiniz hal-hazırda boşdur.</p></div>`;
-                document.getElementById('cart-footer').style.display = 'none';
-                return;
-            }
-
-            container.innerHTML = cart.map((p, i) => `
-                <div class="cart-item">
-                    <img src="${p.img[0]}">
-                    <div class="cart-info">
-                        <h4>${p.name}</h4>
-                        <p>${p.price.toFixed(2)} AZN</p>
-                    </div>
-                    <button class="cart-del" onclick="removeFromCart(${i})"><i class="fa-solid fa-trash-can"></i></button>
-                </div>
-            `).join('');
-
-            document.getElementById('cart-footer').style.display = 'block';
-            document.getElementById('cart-total').innerText = cart.reduce((a, b) => a + b.price, 0).toFixed(2) + " AZN";
-        }
-
-        function removeFromCart(i) {
-            cart.splice(i, 1);
-            localStorage.setItem('senlife_cart', JSON.stringify(cart));
-            updateCartUI();
-        }
-
-        function handleSearch() {
-            const q = document.getElementById('searchInput').value.toLowerCase();
-            filteredProducts = products.filter(p => p.name.toLowerCase().includes(q) || p.code.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q));
-            currentPage = 1;
-            updateProductDisplay();
-        }
-
-        function renderPagination() {
-            const total = Math.ceil(filteredProducts.length / itemsPerPage);
-            let html = '';
-            for(let i=1; i<=total; i++) {
-                html += `<button class="pg-btn ${i===currentPage ? 'active' : ''}" onclick="currentPage=${i};updateProductDisplay();window.scrollTo(0,350);">${i}</button>`;
-            }
-            document.getElementById('pagination-controls').innerHTML = total > 1 ? html : '';
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
         }
 
         function showView(id, el) {
@@ -370,51 +275,6 @@
             document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             el.classList.add('active');
-            if(id === 'cart') updateCartUI();
-            window.scrollTo(0,0);
-        }
-
-        function orderWhatsApp() {
-            const text = cart.map((p, i) => `${i+1}. ${p.name} (${p.code})`).join('\n');
-            const total = cart.reduce((a, b) => a + b.price, 0).toFixed(2);
-            const msg = `Salam SenLife! 👋\nSəbətimdəki məhsulları sifariş etmək istəyirəm:\n\n${text}\n\n💰 Toplam: ${total} AZN`;
-            window.open(`https://wa.me/994773526665?text=${encodeURIComponent(msg)}`);
-        }
-
-        function directOrder(code, name) {
-            const msg = `Salam SenLife! 👋\nMən bu məhsulu sifariş etmək istəyirəm:\n✨ ${name}\n🔢 Kod: ${code}`;
-            window.open(`https://wa.me/994773526665?text=${encodeURIComponent(msg)}`);
-        }
-
-        function renderCategories() {
-            const cats = ['Gips məhsulları', 'Şamlar', 'Hədiyyəlik qutular', 'Aksessuarlar'];
-            document.getElementById('category-list').innerHTML = cats.map(c => `
-                <div onclick="filterByCategory('${c}')" style="background:var(--light); padding:25px 15px; border-radius:20px; text-align:center; cursor:pointer; border:1px solid #eee;">
-                    <i class="fa-solid fa-gift" style="font-size:24px; color:var(--primary); margin-bottom:10px;"></i>
-                    <p style="font-weight:700; font-size:13px;">${c}</p>
-                </div>
-            `).join('');
-        }
-
-        function filterByCategory(cat) {
-            filteredProducts = products.filter(p => p.cat === cat);
-            currentPage = 1;
-            updateProductDisplay();
-            showView('home', document.querySelector('.nav-link:first-child'));
-        }
-
-        function goHome() {
-            filteredProducts = [...products];
-            currentPage = 1;
-            document.getElementById('searchInput').value = '';
-            updateProductDisplay();
-            showView('home', document.querySelector('.nav-link:first-child'));
-        }
-
-        function shareProduct() {
-            if (navigator.share) {
-                navigator.share({ title: 'SenLife', url: window.location.href });
-            }
         }
 
         init();
