@@ -1,200 +1,283 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Senlife</title>
-
-<style>
-body {
-  margin:0;
-  font-family: Arial;
-  background:#f8f8f8;
-}
-
-/* HEADER */
-.header {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:10px;
-  background:white;
-  position:sticky;
-  top:0;
-}
-
-.search {
-  flex:1;
-  margin:0 10px;
-}
-
-.search input {
-  width:100%;
-  padding:10px;
-  border-radius:10px;
-  border:1px solid #ccc;
-}
-
-/* BANNER */
-.banner {
-  display:flex;
-  overflow-x:auto;
-  gap:10px;
-  padding:10px;
-}
-
-.banner div {
-  min-width:120px;
-  height:80px;
-  background:#2ecc71;
-  color:white;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:10px;
-}
-
-/* PRODUCTS */
-.products {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  padding:10px;
-}
-
-.card {
-  background:white;
-  padding:10px;
-  border-radius:10px;
-}
-
-.card img {
-  width:100%;
-  border-radius:10px;
-}
-
-.btn {
-  margin-top:5px;
-  padding:8px;
-  border:none;
-  border-radius:8px;
-  width:100%;
-}
-
-.cart-btn {
-  background:#2ecc71;
-  color:white;
-}
-
-.order-btn {
-  background:#27ae60;
-  color:white;
-}
-
-/* BOTTOM NAV */
-.bottom {
-  position:fixed;
-  bottom:0;
-  width:100%;
-  background:white;
-  display:flex;
-  justify-content:space-around;
-  padding:10px;
-  border-top:1px solid #ccc;
-}
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Senlife | Premium Marketplace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .premium-shadow { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04); }
+        .active-nav { color: #2ECC71; }
+        .page { display: none; }
+        .page.active { display: block; }
+    </style>
 </head>
+<body class="bg-white text-[#2C3E50]">
 
-<body>
+    <div id="app" class="max-w-md mx-auto min-h-screen relative pb-20 shadow-2xl">
+        
+        <header id="main-header" class="p-4 sticky top-0 bg-white/80 backdrop-blur-md z-50 flex items-center gap-2">
+            <div id="back-btn" class="hidden cursor-pointer p-2" onclick="showPage('home')">
+                <i data-lucide="chevron-left"></i>
+            </div>
+            <div class="flex-1 bg-gray-100 rounded-2xl px-4 py-2.5 flex items-center gap-2 border border-transparent focus-within:border-green-400 transition">
+                <i data-lucide="search" class="text-gray-400 w-4 h-4"></i>
+                <input type="text" placeholder="Məhsul, kod və ya açar söz..." class="bg-transparent outline-none text-sm w-full">
+            </div>
+        </header>
 
-<!-- HEADER -->
-<div class="header">
-  🔙
-  <div class="search">
-    <input placeholder="Axtar...">
-  </div>
-  ⭐
-</div>
+        <div id="home" class="page active animate-in fade-in">
+            <section class="flex overflow-x-auto gap-4 p-4 no-scrollbar">
+                <div class="min-w-[280px] h-40 bg-[#2ECC71] rounded-[25px] p-6 text-white flex flex-col justify-end shadow-lg shadow-green-100">
+                    <span class="text-xs uppercase opacity-80">Yeni Kolleksiya</span>
+                    <h3 class="font-bold text-xl">🧵 Əl İşləri</h3>
+                </div>
+                <div class="min-w-[280px] h-40 bg-gray-900 rounded-[25px] p-6 text-white flex flex-col justify-end shadow-lg">
+                    <span class="text-xs uppercase opacity-80">Özəl Seçim</span>
+                    <h3 class="font-bold text-xl">💎 Premium Məhsullar</h3>
+                </div>
+            </section>
 
-<!-- BANNERS -->
-<div class="banner">
-  <div>Əl işləri</div>
-  <div>Premium</div>
-  <div>Hədiyyə</div>
-  <div>Endirim</div>
-  <div>Bonus</div>
-</div>
+            <section class="p-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="font-bold text-lg">Yeni Məhsullar</h2>
+                    <span class="text-xs text-green-600 font-semibold">Hamısına bax</span>
+                </div>
+                <div id="product-list" class="grid grid-cols-2 gap-4">
+                    </div>
+            </section>
+        </div>
 
-<!-- PRODUCTS -->
-<div class="products" id="products"></div>
+        <div id="categories" class="page p-4">
+            <h2 class="font-bold text-xl mb-6">Kateqoriyalar</h2>
+            <div class="grid grid-cols-3 gap-4" id="category-grid">
+                </div>
+        </div>
 
-<!-- BOTTOM -->
-<div class="bottom">
-  🏠
-  📂
-  🛒
-  ℹ️
-</div>
+        <div id="cart" class="page p-4">
+            <h2 class="font-bold text-xl mb-6">Səbətim</h2>
+            <div id="cart-items" class="space-y-4 mb-6">
+                </div>
+            <div id="cart-empty" class="text-center py-20 text-gray-400 hidden">Səbətiniz boşdur.</div>
+            <div id="cart-summary" class="border-t pt-4">
+                <div class="flex justify-between font-bold text-lg mb-4">
+                    <span>Cəmi:</span>
+                    <span id="total-price">0 AZN</span>
+                </div>
+                <button onclick="checkout()" class="w-full bg-[#2ECC71] text-white py-4 rounded-2xl font-bold shadow-lg shadow-green-100">SİFARİŞİ TAMAMLA</button>
+            </div>
+        </div>
 
-<script>
-const phone = "994773526665";
+        <div id="about" class="page p-6 text-center">
+            <div onclick="handleAdminClick()" class="w-24 h-24 bg-green-50 rounded-full mx-auto flex items-center justify-center mb-6 cursor-default">
+                <span class="text-[#2ECC71] font-bold text-3xl">S</span>
+            </div>
+            <h2 class="font-bold text-xl mb-2">Senlife nədir?</h2>
+            <p class="text-gray-500 text-sm leading-relaxed mb-8">Senlife, unikal əl işləri və premium hədiyyələrin onlayn marketplace platformasıdır.</p>
+            
+            <div class="space-y-3">
+                <a href="https://wa.me/994773526665" class="flex items-center gap-4 bg-gray-50 p-4 rounded-2xl hover:bg-gray-100 transition">
+                    <i data-lucide="phone" class="text-[#2ECC71]"></i>
+                    <span class="font-medium">077 352 66 65</span>
+                </a>
+                <a href="https://instagram.com/senlife.az" class="flex items-center gap-4 bg-gray-50 p-4 rounded-2xl hover:bg-gray-100 transition">
+                    <i data-lucide="instagram" class="text-[#2ECC71]"></i>
+                    <span class="font-medium">senlife.az</span>
+                </a>
+                <a href="mailto:senzgroups@gmail.com" class="flex items-center gap-4 bg-gray-50 p-4 rounded-2xl hover:bg-gray-100 transition">
+                    <i data-lucide="mail" class="text-[#2ECC71]"></i>
+                    <span class="font-medium">senzgroups@gmail.com</span>
+                </a>
+            </div>
+        </div>
 
-const products = [
-  {
-    name:"Şam dəsti",
-    price:"15 AZN",
-    code:"SL001",
-    desc:"Əl işi şam",
-    img:"https://via.placeholder.com/150"
-  },
-  {
-    name:"Qol saatı",
-    price:"45 AZN",
-    code:"SL002",
-    desc:"Premium saat",
-    img:"https://via.placeholder.com/150"
-  }
-];
+        <nav class="fixed bottom-0 max-w-md w-full bg-white/90 backdrop-blur-md border-t border-gray-100 flex justify-around py-3 z-50">
+            <button onclick="showPage('home')" class="nav-item active-nav flex flex-col items-center gap-1">
+                <i data-lucide="home" class="w-6 h-6"></i>
+                <span class="text-[10px] font-medium">Ana səhifə</span>
+            </button>
+            <button onclick="showPage('categories')" class="nav-item text-gray-300 flex flex-col items-center gap-1">
+                <i data-lucide="layout-grid" class="w-6 h-6"></i>
+                <span class="text-[10px] font-medium">Kateqoriyalar</span>
+            </button>
+            <button onclick="showPage('cart')" class="nav-item text-gray-300 flex flex-col items-center gap-1 relative">
+                <i data-lucide="shopping-bag" class="w-6 h-6"></i>
+                <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center hidden">0</span>
+                <span class="text-[10px] font-medium">Səbət</span>
+            </button>
+            <button onclick="showPage('about')" class="nav-item text-gray-300 flex flex-col items-center gap-1">
+                <i data-lucide="info" class="w-6 h-6"></i>
+                <span class="text-[10px] font-medium">Haqqında</span>
+            </button>
+        </nav>
+    </div>
 
-function renderProducts(){
-  const container = document.getElementById("products");
-  container.innerHTML = "";
+    <script>
+        // DATA
+        const products = [
+            { id: 1, name: "Zərif Dadlar Paketi", price: 35, code: "ZD-001", category: "Zərif dadlar", desc: "Premium şokolad kolleksiyası", img: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=400" },
+            { id: 2, name: "Minimal Saat", price: 85, code: "ST-202", category: "Saatlar", desc: "Qara kəmərli klassik saat", img: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=400" },
+            { id: 3, name: "Əl İşi Keramika", price: 42, code: "KR-015", category: "Keramika", desc: "Mavi naxışlı saxsı qab", img: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=400" },
+            { id: 4, name: "Premium Ətir", price: 120, code: "ET-99", category: "Ətirlər", desc: "Uniseks premium qoxu", img: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=400" }
+        ];
 
-  products.forEach(p=>{
-    const div = document.createElement("div");
-    div.className = "card";
+        const categories = [
+            { name: "Ev əşyaları", icon: "home" }, { name: "Geyim", icon: "shirt" }, { name: "Büjiteriya", icon: "gem" },
+            { name: "Saatlar", icon: "watch" }, { name: "Zərif dadlar", icon: "cookie" }, { name: "Ətirlər", icon: "flower" },
+            { name: "Şam və gips", icon: "flame" }, { name: "Keramika", icon: "coffee" }, { name: "Portretlər", icon: "palette" },
+            { name: "Hədiyyələr", icon: "gift" }, { name: "Uşaq dünyası", icon: "baby" }, { name: "Digər", icon: "plus" }
+        ];
 
-    div.innerHTML = `
-      <img src="${p.img}">
-      <h4>${p.name}</h4>
-      <p>${p.price}</p>
-      <button class="btn cart-btn">Səbətə əlavə</button>
-      <button class="btn order-btn" onclick="order('${p.name}','${p.price}','${p.code}','${p.desc}')">Sifariş et</button>
-    `;
+        let cart = JSON.parse(localStorage.getItem('senlife_cart')) || [];
+        let adminClicks = 0;
 
-    container.appendChild(div);
-  });
-}
+        // INITIALIZE
+        function init() {
+            lucide.createIcons();
+            renderProducts();
+            renderCategories();
+            updateCartUI();
+        }
 
-function order(name,price,code,desc){
-  const msg = `Salam, bu məhsulu sifariş etmək istəyirəm:
+        // NAVIGATION
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active-nav', 'text-gray-300'));
+            // Bu hissə sadələşdirmək üçün manual idarə olunur
+            
+            document.getElementById('back-btn').style.display = pageId === 'home' ? 'none' : 'block';
+            window.scrollTo(0,0);
+        }
 
-Məhsul: ${name}
-Qiymət: ${price}
-Kod: ${code}
-Təsvir: ${desc}
+        // RENDER PRODUCTS
+        function renderProducts() {
+            const grid = document.getElementById('product-list');
+            grid.innerHTML = products.map(p => `
+                <div class="bg-white rounded-[22px] overflow-hidden border border-gray-50 premium-shadow">
+                    <img src="${p.img}" class="w-full h-40 object-cover" onclick="alert('Məhsul: ${p.name}')">
+                    <div class="p-3">
+                        <h3 class="text-[11px] font-semibold text-gray-500 truncate">${p.name}</h3>
+                        <p class="font-bold text-sm mb-3">${p.price} AZN</p>
+                        <div class="flex gap-2">
+                            <button onclick="addToCart(${p.id})" class="flex-1 bg-gray-100 h-10 rounded-xl flex items-center justify-center active:scale-95 transition">
+                                <i data-lucide="shopping-cart" class="w-4 h-4 text-gray-600"></i>
+                            </button>
+                            <button onclick="orderWhatsApp(${p.id})" class="flex-[2] bg-[#2ECC71] text-white text-[10px] font-bold rounded-xl active:scale-95 transition">
+                                SİFARİŞ ET
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
 
-Ad:
-Ünvan:
-Telefon:`;
+        // CATEGORIES
+        function renderCategories() {
+            const grid = document.getElementById('category-grid');
+            grid.innerHTML = categories.map(c => `
+                <div class="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-[20px] active:bg-green-50 transition">
+                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm">
+                        <i data-lucide="${c.icon}" class="w-5 h-5 text-[#2ECC71]"></i>
+                    </div>
+                    <span class="text-[9px] font-bold text-center uppercase tracking-tighter">${c.name}</span>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
 
-  const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
-  window.open(url,"_blank");
-}
+        // CART LOGIC
+        function addToCart(id) {
+            const product = products.find(p => p.id === id);
+            cart.push({ ...product, tempId: Date.now() });
+            saveCart();
+            updateCartUI();
+        }
 
-renderProducts();
-</script>
+        function removeFromCart(tempId) {
+            cart = cart.filter(item => item.tempId !== tempId);
+            saveCart();
+            updateCartUI();
+        }
 
+        function saveCart() {
+            localStorage.setItem('senlife_cart', JSON.stringify(cart));
+        }
+
+        function updateCartUI() {
+            const list = document.getElementById('cart-items');
+            const badge = document.getElementById('cart-badge');
+            const emptyMsg = document.getElementById('cart-empty');
+            const summary = document.getElementById('cart-summary');
+            
+            badge.innerText = cart.length;
+            badge.classList.toggle('hidden', cart.length === 0);
+
+            if (cart.length === 0) {
+                list.innerHTML = "";
+                emptyMsg.classList.remove('hidden');
+                summary.classList.add('hidden');
+            } else {
+                emptyMsg.classList.add('hidden');
+                summary.classList.remove('hidden');
+                list.innerHTML = cart.map(item => `
+                    <div class="flex items-center gap-4 bg-gray-50 p-3 rounded-[20px]">
+                        <img src="${item.img}" class="w-16 h-16 rounded-xl object-cover">
+                        <div class="flex-1">
+                            <h4 class="text-sm font-bold">${item.name}</h4>
+                            <p class="text-green-600 font-bold text-sm">${item.price} AZN</p>
+                        </div>
+                        <button onclick="removeFromCart(${item.tempId})" class="p-2 text-red-400">
+                            <i data-lucide="trash-2" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                `).join('');
+            }
+            
+            const total = cart.reduce((sum, p) => sum + p.price, 0);
+            document.getElementById('total-price').innerText = total + " AZN";
+            lucide.createIcons();
+        }
+
+        // WHATSAPP SYSTEM
+        function orderWhatsApp(id) {
+            const p = products.find(x => x.id === id);
+            sendWA(p.name, p.price, p.code, p.desc);
+        }
+
+        function checkout() {
+            if (cart.length === 0) return;
+            const names = cart.map(i => i.name).join(", ");
+            const total = cart.reduce((sum, p) => sum + p.price, 0);
+            sendWA(names, total, "SƏBƏT SİFARİŞİ", "Toplu sifariş");
+        }
+
+        function sendWA(name, price, code, desc) {
+            const phone = "994773526665";
+            const text = `Salam, bu məhsulu sifariş etmək istəyirəm:\n\n📦 Məhsul adı: ${name}\n💰 Qiymət: ${price} AZN\n🔢 Kod: ${code}\n📝 Təsvir: ${desc}\n\nÇatdırılma məlumatı:\nAd:\nÜnvan:\nTelefon:`;
+            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        // ADMIN PANEL GİZLİ GİRİŞ
+        function handleAdminClick() {
+            adminClicks++;
+            if (adminClicks >= 5) {
+                const pass = prompt("Admin Parolu:");
+                if (pass === "20152021/Sn/") {
+                    alert("Admin Panel Aktivləşdirildi (Tezliklə)");
+                    // Burada admin pəncərəsini aça bilərsən
+                }
+                adminClicks = 0;
+            }
+        }
+
+        window.onload = init;
+    </script>
 </body>
 </html>
