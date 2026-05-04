@@ -9,104 +9,58 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap');
         
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #ffffff; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #ffffff; overflow-x: hidden; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
-        /* Hamar Səhifə Keçidləri */
+        /* Səhifə Keçid Animasiyası */
         .page-layer {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 100%;
-            height: 100%;
-            background: white;
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 100;
-            overflow-y: auto;
-            visibility: hidden;
+            position: fixed; top: 0; right: -100%; width: 100%; height: 100%;
+            background: white; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100; overflow-y: auto; visibility: hidden;
         }
-        .page-layer.active {
-            transform: translateX(-100%);
-            visibility: visible;
-        }
+        .page-layer.active { transform: translateX(-100%); visibility: visible; }
 
-        /* Banner Slider */
-        .banner-container {
-            display: flex;
-            transition: transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1);
-        }
+        /* Banner Sistemi */
+        .banner-container { display: flex; transition: transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1); }
 
-        /* Custom Modal (Admin Giriş üçün) */
+        /* Özəl Admin Modal */
         #admin-modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px);
-            z-index: 200;
-            align-items: center;
-            justify-content: center;
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px); z-index: 200; align-items: center; justify-content: center;
         }
         
-        .premium-card {
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
-            border: 1px solid #f3f4f6;
-        }
-
         .nav-active { color: #2ECC71 !important; }
+        .premium-card { border: 1px solid #f3f4f6; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); }
     </style>
 </head>
-<body>
+<body class="text-[#2C3E50]">
 
-    <div id="app" class="max-w-md mx-auto min-h-screen relative shadow-2xl overflow-hidden">
+    <div id="app" class="max-w-md mx-auto min-h-screen relative shadow-2xl">
         
         <header class="p-4 sticky top-0 bg-white/90 backdrop-blur-md z-[60] flex items-center gap-3">
-            <button id="menu-trigger" onclick="openAdminModal()" class="p-2 hover:bg-gray-100 rounded-xl transition">
+            <button onclick="openAdminModal()" class="p-2 hover:bg-gray-100 rounded-xl transition">
                 <i data-lucide="menu" class="w-6 h-6"></i>
             </button>
             <div class="flex-1 bg-gray-100 rounded-2xl px-4 py-2.5 flex items-center gap-2 border border-transparent focus-within:border-green-400">
                 <i data-lucide="search" class="w-4 h-4 text-gray-400"></i>
                 <input type="text" placeholder="Məhsul, kod axtar..." class="bg-transparent outline-none text-sm w-full">
             </div>
-            <div class="text-yellow-400 p-2">
-                <i data-lucide="star" fill="currentColor" class="w-6 h-6"></i>
-            </div>
+            <div class="text-yellow-400 p-2"><i data-lucide="star" fill="currentColor" class="w-6 h-6"></i></div>
         </header>
 
         <main id="home" class="pb-24">
             <div class="px-4 mb-6">
                 <div class="relative overflow-hidden rounded-[28px] h-48 shadow-xl shadow-green-50">
                     <div id="banner-track" class="banner-container h-full">
-                        <div class="min-w-full h-full bg-[#2ECC71] p-8 text-white flex flex-col justify-end">
-                            <span class="text-xs font-bold opacity-80">ÖZƏL SEÇİM</span>
-                            <h3 class="text-2xl font-bold">Endirimlər</h3>
-                        </div>
-                        <div class="min-w-full h-full bg-slate-900 p-8 text-white flex flex-col justify-end">
-                            <span class="text-xs font-bold opacity-80">ƏL İŞİ</span>
-                            <h3 class="text-2xl font-bold">Əl işləri</h3>
-                        </div>
-                        <div class="min-w-full h-full bg-emerald-700 p-8 text-white flex flex-col justify-end">
-                            <span class="text-xs font-bold opacity-80">PREMİUM</span>
-                            <h3 class="text-2xl font-bold">Premium məhsullar</h3>
-                        </div>
-                        <div class="min-w-full h-full bg-orange-500 p-8 text-white flex flex-col justify-end">
-                            <span class="text-xs font-bold opacity-80">MƏHDUD SAYDA</span>
-                            <h3 class="text-2xl font-bold">Aksiyalar</h3>
-                        </div>
-                        <div class="min-w-full h-full bg-indigo-600 p-8 text-white flex flex-col justify-end">
-                            <span class="text-xs font-bold opacity-80">BONUS SİSTEMİ</span>
-                            <h3 class="text-2xl font-bold">Bonuslar</h3>
-                        </div>
+                        <div class="min-w-full h-full bg-[#2ECC71] p-8 text-white flex flex-col justify-end"><h3 class="text-2xl font-bold italic">Endirimlər</h3></div>
+                        <div class="min-w-full h-full bg-slate-900 p-8 text-white flex flex-col justify-end"><h3 class="text-2xl font-bold italic">Əl işləri</h3></div>
+                        <div class="min-w-full h-full bg-emerald-700 p-8 text-white flex flex-col justify-end"><h3 class="text-2xl font-bold italic">Premium</h3></div>
+                        <div class="min-w-full h-full bg-orange-500 p-8 text-white flex flex-col justify-end"><h3 class="text-2xl font-bold italic">Aksiyalar</h3></div>
+                        <div class="min-w-full h-full bg-indigo-600 p-8 text-white flex flex-col justify-end"><h3 class="text-2xl font-bold italic">Bonuslar</h3></div>
                     </div>
                 </div>
             </div>
-
-            <div class="px-4">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="font-bold text-lg tracking-tight">Yeni Məhsullar</h2>
-                </div>
-                <div id="product-grid" class="grid grid-cols-2 gap-4"></div>
-            </div>
+            <div id="product-grid" class="px-4 grid grid-cols-2 gap-4"></div>
         </main>
 
         <div id="cat-page" class="page-layer">
@@ -125,72 +79,50 @@
             <div id="cart-content" class="p-4 space-y-4"></div>
             <div id="cart-footer" class="fixed bottom-0 max-w-md w-full p-4 bg-white border-t hidden">
                 <div class="flex justify-between font-bold text-lg mb-4"><span>Cəmi:</span><span id="cart-total">0 AZN</span></div>
-                <button onclick="whatsappCheckout()" class="w-full bg-[#2ECC71] text-white py-4 rounded-2xl font-bold shadow-lg">SİFARİŞİ TAMAMLA</button>
+                <button onclick="whatsappCheckout()" class="w-full bg-[#2ECC71] text-white py-4 rounded-2xl font-bold shadow-lg shadow-green-100">SİFARİŞİ TAMAMLA</button>
             </div>
         </div>
 
         <div id="about-page" class="page-layer bg-gray-50">
-            <header class="p-4 flex items-center gap-4">
-                <button onclick="closeLayer('about-page')" class="p-2 bg-white rounded-full shadow-sm"><i data-lucide="chevron-left"></i></button>
-            </header>
+            <header class="p-4"><button onclick="closeLayer('about-page')" class="p-2 bg-white rounded-full shadow-sm"><i data-lucide="chevron-left"></i></button></header>
             <div class="p-6">
-                <div class="bg-[#2ECC71] rounded-[32px] p-8 text-white shadow-2xl border-4 border-white/20">
-                    <h2 class="text-2xl font-bold mb-4 italic">Senlife Market 🌿</h2>
-                    <p class="text-base font-medium leading-relaxed mb-8 opacity-95">
-                        Xoş gəldiniz! Biz "Senlife" olaraq səmimiyyəti və estetikani bir araya gətiririk. Burada tapdığınız hər bir məhsul sizin həyatınıza rəng qatmaq üçün özəl olaraq seçilib. Müştəri məmnuniyyəti bizim üçün ən dəyərli mükafatdır.
+                <div class="bg-[#2ECC71] rounded-[32px] p-8 text-white shadow-2xl border-4 border-white/20 text-center">
+                    <h2 class="text-2xl font-bold mb-4 italic uppercase">Senlife Market 🌿</h2>
+                    <p class="text-base font-bold leading-relaxed mb-8">
+                        Xoş gəldiniz! Biz "Senlife" olaraq hər bir məhsulun sizin həyatınıza rəng qatacağına inanırıq. Səmimiyyət və keyfiyyət bizim əsas prinsipimizdir.
                     </p>
                     <div class="space-y-4">
                         <a href="https://wa.me/994773526665" class="flex items-center gap-4 bg-white/10 p-4 rounded-2xl border border-white/20 hover:bg-white/20 transition">
                             <i data-lucide="message-circle" class="w-6 h-6"></i> <span class="font-bold">WhatsApp</span>
                         </a>
                         <a href="https://instagram.com/senlife.az" class="flex items-center gap-4 bg-white/10 p-4 rounded-2xl border border-white/20 hover:bg-white/20 transition">
-                            <i data-lucide="instagram" class="w-6 h-6"></i> <span class="font-bold italic">senlife.az</span>
+                            <i data-lucide="instagram" class="w-6 h-6"></i> <span class="font-bold italic underline">senlife.az</span>
                         </a>
                         <a href="mailto:senzgroups@gmail.com" class="flex items-center gap-4 bg-white/10 p-4 rounded-2xl border border-white/20 hover:bg-white/20 transition">
-                            <i data-lucide="mail" class="w-6 h-6"></i> <span class="font-bold">senzgroups@gmail.com</span>
+                            <i data-lucide="mail" class="w-6 h-6"></i> <span class="font-bold text-sm">senzgroups@gmail.com</span>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="detail-page" class="page-layer">
-            <div id="detail-render"></div>
-        </div>
+        <div id="detail-page" class="page-layer"><div id="detail-render"></div></div>
 
         <div id="admin-modal">
             <div class="bg-white w-[85%] rounded-[30px] p-8 premium-card">
                 <div class="text-center mb-6">
-                    <div class="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i data-lucide="lock" class="text-[#2ECC71]"></i>
-                    </div>
                     <h3 class="font-bold text-xl">Admin Girişi</h3>
-                    <p class="text-xs text-gray-400 mt-1">Davam etmək üçün şifrəni daxil edin</p>
+                    <p class="text-xs text-gray-400 mt-1">Şifrəni daxil edin</p>
                 </div>
-                <input type="password" id="admin-pass" placeholder="Şifrə" class="w-full bg-gray-100 p-4 rounded-2xl outline-none border-2 border-transparent focus:border-[#2ECC71] mb-4 text-center">
+                <input type="password" id="admin-pass" class="w-full bg-gray-100 p-4 rounded-2xl outline-none border-2 border-transparent focus:border-[#2ECC71] mb-4 text-center font-bold">
                 <div class="flex gap-3">
                     <button onclick="closeAdminModal()" class="flex-1 py-3 font-bold text-gray-400">Ləğv et</button>
-                    <button onclick="checkAdminPass()" class="flex-1 bg-[#2ECC71] text-white py-3 rounded-xl font-bold shadow-md">Giriş</button>
+                    <button onclick="checkAdminPass()" class="flex-1 bg-[#2ECC71] text-white py-3 rounded-xl font-bold">Giriş</button>
                 </div>
             </div>
         </div>
 
-        <div id="admin-panel" class="page-layer bg-gray-50">
-            <header class="p-4 flex items-center gap-4 border-b bg-white">
-                <button onclick="closeLayer('admin-panel')" class="p-2"><i data-lucide="x"></i></button>
-                <h2 class="font-bold">Məhsul İdarəetmə</h2>
-            </header>
-            <div class="p-6 space-y-4">
-                <input type="text" id="p-name" placeholder="Məhsul Adı" class="w-full p-4 rounded-xl border">
-                <input type="number" id="p-price" placeholder="Qiymət (AZN)" class="w-full p-4 rounded-xl border">
-                <input type="text" id="p-code" placeholder="Kod" class="w-full p-4 rounded-xl border">
-                <textarea id="p-desc" placeholder="Təsvir" class="w-full p-4 rounded-xl border h-24"></textarea>
-                <input type="text" id="p-img" placeholder="Şəkil URL" class="w-full p-4 rounded-xl border">
-                <button onclick="saveNewProduct()" class="w-full bg-black text-white py-4 rounded-2xl font-bold">Yadda Saxla</button>
-            </div>
-        </div>
-
-        <nav class="fixed bottom-0 max-w-md w-full bg-white/90 backdrop-blur-xl border-t flex justify-around py-4 z-[70]">
+        <nav class="fixed bottom-0 max-w-md w-full bg-white/95 backdrop-blur-md border-t flex justify-around py-4 z-[70]">
             <button onclick="closeAllLayers(); setActiveNav(0)" class="nav-btn nav-active"><i data-lucide="home"></i></button>
             <button onclick="openLayer('cat-page'); setActiveNav(1)" class="nav-btn text-gray-400"><i data-lucide="grid-3x3"></i></button>
             <button onclick="openLayer('cart-page'); setActiveNav(2)" class="nav-btn text-gray-400 relative">
@@ -204,8 +136,8 @@
     <script>
         // DATA
         let products = JSON.parse(localStorage.getItem('sl_prods')) || [
-            { id: 1, name: "Zərif Dadlar Paketi", price: 35, code: "ZD-01", desc: "Özəl şokolad və dad kolleksiyası", img: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=400" },
-            { id: 2, name: "Minimalist Saat", price: 85, code: "ST-05", desc: "Zərif dizayn, suya davamlı kəmər", img: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=400" }
+            { id: 1, name: "Zərif Dadlar Paketi", price: 35, code: "ZD-01", desc: "Özəl şokolad kolleksiyası", img: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=400" },
+            { id: 2, name: "Minimalist Saat", price: 85, code: "ST-05", desc: "Suya davamlı klassik saat", img: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=400" }
         ];
         let cart = JSON.parse(localStorage.getItem('sl_cart')) || [];
         let bannerIndex = 0;
@@ -216,45 +148,32 @@
             renderCategories();
             updateCart();
             
-            // 1.3 saniyəlik dövrü olmayan banner (sonuncuya çatanda dayanır - istəyə görə sonsuz etmək olar)
+            // 1.3s Banner Autoplay
             setInterval(() => {
-                if(bannerIndex < 4) {
-                    bannerIndex++;
-                    document.getElementById('banner-track').style.transform = `translateX(-${bannerIndex * 100}%)`;
-                }
+                bannerIndex = (bannerIndex + 1) % 5;
+                document.getElementById('banner-track').style.transform = `translateX(-${bannerIndex * 100}%)`;
             }, 1300);
         }
 
-        // NAVIGATION LOGIC
-        function openLayer(id) {
-            document.getElementById(id).classList.add('active');
-        }
-        function closeLayer(id) {
-            document.getElementById(id).classList.remove('active');
-        }
-        function closeAllLayers() {
-            document.querySelectorAll('.page-layer').forEach(l => l.classList.remove('active'));
-        }
+        // NAV & LAYERS
+        function openLayer(id) { document.getElementById(id).classList.add('active'); }
+        function closeLayer(id) { document.getElementById(id).classList.remove('active'); }
+        function closeAllLayers() { document.querySelectorAll('.page-layer').forEach(l => l.classList.remove('active')); }
         function setActiveNav(idx) {
-            document.querySelectorAll('.nav-btn').forEach((btn, i) => {
-                btn.classList.toggle('nav-active', i === idx);
-            });
+            document.querySelectorAll('.nav-btn').forEach((btn, i) => btn.classList.toggle('nav-active', i === idx));
         }
 
-        // ADMIN MODAL
+        // ADMIN
         function openAdminModal() { document.getElementById('admin-modal').style.display = 'flex'; }
         function closeAdminModal() { document.getElementById('admin-modal').style.display = 'none'; }
         function checkAdminPass() {
-            const pass = document.getElementById('admin-pass').value;
-            if(pass === "20152021/Sn_") {
+            if(document.getElementById('admin-pass').value === "20152021/Sn_") {
                 closeAdminModal();
-                openLayer('admin-panel');
-            } else {
-                alert("Yanlış şifrə!");
-            }
+                alert("Admin Panel tezliklə aktiv olacaq!");
+            } else { alert("Yanlış şifrə!"); }
         }
 
-        // RENDERING
+        // RENDER PRODUCTS
         function renderProducts() {
             const grid = document.getElementById('product-grid');
             grid.innerHTML = products.map(p => `
@@ -279,16 +198,15 @@
                 <div class="relative">
                     <img src="${p.img}" class="w-full h-96 object-cover">
                     <button onclick="closeLayer('detail-page')" class="absolute top-4 left-4 bg-white/80 p-2 rounded-full"><i data-lucide="chevron-left"></i></button>
-                    <button class="absolute top-4 right-4 bg-white/80 p-2 rounded-full"><i data-lucide="share-2"></i></button>
                     <div class="absolute bottom-4 right-4 bg-black/40 text-white text-[10px] px-3 py-1 rounded-full backdrop-blur-md font-bold">1 / 8</div>
                 </div>
                 <div class="p-6">
                     <div class="flex justify-between items-start mb-2">
                         <h2 class="text-2xl font-bold text-slate-800">${p.name}</h2>
-                        <span class="bg-green-50 text-[#2ECC71] px-3 py-1 rounded-lg text-sm font-bold">${p.price} AZN</span>
+                        <span class="text-[#2ECC71] text-xl font-bold">${p.price} AZN</span>
                     </div>
-                    <p class="text-xs text-gray-400 mb-6 font-bold tracking-widest">KOD: ${p.code}</p>
-                    <p class="text-gray-500 leading-relaxed mb-10 text-sm font-medium">${p.desc}</p>
+                    <p class="text-xs text-gray-400 mb-6 font-bold tracking-widest uppercase">KOD: ${p.code}</p>
+                    <p class="text-gray-500 leading-relaxed mb-20 text-sm font-medium">${p.desc}</p>
                     <div class="flex gap-4 fixed bottom-6 left-0 w-full px-6 max-w-md">
                         <button onclick="orderWA(${p.id})" class="flex-[3] bg-[#2ECC71] text-white py-4 rounded-2xl font-bold shadow-xl">SİFARİŞ ET</button>
                         <button onclick="addToCart(${p.id})" class="flex-1 bg-gray-100 py-4 rounded-2xl"><i data-lucide="shopping-bag" class="mx-auto text-gray-600"></i></button>
@@ -302,14 +220,14 @@
         function renderCategories() {
             const cats = ["Ev əşyaları", "Geyim", "Büjiteriya", "Saatlar", "Zərif dadlar", "Ətirlər", "Şam və gips", "Keramika", "Portretlər", "Hədiyyələr", "Uşaq dünyası", "Digər"];
             document.getElementById('category-list').innerHTML = cats.map(c => `
-                <div class="bg-white border border-gray-100 p-4 rounded-2xl text-center shadow-sm active:scale-95 transition">
+                <div class="bg-white border border-gray-100 p-4 rounded-2xl text-center shadow-sm">
                     <div class="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-2 text-[#2ECC71] font-bold italic text-sm">S</div>
-                    <span class="text-[9px] font-bold uppercase text-slate-600 tracking-tighter">${c}</span>
+                    <span class="text-[9px] font-bold uppercase text-slate-600 tracking-tighter font-bold">${c}</span>
                 </div>
             `).join('');
         }
 
-        // CART & WA LOGIC
+        // CART
         function addToCart(id) {
             const p = products.find(x => x.id === id);
             cart.push({...p, uid: Date.now()});
@@ -320,30 +238,23 @@
         function updateCart() {
             localStorage.setItem('sl_cart', JSON.stringify(cart));
             document.getElementById('cart-dot').classList.toggle('hidden', cart.length === 0);
-            
             const list = document.getElementById('cart-content');
             list.innerHTML = cart.map(i => `
                 <div class="flex items-center gap-4 bg-gray-50 p-3 rounded-2xl border border-gray-100">
                     <img src="${i.img}" class="w-16 h-16 rounded-xl object-cover">
-                    <div class="flex-1">
-                        <h4 class="text-sm font-bold">${i.name}</h4>
-                        <p class="text-[#2ECC71] text-sm font-bold">${i.price} AZN</p>
-                    </div>
+                    <div class="flex-1 font-bold text-sm"><h4>${i.name}</h4><p class="text-[#2ECC71]">${i.price} AZN</p></div>
                     <button onclick="removeFromCart(${i.uid})" class="text-red-400 p-2"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
                 </div>
             `).join('');
-            
             const total = cart.reduce((s, i) => s + i.price, 0);
             document.getElementById('cart-total').innerText = total + " AZN";
             document.getElementById('cart-footer').classList.toggle('hidden', cart.length === 0);
             lucide.createIcons();
         }
 
-        function removeFromCart(uid) {
-            cart = cart.filter(i => i.uid !== uid);
-            updateCart();
-        }
+        function removeFromCart(uid) { cart = cart.filter(i => i.uid !== uid); updateCart(); }
 
+        // WA ORDERS
         function orderWA(id) {
             const p = products.find(x => x.id === id);
             const text = `Salam, bu məhsulu sifariş etmək istəyirəm:\n\n📦 Məhsul adı: ${p.name}\n💰 Qiymət: ${p.price} AZN\n🔢 Kod: ${p.code}\n📝 Təsvir: ${p.desc}\n\nÇatdırılma məlumatı:\nAd:\nÜnvan:\nTelefon:`;
@@ -355,21 +266,6 @@
             const total = cart.reduce((s, i) => s + i.price, 0);
             const text = `Salam, bu məhsulları sifariş etmək istəyirəm:\n\n📦 Məhsul adı: ${items}\n💰 Qiymət: ${total} AZN\n🔢 Kod: SƏBƏT SİFARİŞİ\n📝 Təsvir: Toplu sifariş\n\nÇatdırılma məlumatı:\nAd:\nÜnvan:\nTelefon:`;
             window.open(`https://wa.me/994773526665?text=${encodeURIComponent(text)}`);
-        }
-
-        function saveNewProduct() {
-            const name = document.getElementById('p-name').value;
-            const price = parseInt(document.getElementById('p-price').value);
-            const code = document.getElementById('p-code').value;
-            const desc = document.getElementById('p-desc').value;
-            const img = document.getElementById('p-img').value;
-
-            if(!name || !price) return alert("Məlumatları doldurun!");
-
-            products.unshift({ id: Date.now(), name, price, code, desc, img });
-            localStorage.setItem('sl_prods', JSON.stringify(products));
-            renderProducts();
-            closeLayer('admin-panel');
         }
 
         window.onload = init;
