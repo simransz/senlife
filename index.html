@@ -1,187 +1,461 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Senlife Marketplace</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-
-<style>
-body { margin:0; font-family:sans-serif; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Senlife Marketplace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-green: #22c55e;
+            --soft-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #fcfcfc; }
+        .premium-card { background: #fff; border-radius: 20px; box-shadow: var(--soft-shadow); transition: transform 0.2s; }
+        .premium-card:active { transform: scale(0.98); }
+        .btn-green { background-color: var(--primary-green); color: white; border-radius: 12px; }
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .admin-modal, .product-modal { display: none; position: fixed; inset: 0; background: white; z-index: 100; overflow-y: auto; }
+        .active-view { display: block !important; }
+        .banner-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; }
+        .banner-item { min-width: 100%; scroll-snap-align: start; position: relative; }
+        .nav-active { color: var(--primary-green) !important; }
+    </style>
 </head>
+<body class="pb-20">
 
-<body>
-<div id="root"></div>
+    <header class="sticky top-0 bg-white/80 backdrop-blur-md z-50 p-4 flex items-center gap-3 border-b">
+        <button onclick="checkAdmin()" class="text-gray-400 p-2 text-xl">≡</button>
+        <div class="relative flex-1">
+            <input type="text" id="searchInput" oninput="searchProduct()" placeholder="Məhsul adı, kod..." class="w-full bg-gray-100 border-none rounded-full py-2 px-10 focus:ring-2 focus:ring-green-500 outline-none text-sm">
+            <i class="fa fa-search absolute left-4 top-3 text-gray-400 text-sm"></i>
+        </div>
+    </header>
 
-<script type="text/javascript">
-const { useState, useEffect } = React;
+    <main id="main-content">
+        <section id="home-view" class="view">
+            <div id="banner-container" class="p-4">
+                <div class="banner-track hide-scroll rounded-3xl h-48 relative overflow-hidden" id="bannerSlider">
+                    </div>
+            </div>
 
-function App(){
+            <div class="px-4 mb-4 flex justify-between items-center">
+                <h2 class="font-bold text-lg">Kateqoriyalar</h2>
+                <button onclick="showView('categories-view')" class="text-green-600 text-sm font-semibold">Hamısı</button>
+            </div>
+            
+            <div class="px-4">
+                <h2 class="font-bold text-lg mb-4">Yeni məhsullar</h2>
+                <div id="products-grid" class="grid grid-cols-2 gap-4">
+                    </div>
+                <div id="infinite-trigger" class="h-10"></div>
+            </div>
+        </section>
 
-const [products,setProducts]=useState([]);
-const [cart,setCart]=useState([]);
-const [page,setPage]=useState("home");
-const [admin,setAdmin]=useState(false);
-const [password,setPassword]=useState("");
+        <section id="categories-view" class="view hidden p-4">
+            <h2 class="font-bold text-2xl mb-6">Kateqoriyalar</h2>
+            <div id="categories-grid" class="grid grid-cols-3 gap-4">
+                </div>
+        </section>
 
-useEffect(()=>{
-  setProducts(JSON.parse(localStorage.getItem("products")||"[]"));
-  setCart(JSON.parse(localStorage.getItem("cart")||"[]"));
-},[]);
+        <section id="cart-view" class="view hidden p-4">
+            <h2 class="font-bold text-2xl mb-6">Səbətim</h2>
+            <div id="cart-items" class="space-y-4 mb-6"></div>
+            <div class="premium-card p-4 sticky bottom-24">
+                <div class="flex justify-between mb-4">
+                    <span class="text-gray-500">Ümumi:</span>
+                    <span id="total-price" class="font-bold text-xl text-green-600">0 AZN</span>
+                </div>
+                <button onclick="checkoutWhatsApp()" class="w-full btn-green py-4 font-bold uppercase tracking-wide">Sifarişi tamamla</button>
+            </div>
+        </section>
 
-const saveProducts=(data)=>{
-  setProducts(data);
-  localStorage.setItem("products",JSON.stringify(data));
-};
+        <section id="about-view" class="view hidden p-4">
+            <div class="bg-green-500 rounded-3xl p-6 text-white mb-8">
+                <h2 class="text-2xl font-bold mb-4 text-center">Senlife nədir?</h2>
+                <p class="font-medium leading-relaxed italic text-center">"Sizin həyatınız, sizin seçiminiz. Ən özəl əl işləri və premium məhsulları bir araya gətirdik."</p>
+            </div>
+            <div class="space-y-4">
+                <a href="https://wa.me/994773526665" class="premium-card p-4 flex items-center gap-4">
+                    <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-600"><i class="fab fa-whatsapp"></i></div>
+                    <span class="font-semibold text-gray-700">077 352 66 65</span>
+                </a>
+                <a href="https://instagram.com/senlife.az" class="premium-card p-4 flex items-center gap-4">
+                    <div class="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center text-pink-600"><i class="fab fa-instagram"></i></div>
+                    <span class="font-semibold text-gray-700">senlife.az</span>
+                </a>
+                <a href="mailto:senzgroups@gmail.com" class="premium-card p-4 flex items-center gap-4">
+                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600"><i class="fa fa-envelope"></i></div>
+                    <span class="font-semibold text-gray-700">senzgroups@gmail.com</span>
+                </a>
+            </div>
+        </section>
+    </main>
 
-const saveCart=(data)=>{
-  setCart(data);
-  localStorage.setItem("cart",JSON.stringify(data));
-};
+    <div id="product-detail" class="product-modal">
+        <div id="product-content"></div>
+    </div>
 
-const addProduct=(p)=>{
-  const newData=[...products,{...p,id:Date.now()}];
-  saveProducts(newData);
-};
+    <div id="admin-panel" class="admin-modal p-6">
+        <div class="flex justify-between mb-6">
+            <h2 class="text-xl font-bold">Admin Panel</h2>
+            <button onclick="closeAdmin()" class="text-red-500"><i class="fa fa-times-circle text-2xl"></i></button>
+        </div>
+        <div class="space-y-4">
+            <input type="text" id="p-name" placeholder="Məhsul adı" class="w-full border p-3 rounded-xl">
+            <input type="number" id="p-price" placeholder="Qiymət" class="w-full border p-3 rounded-xl">
+            <input type="text" id="p-code" placeholder="Kod" class="w-full border p-3 rounded-xl">
+            <select id="p-cat" class="w-full border p-3 rounded-xl">
+                </select>
+            <textarea id="p-desc" placeholder="Təsvir" class="w-full border p-3 rounded-xl"></textarea>
+            <input type="file" id="p-imgs" multiple accept="image/*" class="w-full">
+            <button onclick="addNewProduct()" class="w-full btn-green py-3 font-bold">Məhsulu Əlavə Et</button>
+        </div>
+        <div class="mt-8">
+            <h3 class="font-bold mb-4">Məhsulları İdarə Et</h3>
+            <div id="admin-product-list" class="space-y-2"></div>
+        </div>
+    </div>
 
-const addToCart=(p)=>{
-  const newCart=[...cart,p];
-  saveCart(newCart);
-};
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around p-3 z-50 shadow-2xl">
+        <button onclick="showView('home-view')" class="nav-item flex flex-col items-center gap-1 text-gray-400 nav-active" id="nav-home">
+            <i class="fa fa-home text-lg"></i><span class="text-[10px]">Ana Səhifə</span>
+        </button>
+        <button onclick="showView('categories-view')" class="nav-item flex flex-col items-center gap-1 text-gray-400" id="nav-categories">
+            <i class="fa fa-th-large text-lg"></i><span class="text-[10px]">Kataloq</span>
+        </button>
+        <button onclick="showView('cart-view')" class="nav-item flex flex-col items-center gap-1 text-gray-400 relative" id="nav-cart">
+            <i class="fa fa-shopping-basket text-lg"></i><span class="text-[10px]">Səbət</span>
+            <span id="cart-count" class="absolute -top-1 right-2 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full hidden flex items-center justify-center">0</span>
+        </button>
+        <button onclick="showView('about-view')" class="nav-item flex flex-col items-center gap-1 text-gray-400" id="nav-about">
+            <i class="fa fa-info-circle text-lg"></i><span class="text-[10px]">Haqqında</span>
+        </button>
+    </nav>
 
-const removeCart=(i)=>{
-  const newCart=cart.filter((_,index)=>index!==i);
-  saveCart(newCart);
-};
+    <script>
+        // DATA STATE
+        let products = JSON.parse(localStorage.getItem('senlife_products')) || [];
+        let cart = JSON.parse(localStorage.getItem('senlife_cart')) || [];
+        
+        const categories = [
+            {id: 1, name: "Ev əşyaları", icon: "fa-home"},
+            {id: 2, name: "Geyim", icon: "fa-tshirt"},
+            {id: 3, name: "Büjiteriya", icon: "fa-gem"},
+            {id: 4, name: "Saatlar", icon: "fa-clock"},
+            {id: 5, name: "Zərif dadlar", icon: "fa-cookie"},
+            {id: 6, name: "Ətirlər", icon: "fa-magic"},
+            {id: 7, name: "Şam və gips", icon: "fa-fire"},
+            {id: 8, name: "Keramika", icon: "fa-palette"},
+            {id: 9, name: "Portretlər", icon: "fa-portrait"},
+            {id: 10, name: "Hədiyyələr", icon: "fa-gift"},
+            {id: 11, name: "Uşaq dünyası", icon: "fa-baby-carriage"},
+            {id: 12, name: "Digər", icon: "fa-ellipsis-h"}
+        ];
 
-const total=cart.reduce((a,b)=>a+Number(b.price||0),0);
+        const banners = [
+            {title: "Əl işləri", color: "from-green-400 to-green-600"},
+            {title: "Premium məhsullar", color: "from-blue-400 to-indigo-600"},
+            {title: "Hədiyyəlik qutular", color: "from-red-400 to-pink-600"},
+            {title: "Endirimlər", color: "from-yellow-400 to-orange-600"},
+            {title: "Bonuslar", color: "from-purple-400 to-purple-600"}
+        ];
 
-const order=(p)=>{
-  const msg=`Salam, bu məhsulu sifariş etmək istəyirəm:
-📦 ${p.name}
-💰 ${p.price}
-🔢 ${p.code}
-📝 ${p.desc}`;
-  window.open(`https://wa.me/994773526665?text=${encodeURIComponent(msg)}`);
-};
+        // INITIALIZE
+        window.onload = () => {
+            renderBanners();
+            renderCategories();
+            renderProducts(products);
+            updateCartCount();
+            setupInfiniteScroll();
+            
+            // Populate Admin Category Select
+            const catSelect = document.getElementById('p-cat');
+            categories.forEach(c => {
+                catSelect.innerHTML += `<option value="${c.name}">${c.name}</option>`;
+            });
+        };
 
-return(
-<div className="pb-20">
+        // NAVIGATION LOGIC
+        function showView(viewId) {
+            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+            document.getElementById(viewId).classList.remove('hidden');
+            
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('nav-active'));
+            document.getElementById('nav-' + viewId.split('-')[0]).classList.add('nav-active');
+            
+            if(viewId === 'cart-view') renderCart();
+            window.scrollTo(0, 0);
+        }
 
-{/* HEADER */}
-<div className="p-3 shadow sticky top-0 bg-white flex gap-2 z-50">
-<input placeholder="Axtar..." className="flex-1 border p-2 rounded-xl"/>
-<button onClick={()=>setAdmin(true)}>≡</button>
-</div>
+        // BANNER ANIMATION
+        function renderBanners() {
+            const container = id('bannerSlider');
+            banners.forEach((b, i) => {
+                container.innerHTML += `
+                    <div class="banner-item bg-gradient-to-br ${b.color} flex items-end p-6">
+                        <h3 class="text-white text-2xl font-black">${b.title}</h3>
+                    </div>
+                `;
+            });
 
-{/* ADMIN LOGIN */}
-{admin && (
-<div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-<div className="bg-white p-4 rounded-xl w-80">
+            let current = 0;
+            setInterval(() => {
+                current = (current + 1) % banners.length;
+                container.scrollTo({ left: container.clientWidth * current, behavior: 'smooth' });
+            }, 1300);
+        }
 
-{password!=="20152021Sn/_/" ? (
-<>
-<input type="password" placeholder="Şifrə"
-className="border p-2 w-full mb-2"
-onChange={(e)=>setPassword(e.target.value)}/>
-<button className="bg-green-500 text-white p-2 w-full"
-onClick={()=>{}}>
-Daxil ol
-</button>
-</>
-):(
-<AdminPanel addProduct={addProduct}/>
-)}
+        // CATEGORIES RENDER
+        function renderCategories() {
+            const grid = id('categories-grid');
+            categories.forEach(c => {
+                grid.innerHTML += `
+                    <div onclick="filterByCategory('${c.name}')" class="premium-card p-4 flex flex-col items-center justify-center gap-2 text-center aspect-square">
+                        <i class="fa ${c.icon} text-green-500 text-xl"></i>
+                        <span class="text-[10px] font-bold text-gray-600">${c.name}</span>
+                    </div>
+                `;
+            });
+        }
 
-</div>
-</div>
-)}
+        // PRODUCT RENDERING
+        function renderProducts(items) {
+            const grid = id('products-grid');
+            grid.innerHTML = items.map(p => `
+                <div class="premium-card overflow-hidden">
+                    <img src="${p.imgs[0]}" onclick="openProduct('${p.id}')" class="w-full h-40 object-cover">
+                    <div class="p-3">
+                        <h3 class="text-sm font-semibold truncate text-gray-700">${p.name}</h3>
+                        <div class="flex justify-between items-center mt-2">
+                            <span class="text-green-600 font-bold">${p.price} AZN</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 mt-3">
+                            <button onclick="orderWhatsApp('${p.id}')" class="bg-green-100 text-green-700 p-2 rounded-lg text-[10px] font-bold">📩 Sifariş</button>
+                            <button onclick="addToCart('${p.id}')" class="bg-gray-100 text-gray-700 p-2 rounded-lg text-[10px] font-bold">🛒 Səbət</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
 
-{/* PAGES */}
-{page==="home" && (
-<div className="p-3 grid grid-cols-2 gap-3">
-{products.map(p=>(
-<div key={p.id} className="shadow rounded-xl p-2">
-<img src={p.image} className="rounded-xl"/>
-<h3>{p.name}</h3>
-<p>{p.price}₼</p>
+        // ADMIN FUNCTIONS
+        function checkAdmin() {
+            const pass = prompt("Parol daxil edin:");
+            if(pass === "20152021Sn/_/") {
+                id('admin-panel').classList.add('active-view');
+                renderAdminProducts();
+            } else {
+                alert("Yanlış parol!");
+            }
+        }
 
-<div className="flex gap-2">
-<button onClick={()=>order(p)}>📩</button>
-<button onClick={()=>addToCart(p)}>🛒</button>
-</div>
+        function closeAdmin() { id('admin-panel').classList.remove('active-view'); }
 
-</div>
-))}
-</div>
-)}
+        async function addNewProduct() {
+            const name = id('p-name').value;
+            const price = id('p-price').value;
+            const code = id('p-code').value;
+            const cat = id('p-cat').value;
+            const desc = id('p-desc').value;
+            const files = id('p-imgs').files;
 
-{page==="cart" && (
-<div className="p-4">
-{cart.map((c,i)=>(
-<div key={i} className="flex justify-between">
-<span>{c.name}</span>
-<button onClick={()=>removeCart(i)}>❌</button>
-</div>
-))}
-<h2 className="mt-4 font-bold">Ümumi: {total}₼</h2>
-</div>
-)}
+            if(!name || !price || files.length === 0) return alert("Məlumatları tam doldurun!");
 
-{page==="about" && (
-<div className="p-4">
-<div className="bg-green-500 text-white p-4 rounded-xl font-bold">
-Senlife — premium marketplace platformudur 💚
-</div>
+            const imgPromises = Array.from(files).map(file => {
+                return new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.readAsDataURL(file);
+                });
+            });
 
-<p>WhatsApp: 0773526665</p>
-<p>Instagram: senlife.az</p>
-<p>Email: senzgroups@gmail.com</p>
-</div>
-)}
+            const imgUrls = await Promise.all(imgPromises);
+            
+            const newP = { id: Date.now().toString(), name, price, code, cat, desc, imgs: imgUrls };
+            products.unshift(newP);
+            localStorage.setItem('senlife_products', JSON.stringify(products));
+            alert("Məhsul əlavə edildi!");
+            location.reload();
+        }
 
-{/* NAVBAR */}
-<div className="fixed bottom-0 w-full bg-white shadow flex justify-around p-3">
-<button onClick={()=>setPage("home")}>🏠</button>
-<button onClick={()=>setPage("cart")}>🛒</button>
-<button onClick={()=>setPage("about")}>ℹ️</button>
-</div>
+        function renderAdminProducts() {
+            const list = id('admin-product-list');
+            list.innerHTML = products.map(p => `
+                <div class="flex justify-between items-center bg-gray-50 p-2 rounded-lg">
+                    <span class="text-sm">${p.name} (${p.code})</span>
+                    <button onclick="deleteProduct('${p.id}')" class="text-red-500"><i class="fa fa-trash"></i></button>
+                </div>
+            `).join('');
+        }
 
-</div>
-);
-}
+        function deleteProduct(id) {
+            products = products.filter(p => p.id !== id);
+            localStorage.setItem('senlife_products', JSON.stringify(products));
+            renderAdminProducts();
+            renderProducts(products);
+        }
 
-function AdminPanel({addProduct}){
-const [p,setP]=useState({});
+        // PRODUCT DETAIL
+        function openProduct(pid) {
+            const p = products.find(i => i.id === pid);
+            const modal = id('product-detail');
+            id('product-content').innerHTML = `
+                <div class="sticky top-0 bg-white p-4 flex justify-between items-center border-b z-10">
+                    <button onclick="id('product-detail').classList.remove('active-view')" class="text-2xl text-green-600"><i class="fa fa-arrow-left"></i></button>
+                    <button onclick="shareProduct('${p.name}')" class="text-xl text-gray-500"><i class="fa fa-share-alt"></i></button>
+                </div>
+                <div class="p-0">
+                    <div class="flex overflow-x-auto snap-x hide-scroll h-80">
+                        ${p.imgs.map(img => `<img src="${img}" class="snap-center min-w-full h-full object-cover">`).join('')}
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h1 class="text-2xl font-bold text-gray-800">${p.name}</h1>
+                            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full font-bold">${p.price} AZN</span>
+                        </div>
+                        <p class="text-xs text-gray-400 mb-4">Kod: ${p.code} | Kateqoriya: ${p.cat}</p>
+                        <div class="bg-gray-50 p-4 rounded-2xl mb-8">
+                            <p class="text-gray-600 text-sm leading-relaxed">${p.desc}</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <button onclick="orderWhatsApp('${p.id}')" class="btn-green py-4 font-bold flex items-center justify-center gap-2"><i class="fab fa-whatsapp"></i> Sifariş</button>
+                            <button onclick="addToCart('${p.id}')" class="bg-gray-100 text-gray-800 py-4 rounded-xl font-bold flex items-center justify-center gap-2"><i class="fa fa-shopping-cart"></i> Səbət</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            modal.classList.add('active-view');
+        }
 
-return(
-<div className="flex flex-col gap-2">
-<input placeholder="Ad" onChange={e=>setP({...p,name:e.target.value})}/>
-<input placeholder="Qiymət" onChange={e=>setP({...p,price:e.target.value})}/>
-<input placeholder="Kod" onChange={e=>setP({...p,code:e.target.value})}/>
-<input placeholder="Kateqoriya" onChange={e=>setP({...p,category:e.target.value})}/>
-<textarea placeholder="Təsvir" onChange={e=>setP({...p,desc:e.target.value})}/>
+        // CART LOGIC
+        function addToCart(pid) {
+            const p = products.find(i => i.id === pid);
+            const exist = cart.find(c => c.id === pid);
+            if(exist) {
+                exist.qty++;
+            } else {
+                cart.push({...p, qty: 1});
+            }
+            saveCart();
+            alert("Səbətə əlavə olundu!");
+        }
 
-<input type="file" onChange={(e)=>{
-const reader=new FileReader();
-reader.onload=()=>setP({...p,image:reader.result});
-reader.readAsDataURL(e.target.files[0]);
-}}/>
+        function renderCart() {
+            const container = id('cart-items');
+            if(cart.length === 0) {
+                container.innerHTML = `<div class="text-center py-20 text-gray-400"><i class="fa fa-shopping-basket text-5xl mb-4"></i><p>Səbət boşdur</p></div>`;
+                id('total-price').innerText = "0 AZN";
+                return;
+            }
+            let total = 0;
+            container.innerHTML = cart.map(item => {
+                total += item.price * item.qty;
+                return `
+                    <div class="premium-card p-3 flex gap-4 items-center">
+                        <img src="${item.imgs[0]}" class="w-20 h-20 object-cover rounded-xl">
+                        <div class="flex-1">
+                            <h4 class="font-bold text-sm text-gray-700">${item.name}</h4>
+                            <p class="text-green-600 font-bold">${item.price} AZN</p>
+                            <div class="flex items-center gap-3 mt-2">
+                                <button onclick="updateQty('${item.id}', -1)" class="w-8 h-8 bg-gray-100 rounded-full">-</button>
+                                <span class="font-bold">${item.qty}</span>
+                                <button onclick="updateQty('${item.id}', 1)" class="w-8 h-8 bg-gray-100 rounded-full">+</button>
+                            </div>
+                        </div>
+                        <button onclick="removeFromCart('${item.id}')" class="text-red-400 p-2"><i class="fa fa-trash"></i></button>
+                    </div>
+                `;
+            }).join('');
+            id('total-price').innerText = total + " AZN";
+        }
 
-<button className="bg-green-500 text-white p-2 rounded"
-onClick={()=>addProduct(p)}>
-Əlavə et
-</button>
-</div>
-);
-}
+        function updateQty(id, change) {
+            const item = cart.find(c => c.id === id);
+            item.qty += change;
+            if(item.qty < 1) return removeFromCart(id);
+            saveCart();
+            renderCart();
+        }
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
-</script>
+        function removeFromCart(id) {
+            cart = cart.filter(c => c.id !== id);
+            saveCart();
+            renderCart();
+        }
 
+        function saveCart() {
+            localStorage.setItem('senlife_cart', JSON.stringify(cart));
+            updateCartCount();
+        }
+
+        function updateCartCount() {
+            const count = cart.reduce((acc, item) => acc + item.qty, 0);
+            const badge = id('cart-count');
+            if(count > 0) {
+                badge.innerText = count;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        // WHATSAPP SYSTEM
+        function orderWhatsApp(pid) {
+            const p = products.find(i => i.id === pid);
+            const text = `Salam, bu məhsulu sifariş etmək istəyirəm:%0A📦 *Məhsul:* ${p.name}%0A💰 *Qiymət:* ${p.price} AZN%0A🔢 *Kod:* ${p.code}%0A📝 *Təsvir:* ${p.desc}%0A%0A*Çatdırılma məlumatı:*%0AAd:%0AÜnvan:%0ATelefon:`;
+            window.open(`https://wa.me/994773526665?text=${text}`);
+        }
+
+        function checkoutWhatsApp() {
+            if(cart.length === 0) return;
+            let list = cart.map(i => `- ${i.name} (${i.qty} ədəd) | ${i.price} AZN`).join('%0A');
+            let total = id('total-price').innerText;
+            const text = `Salam, səbətimdəki məhsulları sifariş etmək istəyirəm:%0A%0A${list}%0A%0A💰 *Ümumi məbləğ:* ${total}%0A%0A*Çatdırılma məlumatı:*%0AAd:%0AÜnvan:%0ATelefon:`;
+            window.open(`https://wa.me/994773526665?text=${text}`);
+        }
+
+        // SEARCH & FILTER
+        function searchProduct() {
+            const term = id('searchInput').value.toLowerCase();
+            const filtered = products.filter(p => p.name.toLowerCase().includes(term) || p.code.toLowerCase().includes(term));
+            renderProducts(filtered);
+            showView('home-view');
+        }
+
+        function filterByCategory(catName) {
+            const filtered = products.filter(p => p.cat === catName);
+            renderProducts(filtered);
+            showView('home-view');
+        }
+
+        // HELPERS
+        function id(e) { return document.getElementById(e); }
+        
+        function shareProduct(name) {
+            if (navigator.share) {
+                navigator.share({ title: 'Senlife', text: name, url: window.location.href });
+            }
+        }
+
+        function setupInfiniteScroll() {
+            const observer = new IntersectionObserver((entries) => {
+                if(entries[0].isIntersecting) {
+                    // Logic for infinite scroll can be added here
+                }
+            });
+            observer.observe(id('infinite-trigger'));
+        }
+
+        // Handle Back Button for Android
+        window.onpopstate = () => {
+            const admin = id('admin-panel');
+            const detail = id('product-detail');
+            if(admin.classList.contains('active-view')) closeAdmin();
+            else if(detail.classList.contains('active-view')) detail.classList.remove('active-view');
+            else showView('home-view');
+        };
+    </script>
 </body>
 </html>
