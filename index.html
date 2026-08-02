@@ -1,461 +1,673 @@
-<!DOCTYPE html>
-<html lang="az">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Senlife Marketplace</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-green: #22c55e;
-            --soft-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
-        }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #fcfcfc; }
-        .premium-card { background: #fff; border-radius: 20px; box-shadow: var(--soft-shadow); transition: transform 0.2s; }
-        .premium-card:active { transform: scale(0.98); }
-        .btn-green { background-color: var(--primary-green); color: white; border-radius: 12px; }
-        .hide-scroll::-webkit-scrollbar { display: none; }
-        .admin-modal, .product-modal { display: none; position: fixed; inset: 0; background: white; z-index: 100; overflow-y: auto; }
-        .active-view { display: block !important; }
-        .banner-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; }
-        .banner-item { min-width: 100%; scroll-snap-align: start; position: relative; }
-        .nav-active { color: var(--primary-green) !important; }
-    </style>
-</head>
-<body class="pb-20">
+'use client';
 
-    <header class="sticky top-0 bg-white/80 backdrop-blur-md z-50 p-4 flex items-center gap-3 border-b">
-        <button onclick="checkAdmin()" class="text-gray-400 p-2 text-xl">≡</button>
-        <div class="relative flex-1">
-            <input type="text" id="searchInput" oninput="searchProduct()" placeholder="Məhsul adı, kod..." class="w-full bg-gray-100 border-none rounded-full py-2 px-10 focus:ring-2 focus:ring-green-500 outline-none text-sm">
-            <i class="fa fa-search absolute left-4 top-3 text-gray-400 text-sm"></i>
+import React, { useState, useEffect } from 'react';
+import { 
+  Search, Star, ShoppingCart, Send, ChevronLeft, Share2, 
+  User, Plus, Trash2, Edit, Home, Grid, Info, Bot, X, Check, ArrowRight 
+} from 'lucide-react';
+
+export default function SenMarkApp() {
+  // Splash Screen State
+  const [showSplash, setShowSplash] = useState(true);
+
+  // App Navigation & Modals
+  const [activeTab, setActiveTab] = useState('home');
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [adminPassword, setAdminPassword] = useState('');
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
+  
+  const [isBonusOpen, setIsBonusOpen] = useState(false);
+  const [bonusCard, setBonusCard] = useState('');
+
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState('all');
+
+  // Search
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Cart State
+  const [cart, setCart] = useState([]);
+
+  // Banners
+  const banners = [
+    { id: 1, title: 'Premium məhsullar', bg: 'from-emerald-600 to-green-500' },
+    { id: 2, title: 'Sevimli məkanlar', bg: 'from-teal-600 to-emerald-500' },
+    { id: 3, title: 'Peşəkar xidmətlər', bg: 'from-green-600 to-teal-500' },
+    { id: 4, title: 'Endirimlər', bg: 'from-emerald-500 to-lime-600' },
+    { id: 5, title: 'Bonuslar', bg: 'from-green-500 to-emerald-700' }
+  ];
+  const [currentBanner, setCurrentBanner] = useState(0);
+
+  // Products Database State
+  const [products, setProducts] = useState([
+    { id: 1, name: 'Lüks Hovuzlu Villa', price: 250, code: 'SM-001', category: 'xidmetler', location: 'Mərdəkan', description: 'Ailəvi istirahət üçün tam şəraitli, hovuzlu və geniş həyətli villa.', status: 'Aktiv', bonus: 15, images: ['https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=600&q=80'] },
+    { id: 2, name: 'Smart Qulaqlıq Pro', price: 89, code: 'SM-002', category: 'elektronika', location: 'Bakı', description: 'Yüksək səs keyfiyyətli simsiz qulaqlıq.', status: 'Aktiv', bonus: 5, images: ['https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80'] },
+    { id: 3, name: 'Təzə Neapolitan Pizza', price: 18, code: 'SM-003', category: 'dadlar', location: 'Mərkəz', description: 'Xüsusi sousla hazırlanan ləzzətli pizza.', status: 'Aktiv', bonus: 2, images: ['https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80'] },
+    { id: 4, name: 'Dəri Qol Saatı', price: 120, code: 'SM-004', category: 'geyim', location: 'Bakı', description: 'Premium keyfiyyətli kişi kolleksiyası.', status: 'Aktiv', bonus: 10, images: ['https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80'] }
+  ]);
+
+  // New Product Form State (Admin)
+  const [newProduct, setNewProduct] = useState({
+    name: '', price: '', code: '', category: 'ev', location: '', description: '', status: 'Aktiv', bonus: '', image: ''
+  });
+
+  // AI Chat Messages
+  const [aiMessages, setAiMessages] = useState([
+    { sender: 'senni', text: 'Salam! Mən Senni 🤖. Sizə necə kömək edə bilərəm? Ailəvi istirahət yeri, geyim və ya hər hansı məhsul axtarırsınızsa yazın!' }
+  ]);
+  const [aiInput, setAiInput] = useState('');
+
+  // Categories List
+  const categories = [
+    { id: 'ev', name: 'Ev və yaşam', icon: '🏠' },
+    { id: 'xidmetler', name: 'Xidmətlər', icon: '🛠' },
+    { id: 'geyim', name: 'Geyim', icon: '👔' },
+    { id: 'elektronika', name: 'Elektronika', icon: '📺' },
+    { id: 'gozellik', name: 'Gözəllik', icon: '🎀' },
+    { id: 'idman', name: 'İdman və hobbi', icon: '⚽' },
+    { id: 'usaq', name: 'Uşaq dünyası', icon: '🧸' },
+    { id: 'dadlar', name: 'Zərif dadlar', icon: '🧁' },
+    { id: 'kitab', name: 'Kitab və ofis', icon: '📚' },
+    { id: 'hediyye', name: 'Hədiyyəlik', icon: '🎁' },
+    { id: 'aksessuar', name: 'Aksessuarlar', icon: '💎' },
+    { id: 'avto', name: 'Avto', icon: '🚗' }
+  ];
+
+  // Splash Screen 1.2s Timer
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSplash(false);
+    }, 1200);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Auto Slider Timer (1.3s)
+  useEffect(() => {
+    const bannerInterval = setInterval(() => {
+      setCurrentBanner((prev) => (prev + 1) % banners.length);
+    }, 1300);
+    return () => clearInterval(bannerInterval);
+  }, [banners.length]);
+
+  // Admin Login Handler
+  const handleAdminLogin = (e) => {
+    e.preventDefault();
+    if (adminPassword === '2025/2026/S/N') {
+      setIsAdminAuthenticated(true);
+    } else {
+      alert('Daxil edilən parol yanlışdır!');
+    }
+  };
+
+  // WhatsApp Single Product Order
+  const handleSingleOrder = (product) => {
+    const message = `Salam, bu məhsulu sifariş etmək istəyirəm:\n📦 Məhsul adı: ${product.name}\n💰 Qiymət: ${product.price} AZN\n🔢 Kod: ${product.code}\n📝 Təsvir: ${product.description}`;
+    const url = `https://wa.me/994773526665?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+  };
+
+  // WhatsApp Cart Order
+  const handleCartOrder = () => {
+    if (cart.length === 0) return;
+    let message = 'Salam, səbətdəki məhsulları sifariş etmək istəyirəm:\n\n';
+    let total = 0;
+    cart.forEach((item, index) => {
+      message += `${index + 1}. 📦 ${item.name} | 🔢 Kod: ${item.code} | 💰 ${item.price} AZN x ${item.quantity}\n`;
+      total += item.price * item.quantity;
+    });
+    message += `\nÜmumi Məbləğ: ${total} AZN`;
+    const url = `https://wa.me/994773526665?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+  };
+
+  // Bonus Check WhatsApp
+  const handleBonusCheck = () => {
+    if (!bonusCard) return;
+    const message = `Salam, ${bonusCard} nömrəli kartımda nə qədər bonus olduğunu öyrənmək istəyirəm.`;
+    const url = `https://wa.me/994773526665?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+  };
+
+  // Add to Cart
+  const addToCart = (product) => {
+    setCart((prev) => {
+      const existing = prev.find((p) => p.id === product.id);
+      if (existing) {
+        return prev.map((p) => p.id === product.id ? { ...p, quantity: p.quantity + 1 } : p);
+      }
+      return [...prev, { ...product, quantity: 1 }];
+    });
+  };
+
+  // Add New Product (Admin)
+  const handleAddProduct = (e) => {
+    e.preventDefault();
+    const item = {
+      ...newProduct,
+      id: Date.now(),
+      price: Number(newProduct.price),
+      bonus: Number(newProduct.bonus),
+      images: [newProduct.image || 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=600&q=80']
+    };
+    setProducts([item, ...products]);
+    setNewProduct({ name: '', price: '', code: '', category: 'ev', location: '', description: '', status: 'Aktiv', bonus: '', image: '' });
+    alert('Məhsul uğurla əlavə olundu!');
+  };
+
+  // Delete Product
+  const handleDeleteProduct = (id) => {
+    setProducts(products.filter(p => p.id !== id));
+  };
+
+  // AI Chat Handler
+  const handleAiSend = () => {
+    if (!aiInput.trim()) return;
+    const userMsg = aiInput;
+    setAiMessages((prev) => [...prev, { sender: 'user', text: userMsg }]);
+    setAiInput('');
+
+    setTimeout(() => {
+      if (userMsg.toLowerCase().includes('hovuz') || userMsg.toLowerCase().includes('ev') || userMsg.toLowerCase().includes('ailə')) {
+        setAiMessages((prev) => [...prev, { 
+          sender: 'senni', 
+          text: 'Sizin üçün marketplace-dən hovuzlu və ailəvi istirahətə uyğun variant tapdım! Mərdəkanda yerləşən Lüks Villanı nəzərdən keçirə bilərsiniz. Rezervasiya üçün birbaşa WhatsApp-a yönləndirə bilərəm.' 
+        }]);
+      } else {
+        setAiMessages((prev) => [...prev, { 
+          sender: 'senni', 
+          text: 'Axtarışınıza uyğun ən yaxşı məhsul və xidmətləri təhlil edirəm! Səbətə əlavə edə və ya birbaşa WhatsApp vasitəsilə sifariş verə bilərsiniz.' 
+        }]);
+      }
+    }, 1000);
+  };
+
+  // Filter Products
+  const filteredProducts = products.filter((p) => {
+    const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          p.code.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory === 'all' || p.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
+
+  // Render Splash Screen
+  if (showSplash) {
+    return (
+      <div className="fixed inset-0 bg-white flex flex-col items-center justify-center z-50">
+        <h1 className="text-4xl font-extrabold text-[#10B981] tracking-wider animate-pulse">
+          SenMark
+        </h1>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-md mx-auto min-h-screen bg-[#F9FAFB] text-gray-800 flex flex-col relative pb-20 font-sans shadow-xl border-x">
+      
+      {/* Top Header */}
+      <header className="sticky top-0 bg-white z-40 px-4 py-3 shadow-sm border-b flex flex-col gap-2">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            {selectedProduct && (
+              <button onClick={() => setSelectedProduct(null)} className="p-1 text-gray-600">
+                <ChevronLeft size={24} />
+              </button>
+            )}
+            <h1 onClick={() => { setSelectedProduct(null); setActiveTab('home'); }} className="text-2xl font-black text-[#10B981] cursor-pointer">
+              SenMark
+            </h1>
+          </div>
+          <button 
+            onClick={() => setIsAdminOpen(true)} 
+            className="p-2 rounded-full hover:bg-gray-100 text-gray-600"
+          >
+            <User size={22} />
+          </button>
         </div>
-    </header>
 
-    <main id="main-content">
-        <section id="home-view" class="view">
-            <div id="banner-container" class="p-4">
-                <div class="banner-track hide-scroll rounded-3xl h-48 relative overflow-hidden" id="bannerSlider">
-                    </div>
+        {/* Search & Bonus Bar */}
+        <div className="flex items-center gap-2">
+          <div className="flex-1 relative">
+            <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
+            <input 
+              type="text" 
+              placeholder="Axtarış: Məhsul adı, Kod..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-3 py-2 bg-gray-100 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#10B981]"
+            />
+          </div>
+          <button 
+            onClick={() => setIsBonusOpen(true)}
+            className="p-2 bg-amber-50 text-amber-500 rounded-lg border border-amber-200 flex items-center justify-center"
+          >
+            <Star size={20} className="fill-amber-400" />
+          </button>
+        </div>
+      </header>
+
+      {/* Main Content Area */}
+      <main className="flex-1 px-4 py-3">
+
+        {/* SINGLE PRODUCT DETAIL PAGE */}
+        {selectedProduct ? (
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <button onClick={() => setSelectedProduct(null)} className="flex items-center text-sm font-semibold text-gray-600">
+                <ChevronLeft size={18} /> Geri
+              </button>
+              <button className="p-2 text-gray-500 hover:text-gray-700">
+                <Share2 size={20} />
+              </button>
             </div>
 
-            <div class="px-4 mb-4 flex justify-between items-center">
-                <h2 class="font-bold text-lg">Kateqoriyalar</h2>
-                <button onclick="showView('categories-view')" class="text-green-600 text-sm font-semibold">Hamısı</button>
+            <div className="w-full h-64 bg-gray-200 rounded-xl overflow-hidden relative">
+              <img src={selectedProduct.images[0]} alt={selectedProduct.name} className="w-full h-full object-cover" />
             </div>
-            
-            <div class="px-4">
-                <h2 class="font-bold text-lg mb-4">Yeni məhsullar</h2>
-                <div id="products-grid" class="grid grid-cols-2 gap-4">
-                    </div>
-                <div id="infinite-trigger" class="h-10"></div>
-            </div>
-        </section>
 
-        <section id="categories-view" class="view hidden p-4">
-            <h2 class="font-bold text-2xl mb-6">Kateqoriyalar</h2>
-            <div id="categories-grid" class="grid grid-cols-3 gap-4">
+            <div>
+              <div className="flex justify-between items-start">
+                <h2 className="text-xl font-bold text-gray-900">{selectedProduct.name}</h2>
+                <span className="text-xl font-extrabold text-[#10B981]">{selectedProduct.price} AZN</span>
+              </div>
+              <p className="text-xs text-gray-400 mt-1">Kod: {selectedProduct.code} | Məkan: {selectedProduct.location}</p>
+            </div>
+
+            <div className="bg-emerald-50 p-3 rounded-lg border border-emerald-100 text-sm text-[#10B981] font-medium">
+              🎁 Qazanılacaq Bonus: +{selectedProduct.bonus} Bal
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-sm mb-1">Təsvir</h3>
+              <p className="text-sm text-gray-600">{selectedProduct.description}</p>
+            </div>
+
+            <div className="flex gap-3 pt-4">
+              <button 
+                onClick={() => handleSingleOrder(selectedProduct)}
+                className="flex-1 py-3 border-2 border-[#10B981] text-[#10B981] font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-emerald-50"
+              >
+                <Send size={18} /> Sifariş et
+              </button>
+              <button 
+                onClick={() => addToCart(selectedProduct)}
+                className="flex-1 py-3 bg-[#10B981] text-white font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-emerald-600"
+              >
+                <ShoppingCart size={18} /> Səbətə əlavə et
+              </button>
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* HOME TAB */}
+            {activeTab === 'home' && (
+              <div className="space-y-5">
+                
+                {/* 1.3s Auto Slider Banner */}
+                <div className="relative w-full h-28 rounded-2xl overflow-hidden shadow-sm transition-all">
+                  <div className={`w-full h-full bg-gradient-to-r ${banners[currentBanner].bg} p-4 flex items-end text-white transition-all duration-300`}>
+                    <span className="font-bold text-lg drop-shadow">{banners[currentBanner].title}</span>
+                  </div>
                 </div>
-        </section>
 
-        <section id="cart-view" class="view hidden p-4">
-            <h2 class="font-bold text-2xl mb-6">Səbətim</h2>
-            <div id="cart-items" class="space-y-4 mb-6"></div>
-            <div class="premium-card p-4 sticky bottom-24">
-                <div class="flex justify-between mb-4">
-                    <span class="text-gray-500">Ümumi:</span>
-                    <span id="total-price" class="font-bold text-xl text-green-600">0 AZN</span>
+                {/* Categories Grid (3x4) */}
+                <div>
+                  <h3 className="font-bold text-md mb-2 text-gray-700">Kateqoriyalar</h3>
+                  <div className="grid grid-cols-4 gap-2">
+                    {categories.map((cat) => (
+                      <button 
+                        key={cat.id} 
+                        onClick={() => { setSelectedCategory(cat.id); setActiveTab('categories'); }}
+                        className="flex flex-col items-center p-2 bg-white rounded-xl shadow-sm border border-gray-100 hover:border-[#10B981]"
+                      >
+                        <span className="text-2xl mb-1">{cat.icon}</span>
+                        <span className="text-[10px] text-center font-medium leading-tight text-gray-600">{cat.name}</span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
-                <button onclick="checkoutWhatsApp()" class="w-full btn-green py-4 font-bold uppercase tracking-wide">Sifarişi tamamla</button>
-            </div>
-        </section>
 
-        <section id="about-view" class="view hidden p-4">
-            <div class="bg-green-500 rounded-3xl p-6 text-white mb-8">
-                <h2 class="text-2xl font-bold mb-4 text-center">Senlife nədir?</h2>
-                <p class="font-medium leading-relaxed italic text-center">"Sizin həyatınız, sizin seçiminiz. Ən özəl əl işləri və premium məhsulları bir araya gətirdik."</p>
-            </div>
-            <div class="space-y-4">
-                <a href="https://wa.me/994773526665" class="premium-card p-4 flex items-center gap-4">
-                    <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-600"><i class="fab fa-whatsapp"></i></div>
-                    <span class="font-semibold text-gray-700">077 352 66 65</span>
-                </a>
-                <a href="https://instagram.com/senlife.az" class="premium-card p-4 flex items-center gap-4">
-                    <div class="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center text-pink-600"><i class="fab fa-instagram"></i></div>
-                    <span class="font-semibold text-gray-700">senlife.az</span>
-                </a>
-                <a href="mailto:senzgroups@gmail.com" class="premium-card p-4 flex items-center gap-4">
-                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600"><i class="fa fa-envelope"></i></div>
-                    <span class="font-semibold text-gray-700">senzgroups@gmail.com</span>
-                </a>
-            </div>
-        </section>
-    </main>
+                {/* Products Grid (2 Columns) */}
+                <div>
+                  <h3 className="font-bold text-md mb-2 text-gray-700">Yeni Məhsullar</h3>
+                  <div className="grid grid-cols-2 gap-3">
+                    {filteredProducts.map((p) => (
+                      <div key={p.id} className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden flex flex-col justify-between">
+                        <div onClick={() => setSelectedProduct(p)} className="cursor-pointer">
+                          <img src={p.images[0]} alt={p.name} className="w-full h-28 object-cover" />
+                          <div className="p-2">
+                            <h4 className="font-bold text-sm text-gray-800 line-clamp-1">{p.name}</h4>
+                            <p className="text-xs text-[#10B981] font-extrabold mt-0.5">{p.price} AZN</p>
+                          </div>
+                        </div>
 
-    <div id="product-detail" class="product-modal">
-        <div id="product-content"></div>
+                        <div className="p-2 pt-0 space-y-1">
+                          <button 
+                            onClick={() => handleSingleOrder(p)}
+                            className="w-full py-1 text-xs border border-[#10B981] text-[#10B981] font-semibold rounded-md hover:bg-emerald-50 flex items-center justify-center gap-1"
+                          >
+                            <Send size={12} /> Sifariş
+                          </button>
+                          <button 
+                            onClick={() => addToCart(p)}
+                            className="w-full py-1 text-xs bg-[#10B981] text-white font-semibold rounded-md hover:bg-emerald-600 flex items-center justify-center gap-1"
+                          >
+                            <ShoppingCart size={12} /> Səbətə
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+              </div>
+            )}
+
+            {/* CATEGORIES TAB */}
+            {activeTab === 'categories' && (
+              <div className="space-y-4">
+                <h2 className="text-lg font-bold">Bütün Kateqoriyalar</h2>
+                <div className="flex gap-2 overflow-x-auto pb-2">
+                  <button 
+                    onClick={() => setSelectedCategory('all')}
+                    className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap ${selectedCategory === 'all' ? 'bg-[#10B981] text-white' : 'bg-gray-200 text-gray-700'}`}
+                  >
+                    Bütün Məhsullar
+                  </button>
+                  {categories.map((c) => (
+                    <button 
+                      key={c.id}
+                      onClick={() => setSelectedCategory(c.id)}
+                      className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap ${selectedCategory === c.id ? 'bg-[#10B981] text-white' : 'bg-gray-200 text-gray-700'}`}
+                    >
+                      {c.name}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  {filteredProducts.map((p) => (
+                    <div key={p.id} className="bg-white p-2 rounded-xl border shadow-sm">
+                      <img src={p.images[0]} alt={p.name} className="w-full h-24 object-cover rounded-md" />
+                      <h4 className="font-bold text-sm mt-1">{p.name}</h4>
+                      <p className="text-xs text-[#10B981] font-bold">{p.price} AZN</p>
+                      <button 
+                        onClick={() => setSelectedProduct(p)}
+                        className="mt-2 w-full py-1 bg-gray-100 text-xs font-semibold rounded text-gray-600"
+                      >
+                        Bax
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* CART TAB */}
+            {activeTab === 'cart' && (
+              <div className="space-y-4">
+                <h2 className="text-lg font-bold">Səbətiniz</h2>
+                {cart.length === 0 ? (
+                  <p className="text-sm text-gray-500 text-center py-10">Səbətiniz boşdur.</p>
+                ) : (
+                  <div className="space-y-3">
+                    {cart.map((item) => (
+                      <div key={item.id} className="bg-white p-3 rounded-xl border flex items-center justify-between">
+                        <div>
+                          <h4 className="font-bold text-sm">{item.name}</h4>
+                          <p className="text-xs text-gray-400">Kod: {item.code}</p>
+                          <p className="text-xs text-[#10B981] font-extrabold">{item.price * item.quantity} AZN</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button 
+                            onClick={() => setCart(cart.map(c => c.id === item.id ? { ...c, quantity: Math.max(1, c.quantity - 1) } : c))}
+                            className="px-2 py-0.5 bg-gray-100 rounded text-sm font-bold"
+                          >
+                            -
+                          </button>
+                          <span className="text-sm font-bold">{item.quantity}</span>
+                          <button 
+                            onClick={() => setCart(cart.map(c => c.id === item.id ? { ...c, quantity: c.quantity + 1 } : c))}
+                            className="px-2 py-0.5 bg-gray-100 rounded text-sm font-bold"
+                          >
+                            +
+                          </button>
+                          <button 
+                            onClick={() => setCart(cart.filter(c => c.id !== item.id))}
+                            className="text-red-500 ml-2"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+
+                    <div className="pt-4 border-t">
+                      <div className="flex justify-between items-center mb-4">
+                        <span className="font-bold">Cəmi:</span>
+                        <span className="font-black text-xl text-[#10B981]">
+                          {cart.reduce((sum, item) => sum + item.price * item.quantity, 0)} AZN
+                        </span>
+                      </div>
+                      <button 
+                        onClick={handleCartOrder}
+                        className="w-full py-3 bg-[#10B981] text-white font-bold rounded-xl flex items-center justify-center gap-2"
+                      >
+                        <Send size={18} /> WhatsApp ilə Tamamla
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ABOUT TAB */}
+            {activeTab === 'about' && (
+              <div className="space-y-4">
+                <div className="border-2 border-[#10B981] bg-white p-4 rounded-xl">
+                  <h2 className="text-lg font-black text-[#10B981] mb-2">SenMark nədir?</h2>
+                  <p className="text-sm text-gray-700 leading-relaxed font-semibold">
+                    SenMark — müasir marketplace platforması və sizin ən yaxın rəqəmsal köməkçinizdir. Geniş məhsul kataloqu, xidmətlər və Aİ dəstəyi ilə axtardığınız hər şeyi bir ünvanda təqdim edirik.
+                  </p>
+                </div>
+
+                <div className="bg-white p-4 rounded-xl border space-y-3">
+                  <h3 className="font-bold text-sm">Əlaqələrimiz</h3>
+                  <a href="https://wa.me/994773526665" target="_blank" rel="noreferrer" className="flex items-center gap-3 text-sm font-medium text-gray-700 hover:text-[#10B981]">
+                    <span className="p-2 bg-emerald-100 text-[#10B981] rounded-lg">💬</span> WhatsApp
+                  </a>
+                  <a href="https://www.instagram.com/senmark.az?igsh=eDU4d3N6ZjQ2aGJm" target="_blank" rel="noreferrer" className="flex items-center gap-3 text-sm font-medium text-gray-700 hover:text-[#10B981]">
+                    <span className="p-2 bg-pink-100 text-pink-600 rounded-lg">📸</span> senmark.az
+                  </a>
+                  <a href="mailto:senzgroups@gmail.com" className="flex items-center gap-3 text-sm font-medium text-gray-700 hover:text-[#10B981]">
+                    <span className="p-2 bg-blue-100 text-blue-600 rounded-lg">✉️</span> senzgroups@gmail.com
+                  </a>
+                </div>
+              </div>
+            )}
+
+            {/* AI ASSISTANT SENNI TAB */}
+            {activeTab === 'ai' && (
+              <div className="flex flex-col h-[calc(100vh-170px)] bg-white rounded-xl border overflow-hidden">
+                {/* Senni Character Header */}
+                <div className="bg-[#10B981] p-3 text-white flex items-center gap-3">
+                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-[#10B981] font-bold text-xl shadow">
+                    🤖
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-sm">Senni (AI Köməkçi)</h3>
+                    <p className="text-[10px] text-emerald-100">Canlı Aİ Dəstəyi & Təhlil</p>
+                  </div>
+                </div>
+
+                {/* Messages Box */}
+                <div className="flex-1 p-3 overflow-y-auto space-y-3">
+                  {aiMessages.map((msg, i) => (
+                    <div key={i} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+                      <div className={`max-w-[80%] p-3 rounded-2xl text-xs ${msg.sender === 'user' ? 'bg-[#10B981] text-white rounded-br-none' : 'bg-gray-100 text-gray-800 rounded-bl-none'}`}>
+                        {msg.text}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* AI Input */}
+                <div className="p-2 border-t flex gap-2">
+                  <input 
+                    type="text" 
+                    placeholder="Senni-yə sual verin..."
+                    value={aiInput}
+                    onChange={(e) => setAiInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleAiSend()}
+                    className="flex-1 px-3 py-2 bg-gray-100 rounded-xl text-xs focus:outline-none"
+                  />
+                  <button onClick={handleAiSend} className="p-2 bg-[#10B981] text-white rounded-xl">
+                    <Send size={16} />
+                  </button>
+                </div>
+              </div>
+            )}
+          </>
+        )}
+
+      </main>
+
+      {/* ADMIN PANEL MODAL */}
+      {isAdminOpen && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white w-full max-w-sm rounded-2xl p-4 space-y-4 max-h-[85vh] overflow-y-auto">
+            <div className="flex justify-between items-center border-b pb-2">
+              <h3 className="font-bold text-md">Admin Paneli</h3>
+              <button onClick={() => setIsAdminOpen(false)}><X size={20} /></button>
+            </div>
+
+            {!isAdminAuthenticated ? (
+              <form onSubmit={handleAdminLogin} className="space-y-3">
+                <p className="text-xs text-gray-500">Daxil olmaq üçün xüsusi parolu qeyd edin:</p>
+                <input 
+                  type="password" 
+                  placeholder="Parol (2025/2026/S/N)"
+                  value={adminPassword}
+                  onChange={(e) => setAdminPassword(e.target.value)}
+                  className="w-full p-2 border rounded-lg text-xs"
+                />
+                <button type="submit" className="w-full py-2 bg-[#10B981] text-white font-bold text-xs rounded-lg">
+                  Giriş
+                </button>
+              </form>
+            ) : (
+              <div className="space-y-4">
+                <div className="bg-emerald-50 p-2 rounded text-xs text-[#10B981] font-semibold">
+                  Sessiya Aktivdir (Giriş Edildi)
+                </div>
+
+                {/* Add Product Form */}
+                <form onSubmit={handleAddProduct} className="space-y-2 border-t pt-2">
+                  <h4 className="font-bold text-xs">Məhsul Əlavə Et</h4>
+                  <input type="text" placeholder="Adı" value={newProduct.name} onChange={e => setNewProduct({...newProduct, name: e.target.value})} className="w-full p-1.5 border rounded text-xs" required />
+                  <input type="number" placeholder="Qiyməti (AZN)" value={newProduct.price} onChange={e => setNewProduct({...newProduct, price: e.target.value})} className="w-full p-1.5 border rounded text-xs" required />
+                  <input type="text" placeholder="Kodu" value={newProduct.code} onChange={e => setNewProduct({...newProduct, code: e.target.value})} className="w-full p-1.5 border rounded text-xs" required />
+                  <input type="text" placeholder="Məkan" value={newProduct.location} onChange={e => setNewProduct({...newProduct, location: e.target.value})} className="w-full p-1.5 border rounded text-xs" />
+                  <textarea placeholder="Təsvir" value={newProduct.description} onChange={e => setNewProduct({...newProduct, description: e.target.value})} className="w-full p-1.5 border rounded text-xs" />
+                  <input type="number" placeholder="Bonus Balı" value={newProduct.bonus} onChange={e => setNewProduct({...newProduct, bonus: e.target.value})} className="w-full p-1.5 border rounded text-xs" />
+                  <input type="text" placeholder="Şəkil URL" value={newProduct.image} onChange={e => setNewProduct({...newProduct, image: e.target.value})} className="w-full p-1.5 border rounded text-xs" />
+                  
+                  <button type="submit" className="w-full py-2 bg-[#10B981] text-white font-bold text-xs rounded-lg flex items-center justify-center gap-1">
+                    <Plus size={14} /> Məhsulu Yarat
+                  </button>
+                </form>
+
+                {/* Existing Products List */}
+                <div className="border-t pt-2 space-y-2">
+                  <h4 className="font-bold text-xs">Məhsul Siyahısı ({products.length})</h4>
+                  {products.map(p => (
+                    <div key={p.id} className="flex justify-between items-center p-2 bg-gray-50 rounded text-xs">
+                      <span>{p.name} ({p.price} AZN)</span>
+                      <button onClick={() => handleDeleteProduct(p.id)} className="text-red-500"><Trash2 size={14} /></button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* BONUS CHECK MODAL */}
+      {isBonusOpen && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white w-full max-w-sm rounded-2xl p-4 space-y-3">
+            <div className="flex justify-between items-center border-b pb-2">
+              <h3 className="font-bold text-md flex items-center gap-1 text-amber-500">
+                <Star size={18} className="fill-amber-400" /> Bonus Hesabı
+              </h3>
+              <button onClick={() => setIsBonusOpen(false)}><X size={20} /></button>
+            </div>
+            <p className="text-xs text-gray-500">Bonus balınızı öyrənmək üçün bonus kart nömrənizi daxil edin:</p>
+            <input 
+              type="text" 
+              placeholder="Bonus Kart Nömrəsi"
+              value={bonusCard}
+              onChange={(e) => setBonusCard(e.target.value)}
+              className="w-full p-2 border rounded-lg text-xs"
+            />
+            <button 
+              onClick={handleBonusCheck}
+              className="w-full py-2 bg-[#10B981] text-white font-bold text-xs rounded-lg flex items-center justify-center gap-1"
+            >
+              <Send size={14} /> WhatsApp ilə Yoxla
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Bottom Sticky Navigation */}
+      <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white border-t py-2 px-3 flex justify-between items-center z-40">
+        <button 
+          onClick={() => { setSelectedProduct(null); setActiveTab('home'); }} 
+          className={`flex flex-col items-center gap-0.5 ${activeTab === 'home' && !selectedProduct ? 'text-[#10B981]' : 'text-gray-400'}`}
+        >
+          <Home size={18} />
+          <span className="text-[10px] font-medium">Ana Səhifə</span>
+        </button>
+
+        <button 
+          onClick={() => { setSelectedProduct(null); setActiveTab('categories'); }} 
+          className={`flex flex-col items-center gap-0.5 ${activeTab === 'categories' ? 'text-[#10B981]' : 'text-gray-400'}`}
+        >
+          <Grid size={18} />
+          <span className="text-[10px] font-medium">Kateqoriyalar</span>
+        </button>
+
+        <button 
+          onClick={() => { setSelectedProduct(null); setActiveTab('cart'); }} 
+          className={`flex flex-col items-center gap-0.5 relative ${activeTab === 'cart' ? 'text-[#10B981]' : 'text-gray-400'}`}
+        >
+          <ShoppingCart size={18} />
+          {cart.length > 0 && (
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">
+              {cart.reduce((a, b) => a + b.quantity, 0)}
+            </span>
+          )}
+          <span className="text-[10px] font-medium">Səbət</span>
+        </button>
+
+        <button 
+          onClick={() => { setSelectedProduct(null); setActiveTab('about'); }} 
+          className={`flex flex-col items-center gap-0.5 ${activeTab === 'about' ? 'text-[#10B981]' : 'text-gray-400'}`}
+        >
+          <Info size={18} />
+          <span className="text-[10px] font-medium">Haqqında</span>
+        </button>
+
+        <button 
+          onClick={() => { setSelectedProduct(null); setActiveTab('ai'); }} 
+          className={`flex flex-col items-center gap-0.5 ${activeTab === 'ai' ? 'text-[#10B981]' : 'text-gray-400'}`}
+        >
+          <Bot size={18} />
+          <span className="text-[10px] font-medium">AI Köməkçi</span>
+        </button>
+      </nav>
+
     </div>
-
-    <div id="admin-panel" class="admin-modal p-6">
-        <div class="flex justify-between mb-6">
-            <h2 class="text-xl font-bold">Admin Panel</h2>
-            <button onclick="closeAdmin()" class="text-red-500"><i class="fa fa-times-circle text-2xl"></i></button>
-        </div>
-        <div class="space-y-4">
-            <input type="text" id="p-name" placeholder="Məhsul adı" class="w-full border p-3 rounded-xl">
-            <input type="number" id="p-price" placeholder="Qiymət" class="w-full border p-3 rounded-xl">
-            <input type="text" id="p-code" placeholder="Kod" class="w-full border p-3 rounded-xl">
-            <select id="p-cat" class="w-full border p-3 rounded-xl">
-                </select>
-            <textarea id="p-desc" placeholder="Təsvir" class="w-full border p-3 rounded-xl"></textarea>
-            <input type="file" id="p-imgs" multiple accept="image/*" class="w-full">
-            <button onclick="addNewProduct()" class="w-full btn-green py-3 font-bold">Məhsulu Əlavə Et</button>
-        </div>
-        <div class="mt-8">
-            <h3 class="font-bold mb-4">Məhsulları İdarə Et</h3>
-            <div id="admin-product-list" class="space-y-2"></div>
-        </div>
-    </div>
-
-    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around p-3 z-50 shadow-2xl">
-        <button onclick="showView('home-view')" class="nav-item flex flex-col items-center gap-1 text-gray-400 nav-active" id="nav-home">
-            <i class="fa fa-home text-lg"></i><span class="text-[10px]">Ana Səhifə</span>
-        </button>
-        <button onclick="showView('categories-view')" class="nav-item flex flex-col items-center gap-1 text-gray-400" id="nav-categories">
-            <i class="fa fa-th-large text-lg"></i><span class="text-[10px]">Kataloq</span>
-        </button>
-        <button onclick="showView('cart-view')" class="nav-item flex flex-col items-center gap-1 text-gray-400 relative" id="nav-cart">
-            <i class="fa fa-shopping-basket text-lg"></i><span class="text-[10px]">Səbət</span>
-            <span id="cart-count" class="absolute -top-1 right-2 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full hidden flex items-center justify-center">0</span>
-        </button>
-        <button onclick="showView('about-view')" class="nav-item flex flex-col items-center gap-1 text-gray-400" id="nav-about">
-            <i class="fa fa-info-circle text-lg"></i><span class="text-[10px]">Haqqında</span>
-        </button>
-    </nav>
-
-    <script>
-        // DATA STATE
-        let products = JSON.parse(localStorage.getItem('senlife_products')) || [];
-        let cart = JSON.parse(localStorage.getItem('senlife_cart')) || [];
-        
-        const categories = [
-            {id: 1, name: "Ev əşyaları", icon: "fa-home"},
-            {id: 2, name: "Geyim", icon: "fa-tshirt"},
-            {id: 3, name: "Büjiteriya", icon: "fa-gem"},
-            {id: 4, name: "Saatlar", icon: "fa-clock"},
-            {id: 5, name: "Zərif dadlar", icon: "fa-cookie"},
-            {id: 6, name: "Ətirlər", icon: "fa-magic"},
-            {id: 7, name: "Şam və gips", icon: "fa-fire"},
-            {id: 8, name: "Keramika", icon: "fa-palette"},
-            {id: 9, name: "Portretlər", icon: "fa-portrait"},
-            {id: 10, name: "Hədiyyələr", icon: "fa-gift"},
-            {id: 11, name: "Uşaq dünyası", icon: "fa-baby-carriage"},
-            {id: 12, name: "Digər", icon: "fa-ellipsis-h"}
-        ];
-
-        const banners = [
-            {title: "Əl işləri", color: "from-green-400 to-green-600"},
-            {title: "Premium məhsullar", color: "from-blue-400 to-indigo-600"},
-            {title: "Hədiyyəlik qutular", color: "from-red-400 to-pink-600"},
-            {title: "Endirimlər", color: "from-yellow-400 to-orange-600"},
-            {title: "Bonuslar", color: "from-purple-400 to-purple-600"}
-        ];
-
-        // INITIALIZE
-        window.onload = () => {
-            renderBanners();
-            renderCategories();
-            renderProducts(products);
-            updateCartCount();
-            setupInfiniteScroll();
-            
-            // Populate Admin Category Select
-            const catSelect = document.getElementById('p-cat');
-            categories.forEach(c => {
-                catSelect.innerHTML += `<option value="${c.name}">${c.name}</option>`;
-            });
-        };
-
-        // NAVIGATION LOGIC
-        function showView(viewId) {
-            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-            document.getElementById(viewId).classList.remove('hidden');
-            
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('nav-active'));
-            document.getElementById('nav-' + viewId.split('-')[0]).classList.add('nav-active');
-            
-            if(viewId === 'cart-view') renderCart();
-            window.scrollTo(0, 0);
-        }
-
-        // BANNER ANIMATION
-        function renderBanners() {
-            const container = id('bannerSlider');
-            banners.forEach((b, i) => {
-                container.innerHTML += `
-                    <div class="banner-item bg-gradient-to-br ${b.color} flex items-end p-6">
-                        <h3 class="text-white text-2xl font-black">${b.title}</h3>
-                    </div>
-                `;
-            });
-
-            let current = 0;
-            setInterval(() => {
-                current = (current + 1) % banners.length;
-                container.scrollTo({ left: container.clientWidth * current, behavior: 'smooth' });
-            }, 1300);
-        }
-
-        // CATEGORIES RENDER
-        function renderCategories() {
-            const grid = id('categories-grid');
-            categories.forEach(c => {
-                grid.innerHTML += `
-                    <div onclick="filterByCategory('${c.name}')" class="premium-card p-4 flex flex-col items-center justify-center gap-2 text-center aspect-square">
-                        <i class="fa ${c.icon} text-green-500 text-xl"></i>
-                        <span class="text-[10px] font-bold text-gray-600">${c.name}</span>
-                    </div>
-                `;
-            });
-        }
-
-        // PRODUCT RENDERING
-        function renderProducts(items) {
-            const grid = id('products-grid');
-            grid.innerHTML = items.map(p => `
-                <div class="premium-card overflow-hidden">
-                    <img src="${p.imgs[0]}" onclick="openProduct('${p.id}')" class="w-full h-40 object-cover">
-                    <div class="p-3">
-                        <h3 class="text-sm font-semibold truncate text-gray-700">${p.name}</h3>
-                        <div class="flex justify-between items-center mt-2">
-                            <span class="text-green-600 font-bold">${p.price} AZN</span>
-                        </div>
-                        <div class="grid grid-cols-2 gap-2 mt-3">
-                            <button onclick="orderWhatsApp('${p.id}')" class="bg-green-100 text-green-700 p-2 rounded-lg text-[10px] font-bold">📩 Sifariş</button>
-                            <button onclick="addToCart('${p.id}')" class="bg-gray-100 text-gray-700 p-2 rounded-lg text-[10px] font-bold">🛒 Səbət</button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // ADMIN FUNCTIONS
-        function checkAdmin() {
-            const pass = prompt("Parol daxil edin:");
-            if(pass === "20152021Sn/_/") {
-                id('admin-panel').classList.add('active-view');
-                renderAdminProducts();
-            } else {
-                alert("Yanlış parol!");
-            }
-        }
-
-        function closeAdmin() { id('admin-panel').classList.remove('active-view'); }
-
-        async function addNewProduct() {
-            const name = id('p-name').value;
-            const price = id('p-price').value;
-            const code = id('p-code').value;
-            const cat = id('p-cat').value;
-            const desc = id('p-desc').value;
-            const files = id('p-imgs').files;
-
-            if(!name || !price || files.length === 0) return alert("Məlumatları tam doldurun!");
-
-            const imgPromises = Array.from(files).map(file => {
-                return new Promise((resolve) => {
-                    const reader = new FileReader();
-                    reader.onload = (e) => resolve(e.target.result);
-                    reader.readAsDataURL(file);
-                });
-            });
-
-            const imgUrls = await Promise.all(imgPromises);
-            
-            const newP = { id: Date.now().toString(), name, price, code, cat, desc, imgs: imgUrls };
-            products.unshift(newP);
-            localStorage.setItem('senlife_products', JSON.stringify(products));
-            alert("Məhsul əlavə edildi!");
-            location.reload();
-        }
-
-        function renderAdminProducts() {
-            const list = id('admin-product-list');
-            list.innerHTML = products.map(p => `
-                <div class="flex justify-between items-center bg-gray-50 p-2 rounded-lg">
-                    <span class="text-sm">${p.name} (${p.code})</span>
-                    <button onclick="deleteProduct('${p.id}')" class="text-red-500"><i class="fa fa-trash"></i></button>
-                </div>
-            `).join('');
-        }
-
-        function deleteProduct(id) {
-            products = products.filter(p => p.id !== id);
-            localStorage.setItem('senlife_products', JSON.stringify(products));
-            renderAdminProducts();
-            renderProducts(products);
-        }
-
-        // PRODUCT DETAIL
-        function openProduct(pid) {
-            const p = products.find(i => i.id === pid);
-            const modal = id('product-detail');
-            id('product-content').innerHTML = `
-                <div class="sticky top-0 bg-white p-4 flex justify-between items-center border-b z-10">
-                    <button onclick="id('product-detail').classList.remove('active-view')" class="text-2xl text-green-600"><i class="fa fa-arrow-left"></i></button>
-                    <button onclick="shareProduct('${p.name}')" class="text-xl text-gray-500"><i class="fa fa-share-alt"></i></button>
-                </div>
-                <div class="p-0">
-                    <div class="flex overflow-x-auto snap-x hide-scroll h-80">
-                        ${p.imgs.map(img => `<img src="${img}" class="snap-center min-w-full h-full object-cover">`).join('')}
-                    </div>
-                    <div class="p-6">
-                        <div class="flex justify-between items-start mb-2">
-                            <h1 class="text-2xl font-bold text-gray-800">${p.name}</h1>
-                            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full font-bold">${p.price} AZN</span>
-                        </div>
-                        <p class="text-xs text-gray-400 mb-4">Kod: ${p.code} | Kateqoriya: ${p.cat}</p>
-                        <div class="bg-gray-50 p-4 rounded-2xl mb-8">
-                            <p class="text-gray-600 text-sm leading-relaxed">${p.desc}</p>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <button onclick="orderWhatsApp('${p.id}')" class="btn-green py-4 font-bold flex items-center justify-center gap-2"><i class="fab fa-whatsapp"></i> Sifariş</button>
-                            <button onclick="addToCart('${p.id}')" class="bg-gray-100 text-gray-800 py-4 rounded-xl font-bold flex items-center justify-center gap-2"><i class="fa fa-shopping-cart"></i> Səbət</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            modal.classList.add('active-view');
-        }
-
-        // CART LOGIC
-        function addToCart(pid) {
-            const p = products.find(i => i.id === pid);
-            const exist = cart.find(c => c.id === pid);
-            if(exist) {
-                exist.qty++;
-            } else {
-                cart.push({...p, qty: 1});
-            }
-            saveCart();
-            alert("Səbətə əlavə olundu!");
-        }
-
-        function renderCart() {
-            const container = id('cart-items');
-            if(cart.length === 0) {
-                container.innerHTML = `<div class="text-center py-20 text-gray-400"><i class="fa fa-shopping-basket text-5xl mb-4"></i><p>Səbət boşdur</p></div>`;
-                id('total-price').innerText = "0 AZN";
-                return;
-            }
-            let total = 0;
-            container.innerHTML = cart.map(item => {
-                total += item.price * item.qty;
-                return `
-                    <div class="premium-card p-3 flex gap-4 items-center">
-                        <img src="${item.imgs[0]}" class="w-20 h-20 object-cover rounded-xl">
-                        <div class="flex-1">
-                            <h4 class="font-bold text-sm text-gray-700">${item.name}</h4>
-                            <p class="text-green-600 font-bold">${item.price} AZN</p>
-                            <div class="flex items-center gap-3 mt-2">
-                                <button onclick="updateQty('${item.id}', -1)" class="w-8 h-8 bg-gray-100 rounded-full">-</button>
-                                <span class="font-bold">${item.qty}</span>
-                                <button onclick="updateQty('${item.id}', 1)" class="w-8 h-8 bg-gray-100 rounded-full">+</button>
-                            </div>
-                        </div>
-                        <button onclick="removeFromCart('${item.id}')" class="text-red-400 p-2"><i class="fa fa-trash"></i></button>
-                    </div>
-                `;
-            }).join('');
-            id('total-price').innerText = total + " AZN";
-        }
-
-        function updateQty(id, change) {
-            const item = cart.find(c => c.id === id);
-            item.qty += change;
-            if(item.qty < 1) return removeFromCart(id);
-            saveCart();
-            renderCart();
-        }
-
-        function removeFromCart(id) {
-            cart = cart.filter(c => c.id !== id);
-            saveCart();
-            renderCart();
-        }
-
-        function saveCart() {
-            localStorage.setItem('senlife_cart', JSON.stringify(cart));
-            updateCartCount();
-        }
-
-        function updateCartCount() {
-            const count = cart.reduce((acc, item) => acc + item.qty, 0);
-            const badge = id('cart-count');
-            if(count > 0) {
-                badge.innerText = count;
-                badge.classList.remove('hidden');
-            } else {
-                badge.classList.add('hidden');
-            }
-        }
-
-        // WHATSAPP SYSTEM
-        function orderWhatsApp(pid) {
-            const p = products.find(i => i.id === pid);
-            const text = `Salam, bu məhsulu sifariş etmək istəyirəm:%0A📦 *Məhsul:* ${p.name}%0A💰 *Qiymət:* ${p.price} AZN%0A🔢 *Kod:* ${p.code}%0A📝 *Təsvir:* ${p.desc}%0A%0A*Çatdırılma məlumatı:*%0AAd:%0AÜnvan:%0ATelefon:`;
-            window.open(`https://wa.me/994773526665?text=${text}`);
-        }
-
-        function checkoutWhatsApp() {
-            if(cart.length === 0) return;
-            let list = cart.map(i => `- ${i.name} (${i.qty} ədəd) | ${i.price} AZN`).join('%0A');
-            let total = id('total-price').innerText;
-            const text = `Salam, səbətimdəki məhsulları sifariş etmək istəyirəm:%0A%0A${list}%0A%0A💰 *Ümumi məbləğ:* ${total}%0A%0A*Çatdırılma məlumatı:*%0AAd:%0AÜnvan:%0ATelefon:`;
-            window.open(`https://wa.me/994773526665?text=${text}`);
-        }
-
-        // SEARCH & FILTER
-        function searchProduct() {
-            const term = id('searchInput').value.toLowerCase();
-            const filtered = products.filter(p => p.name.toLowerCase().includes(term) || p.code.toLowerCase().includes(term));
-            renderProducts(filtered);
-            showView('home-view');
-        }
-
-        function filterByCategory(catName) {
-            const filtered = products.filter(p => p.cat === catName);
-            renderProducts(filtered);
-            showView('home-view');
-        }
-
-        // HELPERS
-        function id(e) { return document.getElementById(e); }
-        
-        function shareProduct(name) {
-            if (navigator.share) {
-                navigator.share({ title: 'Senlife', text: name, url: window.location.href });
-            }
-        }
-
-        function setupInfiniteScroll() {
-            const observer = new IntersectionObserver((entries) => {
-                if(entries[0].isIntersecting) {
-                    // Logic for infinite scroll can be added here
-                }
-            });
-            observer.observe(id('infinite-trigger'));
-        }
-
-        // Handle Back Button for Android
-        window.onpopstate = () => {
-            const admin = id('admin-panel');
-            const detail = id('product-detail');
-            if(admin.classList.contains('active-view')) closeAdmin();
-            else if(detail.classList.contains('active-view')) detail.classList.remove('active-view');
-            else showView('home-view');
-        };
-    </script>
-</body>
-</html>
+  );
+}
